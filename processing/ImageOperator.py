@@ -45,3 +45,32 @@ class ImageOperator:
         newImg[newImg != 255] = 0
         
         return newImg
+    def applyLocalThreshold(self,blockSize = 10, C = 5):
+        inputImg = self.getImg()
+        # if blockSize % 2 == 0:
+        #     blockSize += 1
+        
+        output = np.zeros_like(inputImg)
+
+        for x in range(inputImg.shape[0]):
+            for y in range(inputImg.shape[1]):
+                # Get the neighborhood around the pixel
+                neighborhood = []
+                for i in range(-blockSize // 2, blockSize // 2 + 1):
+                    for j in range(-blockSize // 2, blockSize // 2 + 1):
+                        # Check if the pixel is within the image boundaries
+                        px = x + i
+                        py = y + j
+                        if px >= 0 and px < inputImg.shape[0] and py >= 0 and py < inputImg.shape[1]:
+                            neighborhood.append(inputImg[px, py])
+                
+                # Compute the local threshold using the mean and constant C
+                threshold = int(round(np.mean(neighborhood) - C))
+                
+                # Apply the threshold to the pixel
+                if inputImg[x][y] >= threshold:
+                    output[x][y] = 255
+                else:
+                    output[x][y] = 0
+
+        return output

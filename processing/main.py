@@ -7,8 +7,8 @@ import numpy as np
 img = cv2.imread('processing\lena.jpg',0)
 
 imgOperator = ImageOperator(img)
-newImg =  imgOperator.applyGlobalThreshold(100)
-cv2.imwrite('processing\globalThreshold.jpg',newImg)
+newImg =  imgOperator.applyLocalThreshold()
+cv2.imwrite('processing\localthreshold.jpg',newImg)
 
 
 # plt.imshow(img,cmap='gray')

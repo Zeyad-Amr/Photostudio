@@ -7,11 +7,14 @@ class ImageOperator:
     def __init__(self,img):
         self.img = img
 
+    def getImg(self):
+        return self.img
+    
     def operateOn(self,img):
         self.img = img
     
     def equalize(self):
-        img = self.img        
+        img = self.getImg()  
         histogram = tl.getHistoGram(img)
         cumulativeSum = tl.getCumSum(histogram)
 
@@ -26,7 +29,7 @@ class ImageOperator:
         return newImg
     
     def normalise(self):
-        img = self.img
+        img = self.getImg()
         newImg =  deepcopy(img)
         rows = img.shape[0]
         columns = img.shape[1]
@@ -34,4 +37,11 @@ class ImageOperator:
             for j in range(columns):
                 newImg[i][j] = newImg[i][j]/(255) * 400
 
+        return newImg
+    def applyGlobalThreshold(self,threshold):
+        newImg = self.getImg()
+        
+        newImg[newImg > threshold] = 255
+        newImg[newImg != 255] = 0
+        
         return newImg

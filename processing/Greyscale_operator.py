@@ -2,7 +2,7 @@ import tools as tl
 from copy import deepcopy
 import numpy as np
 
-class ImageOperator:
+class GrayScaleOperator:
 
     def __init__(self,img):
         self.img = img
@@ -38,6 +38,7 @@ class ImageOperator:
                 newImg[i][j] = newImg[i][j]/(255) * 400
 
         return newImg
+        
     def applyGlobalThreshold(self,threshold):
         newImg = self.getImg()
         
@@ -45,6 +46,7 @@ class ImageOperator:
         newImg[newImg != 255] = 0
         
         return newImg
+
     def applyLocalThreshold(self,blockSize = 10, C = 5):
         inputImg = self.getImg()
         # if blockSize % 2 == 0:
@@ -74,3 +76,27 @@ class ImageOperator:
                     output[x][y] = 0
 
         return output
+    
+    #splits the img to 3 frames r,g,b
+    #the img must be colored
+    def split(self):
+        img = self.getImg()
+        
+        # determining width and height of original image
+        w, h = img.shape[:2]
+        
+        # new Image dimension with 4 attribute in each pixel 
+        r =np.zeros_like(img)
+        g = np.zeros_like(img)
+        b = np.zeros_like(img)
+        print( w )
+        print( h )
+        
+        for i in range(w):
+            for j in range(h):
+                # ratio of RGB will be between 0 and 1
+                b[i][j]=(img[i][j][0])
+                g[i][j]=(img[i][j][1])
+                r[i][j]=(img[i][j][2])
+        return r,g,b
+    

@@ -1,6 +1,7 @@
 import React, { useRef, useContext, useState } from 'react'
 import { FileContext } from '../contexts/fileContext'
 import axios from '../global/API/axios';
+import './Inputimg.css'
 
 const Inputimg = () => {
 
@@ -31,7 +32,7 @@ const Inputimg = () => {
   };
 
   return (
-    <div>
+    <div className='input-contain'>
       <input
         type='file'
         id='file'
@@ -39,10 +40,12 @@ const Inputimg = () => {
         style={{ display: 'none' }}
         onChange={handleUpload}
       />
-      <button onClick={handleButtonClick}>
+      <button className='upload-btn' onClick={handleButtonClick}>
         Upload
       </button>
-      <img style={{width:"15rem",height:"15rem",}} src={uploadImg} alt="" />
+      <div className='upload-img-contain'>
+      <img className='upload-img' style={{display: uploadImg === undefined || uploadImg === "" ? "none" : "block"}} src={uploadImg} alt="" />
+      </div>
     </div>
   )
 }

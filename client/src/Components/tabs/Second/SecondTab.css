@@ -1,0 +1,30 @@
+.local-sliders {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2.5rem;
+}
+
+.sliders-contain {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.apply-btn {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: #1976d2;
+    color: white;
+    width: 5rem;
+    height: 2rem;
+    margin-bottom: 1rem;
+}
+
+.global-slider {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    margin-left: 2.5rem;
+    margin-top: 0.5rem;
+}

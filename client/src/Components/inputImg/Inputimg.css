@@ -1,0 +1,32 @@
+.input-contain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-btn {
+ outline: none;
+ border: none;
+ border-radius: 10px;
+ background-color: #1976d2;
+ color: white;
+ width: 5rem;
+ height: 2rem;
+ margin-bottom: 1rem;
+}
+
+.upload-img {
+    width: 14rem;
+    height: 14rem;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #1976d2;
+}
+
+.upload-img-contain {
+    width: 14rem;
+    height: 14rem;
+    border-radius: 5px;
+    border: 1px solid #1976d2;
+}

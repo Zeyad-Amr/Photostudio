@@ -5,7 +5,9 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import Inputimg from '../inputImg/Inputimg';
+import FirstTab from './First/FirstTab';
+import SecondTab from './Second/SecondTab';
+import ThirdTab from './Third/ThirdTab';
 
 const Tabs = () => {
 
@@ -26,10 +28,14 @@ const Tabs = () => {
                     </TabList>
                 </Box>
                 <TabPanel value="1">
-                    <Inputimg/>
+                    <FirstTab/>
                 </TabPanel>
-                <TabPanel value="2">Item Two</TabPanel>
-                <TabPanel value="3">Item Three</TabPanel>
+                <TabPanel value="2">
+                    <SecondTab/>
+                </TabPanel>
+                <TabPanel value="3">
+                    <ThirdTab/>
+                </TabPanel>
             </TabContext>
         </Box>
     )

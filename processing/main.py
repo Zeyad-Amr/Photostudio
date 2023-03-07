@@ -1,5 +1,6 @@
 from Histograms import Histograms
 from Histograms import ColoredOperator
+# from matplotlib import pyplot as plt
 
 import cv2
 import numpy as np
@@ -17,4 +18,4 @@ r, g, b = imgOperator.split()
 print(r), print(g), print(b)
 
 
-# plt.imshow(img,cmap='gray')
+# plt.imshow(img, cmap='gray')

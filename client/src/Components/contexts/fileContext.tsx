@@ -1,10 +1,10 @@
 import { createContext, useState } from 'react';
-const FileContext = createContext();
+const FileContext = createContext<any>('');
 
-const FileContextProvider = ({ children }) => {
+const FileContextProvider = ({ children } : any) => {
 
     // input img component
-    const [uploadImg,setUploadImg] = useState<String>('')
+    const [uploadImg,setUploadImg] = useState<String | undefined>('')
 
     return (
         <FileContext.Provider

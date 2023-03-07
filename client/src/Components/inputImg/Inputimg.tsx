@@ -4,12 +4,10 @@ import { FileContext } from '../contexts/fileContext'
 const Inputimg = () => {
 
   const inputFile = useRef<HTMLInputElement | null>(null);
-  // const {
-  //   uploadImg,
-  //   setUploadImg
-  // } = useContext(FileContext);
-
-  const [uploadImg, setUploadImg] = useState<string | undefined>('')
+  const {
+    uploadImg,
+    setUploadImg
+  } = useContext(FileContext);
 
 
   const handleUpload = (e: any) => {
@@ -26,7 +24,7 @@ const Inputimg = () => {
   }
 
   const handleButtonClick = () => {
-    if ( inputFile.current !== null ) {
+    if (inputFile.current !== null) {
       inputFile.current.click();
     }
   };
@@ -43,7 +41,7 @@ const Inputimg = () => {
       <button onClick={handleButtonClick}>
         Upload
       </button>
-      <img src={uploadImg} alt="" />
+      <img style={{width:"15rem",height:"15rem",}} src={uploadImg} alt="" />
     </div>
   )
 }

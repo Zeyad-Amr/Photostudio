@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'image'
-    
-    
+    'image',
+    "corsheaders",
+
 ]
 
 MIDDLEWARE = [
@@ -53,9 +53,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'backend.urls'
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://localhost:3000",
+]
 
 TEMPLATES = [
     {
@@ -119,7 +124,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-APPEND_SLASH=False
+APPEND_SLASH = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -127,4 +132,4 @@ APPEND_SLASH=False
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'backend/mediaFiles')
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/images/'
+MEDIA_URL = '/'

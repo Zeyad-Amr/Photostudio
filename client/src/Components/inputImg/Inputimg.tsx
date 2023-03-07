@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useState } from 'react'
 import { FileContext } from '../contexts/fileContext'
+import axios from '../global/API/axios';
 
 const Inputimg = () => {
 
@@ -13,14 +14,14 @@ const Inputimg = () => {
   const handleUpload = (e: any) => {
     setUploadImg(URL.createObjectURL(e.target.files[0]));
     const formData = new FormData();
-    formData.append("Img", e.target.files[0])
-    // axios.post('/',
-    //     formData
-    // ).then((response) => {
-    //   console.log(response)
-    // }).catch((err) => {
-    //     console.log(err)
-    // })
+    formData.append("image", e.target.files[0])
+    axios.post('/image/',
+        formData
+    ).then((response: any) => {
+      console.log(response)
+    }).catch((err: any) => {
+        console.log(err)
+    })
   }
 
   const handleButtonClick = () => {

@@ -2,17 +2,27 @@ import { Container } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import Inputimg from '../../inputImg/Inputimg';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import './SecondTab.css'
+import { FileContext } from '../../contexts/fileContext'
 import axios from '../../global/API/axios';
 
 
 const SecondTab = () => {
+
+    const {
+        sliderC,
+        setSliderC,
+        sliderBlock,
+        setSliderBlock,
+        sliderGlobal,
+        setSliderGlobal
+    } = useContext(FileContext);
 
     const [secondTabOptions, setSecondTabOptions] = useState<string>('');
 
@@ -31,6 +41,26 @@ const SecondTab = () => {
     const handleChange = (event: SelectChangeEvent) => {
         setSecondTabOptions(event.target.value);
     };
+
+    const handleGlobalButton = () => {
+        // axios.post('',
+        //     sliderGlobal
+        // ).then((response: any) => {
+        //     console.log(response)
+        // }).catch((err: any) => {
+        //     console.log(err)
+        // })
+    }
+
+    const handleLocalButton = () => {
+        // axios.post('',{
+        //     sliderBlock,sliderC
+        // }).then((response: any) => {
+        //     console.log(response)
+        // }).catch((err: any) => {
+        //     console.log(err)
+        // })
+    }
 
     console.log(secondTabOptions)
 
@@ -66,21 +96,21 @@ const SecondTab = () => {
                             <div className='local-sliders'>
                                 <div className='sliders-contain'>
                                     <label htmlFor="">Block size</label>
-                                    <Slider min={5} max={10} step={1} style={{ width: "50%" }} defaultValue={7} aria-label="Default" valueLabelDisplay="auto" />
+                                    <Slider value={sliderBlock} onChange={(e : any) => setSliderBlock(e.target.value)} min={5} max={10} step={1} style={{ width: "50%" }}  aria-label="Default" valueLabelDisplay="auto" />
                                 </div>
                                 <div className='sliders-contain'>
                                     <label htmlFor="">C</label>
-                                    <Slider min={0} max={100} step={1} style={{ width: "50%" }} defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+                                    <Slider value={sliderC} onChange={(e : any) => setSliderC(e.target.value)} min={0} max={100} step={1} style={{ width: "50%" }}  aria-label="Default" valueLabelDisplay="auto" />
                                 </div>
-                                <button className='apply-btn'>Apply</button>
+                                <button className='apply-btn' onClick={handleLocalButton}>Apply</button>
                             </div>
                             : secondTabOptions === "4" ?
                                 <div className='global-slider'>
                                     <div className='sliders-contain'>
                                         <label htmlFor="">label</label>
-                                        <Slider min={0} max={100} step={1} style={{ width: "50%" }} defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+                                        <Slider value={sliderGlobal} onChange={(e : any) => setSliderGlobal(e.target.value)} min={0} max={100} step={1} style={{ width: "50%" }}  aria-label="Default" valueLabelDisplay="auto" />
                                     </div>
-                                    <button className='apply-btn'>Apply</button>
+                                    <button className='apply-btn' onClick={handleGlobalButton}>Apply</button>
                                 </div>
                                 : null
                         }

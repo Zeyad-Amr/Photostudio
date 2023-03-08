@@ -28,3 +28,30 @@
     margin-left: 2.5rem;
     margin-top: 0.5rem;
 }
+
+.output-images {
+    width: 15rem;
+    height: 15rem;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #1976d2;
+}
+
+.img-contain {
+    width: 15rem;
+    height: 15rem;
+    border-radius: 5px;
+    border: 1px solid #1976d2;
+}
+
+.img-label-contain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-label-contain label {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}

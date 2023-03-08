@@ -10,7 +10,6 @@ const Inputimg = () => {
     baseURL,
     uploadImg,
     setUploadImg,
-    imgId,
     setImgId
   } = useContext(FileContext);
 

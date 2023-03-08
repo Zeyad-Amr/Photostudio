@@ -7,19 +7,25 @@ const Inputimg = () => {
 
   const inputFile = useRef<HTMLInputElement | null>(null);
   const {
+    baseURL,
     uploadImg,
-    setUploadImg
+    setUploadImg,
+    imgId,
+    setImgId
   } = useContext(FileContext);
 
 
   const handleUpload = (e: any) => {
-    setUploadImg(URL.createObjectURL(e.target.files[0]));
     const formData = new FormData();
     formData.append("image", e.target.files[0])
     axios.post('/image/',
-        formData
-    ).then((response: any) => {
-      console.log(response)
+    formData
+    ).then((res: any) => {
+      console.log(res.data.id);
+      
+      setUploadImg(baseURL + res.data.image);
+      setImgId(res.data.id)
+      console.log(res)
     }).catch((err: any) => {
         console.log(err)
     })

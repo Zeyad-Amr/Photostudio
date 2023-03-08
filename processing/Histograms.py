@@ -102,7 +102,7 @@ class Histograms:
         return r, g, b
 
     # takes 1darray and return its cumulative sum
-    def getCumSum(arr):
+    def getCumSum(self,arr):
         a = np.array(arr)
         b = []
 
@@ -133,7 +133,7 @@ class Histograms:
         return histogram
 
     # takes a 2darray and return it as just 1d.
-    def flatten(arr2d):
+    def flatten(self,arr2d):
         img = np.asarray(arr2d)
         img = img.flatten()
         return img

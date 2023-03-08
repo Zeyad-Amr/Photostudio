@@ -21,45 +21,61 @@ const SecondTab = () => {
         sliderBlock,
         setSliderBlock,
         sliderGlobal,
-        setSliderGlobal
+        setSliderGlobal,
+        imgId,
+        baseURL,
+
     } = useContext(FileContext);
 
     const [secondTabOptions, setSecondTabOptions] = useState<string>('');
+    const [imgOutput, setImgOutput] = useState<string | undefined>('')
+    const [imgOutputHisto, setimgOutputHisto] = useState<string | undefined>('')
+    const [imgOutputCum, setimgOutputCum] = useState<string | undefined>('')
 
     // integration with Back
-    // useEffect(() => {
-    //     axios.post('',
-    //         secondTabOptions
-    //     ).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
-    // }, [secondTabOptions])
+    useEffect(() => {
+        if (imgId) {
+            axios.post(`/image/${imgId}/process/`,
+                { option: secondTabOptions }
+            ).then((res: any) => {
+                setImgOutput(baseURL + res.data.image);
+                setimgOutputHisto(res.data.histURL)
+                setimgOutputCum(res.data.cumURL)
+
+                console.log(res)
+            }).catch((err: any) => {
+                console.log(err)
+            })
+        }
+    }, [secondTabOptions, imgId])
 
 
     const handleChange = (event: SelectChangeEvent) => {
         setSecondTabOptions(event.target.value);
     };
 
-    const handleGlobalButton = () => {
-        // axios.post('',
-        //     sliderGlobal
-        // ).then((response: any) => {
-        //     console.log(response)
-        // }).catch((err: any) => {
-        //     console.log(err)
-        // })
+    const handleGlobalButton = () => {        
+        axios.post(`/image/${imgId}/process/`,
+            { option: secondTabOptions, globalThreshold: sliderGlobal }
+        ).then((res: any) => {
+            setImgOutput(baseURL + res.data.image);
+            setimgOutputHisto(res.data.histURL)
+            setimgOutputCum(res.data.cumURL)
+        }).catch((err: any) => {
+            console.log(err)
+        })
     }
-
+    
     const handleLocalButton = () => {
-        // axios.post('',{
-        //     sliderBlock,sliderC
-        // }).then((response: any) => {
-        //     console.log(response)
-        // }).catch((err: any) => {
-        //     console.log(err)
-        // })
+        axios.post(`/image/${imgId}/process/`,
+            { option: secondTabOptions, blocksize: sliderBlock, c: sliderC }
+        ).then((res: any) => {
+            setImgOutput(baseURL + res.data.image);
+            setimgOutputHisto(res.data.histURL)
+            setimgOutputCum(res.data.cumURL)
+        }).catch((err: any) => {
+            console.log(err)
+        })
     }
 
     console.log(secondTabOptions)
@@ -95,11 +111,11 @@ const SecondTab = () => {
                             <div className='local-sliders'>
                                 <div className='sliders-contain'>
                                     <label htmlFor="">Block size</label>
-                                    <Slider value={sliderBlock} onChange={(e : any) => setSliderBlock(e.target.value)} min={5} max={10} step={1} style={{ width: "50%" }}  aria-label="Default" valueLabelDisplay="auto" />
+                                    <Slider value={sliderBlock} onChange={(e: any) => setSliderBlock(e.target.value)} min={5} max={10} step={1} style={{ width: "50%" }} aria-label="Default" valueLabelDisplay="auto" />
                                 </div>
                                 <div className='sliders-contain'>
                                     <label htmlFor="">C</label>
-                                    <Slider value={sliderC} onChange={(e : any) => setSliderC(e.target.value)} min={0} max={100} step={1} style={{ width: "50%" }}  aria-label="Default" valueLabelDisplay="auto" />
+                                    <Slider value={sliderC} onChange={(e: any) => setSliderC(e.target.value)} min={0} max={100} step={1} style={{ width: "50%" }} aria-label="Default" valueLabelDisplay="auto" />
                                 </div>
                                 <button className='apply-btn' onClick={handleLocalButton}>Apply</button>
                             </div>
@@ -107,7 +123,7 @@ const SecondTab = () => {
                                 <div className='global-slider'>
                                     <div className='sliders-contain'>
                                         <label htmlFor="">label</label>
-                                        <Slider value={sliderGlobal} onChange={(e : any) => setSliderGlobal(e.target.value)} min={0} max={100} step={1} style={{ width: "50%" }}  aria-label="Default" valueLabelDisplay="auto" />
+                                        <Slider value={sliderGlobal} onChange={(e: any) => setSliderGlobal(e.target.value)} min={0} max={100} step={1} style={{ width: "50%" }} aria-label="Default" valueLabelDisplay="auto" />
                                     </div>
                                     <button className='apply-btn' onClick={handleGlobalButton}>Apply</button>
                                 </div>
@@ -123,7 +139,7 @@ const SecondTab = () => {
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Output</label>
                                         <div className='img-contain'>
-                                            <img className='output-images' src="" alt="" />
+                                            <img className='output-images' src={imgOutput} alt="" />
                                         </div>
                                     </div>
                                     :
@@ -148,7 +164,7 @@ const SecondTab = () => {
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Histogram</label>
                                         <div className='img-contain'>
-                                            <img className='output-images' src="" alt="" />
+                                            <img className='output-images' src={imgOutputHisto} alt="" />
                                         </div>
                                     </div>
                                     :
@@ -173,7 +189,7 @@ const SecondTab = () => {
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Comulative</label>
                                         <div className='img-contain'>
-                                            <img className='output-images' src="" alt="" />
+                                            <img className='output-images' src={imgOutputCum} alt="" />
                                         </div>
                                     </div>
                                     :

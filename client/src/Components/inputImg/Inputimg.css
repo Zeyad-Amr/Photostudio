@@ -17,16 +17,16 @@
 }
 
 .upload-img {
-    width: 14rem;
-    height: 14rem;
+    width: 16rem;
+    height: 16rem;
     border-radius: 5px;
     outline: none;
     border: 1px solid #1976d2;
 }
 
 .upload-img-contain {
-    width: 14rem;
-    height: 14rem;
+    width: 16rem;
+    height: 16rem;
     border-radius: 5px;
     border: 1px solid #1976d2;
 }

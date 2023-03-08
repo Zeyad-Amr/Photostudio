@@ -80,7 +80,6 @@ const SecondTab = () => {
                                 value={secondTabOptions}
                                 onChange={handleChange}
                                 autoWidth
-                                label="Age"
                             >
                                 <MenuItem value="0">
                                     <em>None</em>

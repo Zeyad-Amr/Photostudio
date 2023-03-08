@@ -87,83 +87,87 @@ const SecondTab = () => {
                     </div>
                 </Col>
                 <Col style={{ height: "85vh" }} lg={9} md={9} sm={12} xs={12}>
-                    <Row>
-                        <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
-                            {secondTabOptions !== "5" ?
-                                <div className='img-label-contain'>
-                                    <label htmlFor="">Output</label>
-                                    <div className='img-contain'>
-                                        <img className='output-images' src="" alt="" />
-                                    </div>
-                                </div>
-                                :
-                                <>
+                    {secondTabOptions !== "0" ?
+                        <Row>
+                            <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
+                                {secondTabOptions !== "5" ?
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Output</label>
                                         <div className='img-contain'>
                                             <img className='output-images' src="" alt="" />
                                         </div>
                                     </div>
-                                    <div className='img-label-contain'>
-                                        <label htmlFor="">img</label>
-                                        <div className='img-contain'>
-                                            <img className='output-images' src="" alt="" />
+                                    :
+                                    <>
+                                        <div className='img-label-contain'>
+                                            <label htmlFor="">Output</label>
+                                            <div className='img-contain'>
+                                                <img className='output-images' src="" alt="" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            }
-                        </Col>
-                        <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
-                        {secondTabOptions !== "5" ?
-                                <div className='img-label-contain'>
-                                    <label htmlFor="">Histogram</label>
-                                    <div className='img-contain'>
-                                        <img className='output-images' src="" alt="" />
-                                    </div>
-                                </div>
-                                :
-                                <>
+                                        <div className='img-label-contain'>
+                                            <label htmlFor="">img</label>
+                                            <div className='img-contain'>
+                                                <img className='output-images' src="" alt="" />
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </Col>
+                            <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
+                                {secondTabOptions !== "5" ?
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Histogram</label>
                                         <div className='img-contain'>
                                             <img className='output-images' src="" alt="" />
                                         </div>
                                     </div>
-                                    <div className='img-label-contain'>
-                                        <label htmlFor="">img</label>
-                                        <div className='img-contain'>
-                                            <img className='output-images' src="" alt="" />
+                                    :
+                                    <>
+                                        <div className='img-label-contain'>
+                                            <label htmlFor="">Histogram</label>
+                                            <div className='img-contain'>
+                                                <img className='output-images' src="" alt="" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            }
-                        </Col>
-                        <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
-                        {secondTabOptions !== "5" ?
-                                <div className='img-label-contain'>
-                                    <label htmlFor="">Comulative</label>
-                                    <div className='img-contain'>
-                                        <img className='output-images' src="" alt="" />
-                                    </div>
-                                </div>
-                                :
-                                <>
+                                        <div className='img-label-contain'>
+                                            <label htmlFor="">img</label>
+                                            <div className='img-contain'>
+                                                <img className='output-images' src="" alt="" />
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </Col>
+                            <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
+                                {secondTabOptions !== "5" ?
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Comulative</label>
                                         <div className='img-contain'>
                                             <img className='output-images' src="" alt="" />
                                         </div>
                                     </div>
-                                    <div className='img-label-contain'>
-                                        <label htmlFor="">img</label>
-                                        <div className='img-contain'>
-                                            <img className='output-images' src="" alt="" />
+                                    :
+                                    <>
+                                        <div className='img-label-contain'>
+                                            <label htmlFor="">Comulative</label>
+                                            <div className='img-contain'>
+                                                <img className='output-images' src="" alt="" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            }
-                        </Col>
-                    </Row>
+                                        <div className='img-label-contain'>
+                                            <label htmlFor="">img</label>
+                                            <div className='img-contain'>
+                                                <img className='output-images' src="" alt="" />
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </Col>
+                        </Row>
+                        : null
+                    }
+
                 </Col>
             </Row>
         </Container>

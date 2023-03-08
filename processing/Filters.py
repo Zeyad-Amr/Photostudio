@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
 from math import sqrt
 import numpy as np
-import random
+
 
 """ 
 # TODO:
@@ -27,8 +27,8 @@ import random
 
 
 class Filters:
-    def __init__(self, image):
-        self.image = image
+    def __init__():
+        pass
 
     def salt_pepper_noise(image, range):
         row, col = image.shape
@@ -155,6 +155,8 @@ class sobel_edge_detector:
                     self.image[i][j] = 1 - self.image[i][j]
             plt.imshow(self.image, cmap='gray')
             plt.show()
+
+
 ###### CANNY######
 
 

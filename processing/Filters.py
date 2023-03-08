@@ -60,6 +60,8 @@ class Filters:
     def average_filter(image, kernel_size):
         row, col = image.shape
         new_image = np.zeros((row, col))
+
+        # apply filter
         for i in range(row):
             for j in range(col):
                 new_image[i, j] = np.mean(
@@ -69,13 +71,15 @@ class Filters:
     def median_filter(image, kernel_size):
         row, col = image.shape
         new_image = np.zeros((row, col))
+
+        # apply filter
         for i in range(row):
             for j in range(col):
                 new_image[i, j] = np.median(
                     image[i:i+kernel_size, j:j+kernel_size])
         return new_image
 
-    def gaussian_filter(image, kernel_size, self):
+    def gaussian_filter(image, kernel_size):
         row, col = image.shape
         new_image = np.zeros((row, col))
         sigma = 2

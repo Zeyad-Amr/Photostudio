@@ -5,8 +5,8 @@ const FileContextProvider = ({ children } : any) => {
 
     // input img component
     const baseURL: string = 'http://localhost:8000' 
-    const [uploadImg,setUploadImg] = useState<String | undefined>('')
-    const [imgId,setImgId] = useState<String | undefined>('')
+    const [uploadImg,setUploadImg] = useState<string | undefined>('')
+    const [imgId,setImgId] = useState<string | undefined>('')
     
     // SecondTab component
     const [sliderC,setSliderC] = useState<number>(40)
@@ -14,8 +14,8 @@ const FileContextProvider = ({ children } : any) => {
     const [sliderGlobal,setSliderGlobal] = useState<number>(30)
     
     // Third tab component
-    const [uploadImgfirst,setUploadImgfirst] = useState<String | undefined>('')
-    const [uploadImgsecond,setUploadImgsecond] = useState<String | undefined>('')
+    const [uploadImgfirst,setUploadImgfirst] = useState<string | undefined>('')
+    const [uploadImgsecond,setUploadImgsecond] = useState<string | undefined>('')
 
 
     return (

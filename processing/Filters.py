@@ -30,6 +30,9 @@ class Filters:
     def __init__():
         pass
 
+    ######################################################################
+    # Add noise to the image algorithms
+
     def salt_pepper_noise(image, range):
         row, col = image.shape
         salt_pepper = np.random.random((row, col))*255
@@ -56,6 +59,9 @@ class Filters:
         noise = np.random.uniform(low, high, (row, col))
         noisy = image + noise
         return noisy
+
+    ######################################################################
+    # Smoothing filters algorithms
 
     def average_filter(image, kernel_size):
         row, col = image.shape
@@ -101,6 +107,60 @@ class Filters:
                 new_image[i, j] = np.sum(
                     image[i:i+kernel_size, j:j+kernel_size]*kernel)
         return new_image
+
+        ######################################################################
+        # Edge detection algorithms
+
+        def sobel_edge_detector(image):
+            vertical_grad_filter = np.array(
+                [[1, 0, -1], [2, 0, -2], [1, 0, -1]])
+            horizontal_grad_filter = np.array(
+                [[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
+            return __detect_edges_helper(image, vertical_grad_filter, horizontal_grad_filter)
+
+        def prewitt_edge_detector(image):
+            vertical_grad_filter = np.array(
+                [[1, 1, 1], [0, 0, 0], [-1, -1, -1]])
+            horizontal_grad_filter = np.array(
+                [[1, 0, -1], [1, 0, -1], [1, 0, -1]])
+            return __detect_edges_helper(image, vertical_grad_filter, horizontal_grad_filter)
+
+        def __detect_edges_helper(image, vertical_grad_filter=None, horizontal_grad_filter=None):
+            # convert to grayscale image
+            image = np.dot(image, [1, 1, 1])//3
+
+            # normalize the image
+            image = image/255
+
+            # kernel width initialization
+            kernel_width = vertical_grad_filter.shape[0]//2
+
+            # initialize the gradient image
+            gradient = np.zeros(image.shape)
+
+            # pad the image
+            image = np.pad(image, kernel_width, 'constant')
+
+            for i in range(kernel_width, image.shape[0] - kernel_width):
+                for j in range(kernel_width, image.shape[1] - kernel_width):
+
+                    # obtain the horizontal gradients
+                    x = image[i - kernel_width: i + kernel_width +
+                              1, j - kernel_width: j + kernel_width + 1]
+                    x = x.flatten() * vertical_grad_filter.flatten()
+                    sum_x = x.sum()
+
+                    # obtain the vertical gradients
+                    y = image[i - kernel_width: i + kernel_width +
+                              1, j - kernel_width: j + kernel_width + 1]
+                    y = y.flatten() * horizontal_grad_filter.flatten()
+                    sum_y = y.sum()
+
+                    # calculate the gradient
+                    gradient[i - kernel_width][j -
+                                               kernel_width] = sqrt(sum_x**2 + sum_y**2)
+
+            return gradient
 
 
 class sobel_edge_detector:

@@ -78,7 +78,7 @@ const SecondTab = () => {
         })
     }
 
-    console.log(secondTabOptions)
+    // console.log(secondTabOptions)
 
     return (
         <Container fluid>

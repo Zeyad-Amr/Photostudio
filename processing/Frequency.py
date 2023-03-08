@@ -1,59 +1,75 @@
 import numpy as np
+import cv2
 
 
 class Frequency:
+
     def __init__():
         pass
 
-    def get_max_frequency(img):
-        rows = img.shape[0]
-        columns = img.shape[1]
-        img = np.fft.fft2(img)
-        img = np.fft.fftshift(img)
-        max = 0
-        for i in range(rows):
-            for j in range(columns):
-                if img[i][j] > max:
-                    max = img[i][j]
-        return max
+    def high_pass_filter(img, filter_range):
+        # resize the image
+        img = cv2.resize(img, (512, 512))
 
-    def get_min_frequency(img):
-        rows = img.shape[0]
-        columns = img.shape[1]
-        img = np.fft.fft2(img)
-        img = np.fft.fftshift(img)
-        min = 0
-        for i in range(rows):
-            for j in range(columns):
-                if img[i][j] < min:
-                    min = img[i][j]
-        return min
+        # convert to grayscale image
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    def low_pass_filter(img, cutoff):
-        rows = img.shape[0]
-        columns = img.shape[1]
-        img = np.fft.fft2(img)
-        img = np.fft.fftshift(img)
-        for i in range(rows):
-            for j in range(columns):
-                if (i - rows/2)**2 + (j - columns/2)**2 > cutoff**2:
-                    img[i][j] = 0
-        img = np.fft.ifftshift(img)
-        img = np.fft.ifft2(img)
-        return img
+        # apply the Fourier transform to the image
+        f = np.fft.fft2(gray)
+        fshift = np.fft.fftshift(f)
 
-    def high_pass_filter(img, cutoff):
-        rows = img.shape[0]
-        columns = img.shape[1]
-        img = np.fft.fft2(img)
-        img = np.fft.fftshift(img)
+        # define the filter mask
+        rows, cols = gray.shape
+        crow, ccol = rows//2, cols//2
+        mask = np.zeros((rows, cols), np.uint8)
+
         for i in range(rows):
-            for j in range(columns):
-                if (i - rows/2)**2 + (j - columns/2)**2 < cutoff**2:
-                    img[i][j] = 0
-        img = np.fft.ifftshift(img)
-        img = np.fft.ifft2(img)
-        return img
+            for j in range(cols):
+                dist = np.sqrt((i-crow)**2+(j-ccol)**2)
+                if dist > filter_range:
+                    mask[i][j] = 1
+
+        # apply the filter mask to the Fourier transformed image
+        fshift = fshift * mask
+
+        # apply the inverse Fourier transform to the filtered image
+        ishift = np.fft.ifftshift(fshift)
+        filtered_image = np.fft.ifft2(ishift)
+        filtered_image = np.abs(filtered_image)
+
+        return filtered_image
+
+    def low_pass_filter(img, filter_range):
+        # resize the image
+        img = cv2.resize(img, (512, 512))
+
+        # convert to grayscale image
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        # apply the Fourier transform to the image
+        f = np.fft.fft2(gray)
+        fshift = np.fft.fftshift(f)
+
+        # define the filter mask
+        rows, cols = gray.shape
+        crow, ccol = rows//2, cols//2
+        mask = np.zeros((rows, cols), np.uint8)
+
+        for i in range(rows):
+            for j in range(cols):
+                dist = np.sqrt((i-crow)**2+(j-ccol)**2)
+                if dist < filter_range:
+                    mask[i][j] = 1
+
+        # apply the filter mask to the Fourier transformed image
+        fshift = fshift * mask
+
+        # apply the inverse Fourier transform to the filtered image
+        ishift = np.fft.ifftshift(fshift)
+        filtered_image = np.fft.ifft2(ishift)
+        filtered_image = np.abs(filtered_image)
+
+        return filtered_image
 
     def hypridImages(img1, img2):
         return img1+img2

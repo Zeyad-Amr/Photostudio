@@ -4,7 +4,6 @@ import matplotlib.image as mpimg
 from math import sqrt
 import numpy as np
 
-
 """ 
 # TODO:
 1. Add additive noise to the image
@@ -22,6 +21,7 @@ import numpy as np
 - Roberts
 - Prewitt
 - Canny
+
 
 """
 
@@ -401,38 +401,48 @@ cv2.imwrite('Result.jpg', hys)
 ######################################
 
 # robert operator [[-1,-1],[1,1]]
+
+
 def robert(img):
     r, c = img.shape
-    r_sunnzi = [[-1,-1],[1,1]]
+    r_sunnzi = [[-1, -1], [1, 1]]
     for x in range(r):
         for y in range(c):
             if (y + 2 <= c) and (x + 2 <= r):
                 imgChild = img[x:x+2, y:y+2]
                 list_robert = r_sunnzi*imgChild
-                img[x, y] = abs(list_robert.sum()) # sum and absolute value
+                img[x, y] = abs(list_robert.sum())  # sum and absolute value
     return img
 
+
 ###############################
-filter_dim = 5 #A matrix for the gaussian filter
-sigma_val = 5 #sigma is the standard deviation
-def gaussian_filter(image,filter_size,sigma):
+filter_dim = 5  # A matrix for the gaussian filter
+sigma_val = 5  # sigma is the standard deviation
+
+
+def gaussian_filter(image, filter_size, sigma):
     """This function uses gaussian filter to remove image noise"""
-    filtered_image = cv2.GaussianBlur(image,(filter_size, filter_size),sigma)
+    filtered_image = cv2.GaussianBlur(image, (filter_size, filter_size), sigma)
     return filtered_image
+
+
 def prewitt_filter(any_image):
     """This function uses prewitt filter to detect image edges"""
-    image = gaussian_filter(any_image,filter_size=filter_dim,sigma=sigma_val)
-    vertical_filter = np.array([[-1,-1,-1],[0,0,0],[1,1,1]])
-    horizontal_filter = np.array([[-1,0,1],[-1,0,1],[-1,0,1]])
-    
-    vertical_filtered = cv2.filter2D(image,-1,vertical_filter)
-    horizontal_filtered = cv2.filter2D(image,-1,horizontal_filter)
-    
+    image = gaussian_filter(any_image, filter_size=filter_dim, sigma=sigma_val)
+    vertical_filter = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
+    horizontal_filter = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
+
+    vertical_filtered = cv2.filter2D(image, -1, vertical_filter)
+    horizontal_filtered = cv2.filter2D(image, -1, horizontal_filter)
+
     abs_grad_x = cv2.convertScaleAbs(vertical_filtered)
     abs_grad_y = cv2.convertScaleAbs(horizontal_filtered)
-    
-    grad =cv2.addWeighted(abs_grad_x,0.5,abs_grad_y,0.5,0)  #0.5 is the sqrt of the abs values
+
+    # 0.5 is the sqrt of the abs values
+    grad = cv2.addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0)
     return grad
+
+
 ####################################
 if __name__ == "__main__":
     img = sobel_edge_detector("test.jpg")

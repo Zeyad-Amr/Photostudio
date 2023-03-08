@@ -5,11 +5,78 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
+import axios from '../../global/API/axios';
+import './FirstTab.css'
 
 const FirstTab = () => {
 
   const [selectionMode, setSelectionMode] = useState<string>('');
   const [firstTabOptions, setFirstTabOptions] = useState<string>('');
+
+  // noise sliders & functions
+  const [uniformSlider, setUniformSlider] = useState<number>(50)
+  const [gaussianSlider, setGaussianSlider] = useState<number>(90)
+  const [saltPepperSlider, setSaltPepperSlider] = useState<number>(30)
+  const handleUniformClick = () => {
+    // axios.post('',{
+    //         firstTabOptions,uniformSlider
+    // }).then((response: any) => {
+    //         console.log(response)
+    //     }).catch((err: any) => {
+    //         console.log(err)
+    //     })
+  }
+  const handleGaussianClick = () => {
+    // axios.post('',{
+    //         firstTabOptions,gaussianSlider
+    // }).then((response: any) => {
+    //         console.log(response)
+    //     }).catch((err: any) => {
+    //         console.log(err)
+    //     })
+  }
+  const handleSaltPepperClick = () => {
+    // axios.post('',{
+    //         firstTabOptions,saltPepperSlider
+    // }).then((response: any) => {
+    //         console.log(response)
+    //     }).catch((err: any) => {
+    //         console.log(err)
+    //     })
+  }
+
+  // filter slider & functions
+  const [averageSlider, setAverageSlider] = useState<number>(40)
+  const [gaussianFilterSlider, setGaussianFilterSlider] = useState<number>(80)
+  const [medianSlider, setMedianSlider] = useState<number>(20)
+  const handleAverageClick = () => {
+    // axios.post('',{
+    //         firstTabOptions,averageSlider
+    // }).then((response: any) => {
+    //         console.log(response)
+    //     }).catch((err: any) => {
+    //         console.log(err)
+    //     })
+  }
+  const handleGaussianFilterClick = () => {
+    // axios.post('',{
+    //         firstTabOptions,gaussianFilterSlider
+    // }).then((response: any) => {
+    //         console.log(response)
+    //     }).catch((err: any) => {
+    //         console.log(err)
+    //     })
+  }
+  const handleMedianClick = () => {
+    // axios.post('',{
+    //         firstTabOptions,medianSlider
+    // }).then((response: any) => {
+    //         console.log(response)
+    //     }).catch((err: any) => {
+    //         console.log(err)
+    //     })
+  }
 
   console.log(selectionMode)
   console.log(firstTabOptions)
@@ -25,12 +92,12 @@ const FirstTab = () => {
   return (
     <Container fluid>
       <Row>
-        <Col style={{ height: "85vh", display: "flex", flexDirection: "column",  justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
+        <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
           <Inputimg />
         </Col>
-        <Col style={{ height: "85vh", display: "flex", flexDirection: "column",  justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
+        <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
           {/* selection mode */}
-          <FormControl style={{ marginBottom: "2rem",width : "13rem"}} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+          <FormControl style={{ marginBottom: "2rem", width: "13rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
             <InputLabel id="demo-simple-select-autowidth-label">Choose mode</InputLabel>
             <Select
               labelId="demo-simple-select-autowidth-label"
@@ -50,7 +117,7 @@ const FirstTab = () => {
           {
             selectionMode === "1" ?
               // noise selection
-              <FormControl style={{ marginBottom: "2rem",width : "13rem"}} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+              <FormControl style={{ marginBottom: "2rem", width: "13rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
                 <InputLabel id="demo-simple-select-autowidth-label">Choose noise</InputLabel>
                 <Select
                   labelId="demo-simple-select-autowidth-label"
@@ -69,7 +136,7 @@ const FirstTab = () => {
               </FormControl>
               : selectionMode === "2" ?
                 // filter selection
-                <FormControl style={{ marginBottom: "2rem",width : "13rem"}} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+                <FormControl style={{ marginBottom: "2rem", width: "13rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
                   <InputLabel id="demo-simple-select-autowidth-label">Choose filter</InputLabel>
                   <Select
                     labelId="demo-simple-select-autowidth-label"
@@ -88,7 +155,7 @@ const FirstTab = () => {
                 </FormControl>
                 : selectionMode === "3" ?
                   // edges detection selection
-                  <FormControl style={{ marginBottom: "2rem",width : "13rem"}} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+                  <FormControl style={{ marginBottom: "2rem", width: "13rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Choose edge detectors</InputLabel>
                     <Select
                       labelId="demo-simple-select-autowidth-label"
@@ -108,8 +175,57 @@ const FirstTab = () => {
                   </FormControl>
                   : null
           }
+          {
+            // start noise sliders
+            firstTabOptions === "1" ?
+              <div className='btn-slider-contain'>
+                <div className='sliders-contain'>
+                  <Slider value={uniformSlider} onChange={(e: any) => setUniformSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleUniformClick}>Apply</button>
+              </div>
+              : firstTabOptions === "2" ?
+              <div className='btn-slider-contain'>
+                <div className='sliders-contain'>
+                  <Slider value={gaussianSlider} onChange={(e: any) => setGaussianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleGaussianClick}>Apply</button>
+              </div>
+              : firstTabOptions === "3" ?
+              <div className='btn-slider-contain'>
+                <div className='sliders-contain'>
+                  <Slider value={saltPepperSlider} onChange={(e: any) => setSaltPepperSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleSaltPepperClick}>Apply</button>
+              </div>
+              // End noise sliders
+              // Start filter sliders
+              : firstTabOptions === "4" ?
+              <div className='btn-slider-contain'>
+                <div className='sliders-contain'>
+                  <Slider value={averageSlider} onChange={(e: any) => setAverageSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleAverageClick}>Apply</button>
+              </div>
+              : firstTabOptions === "5" ?
+              <div className='btn-slider-contain'>
+                <div className='sliders-contain'>
+                  <Slider value={gaussianFilterSlider} onChange={(e: any) => setGaussianFilterSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleGaussianFilterClick}>Apply</button>
+              </div>
+              : firstTabOptions === "6" ?
+              <div className='btn-slider-contain'>
+                <div className='sliders-contain'>
+                  <Slider value={medianSlider} onChange={(e: any) => setMedianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleMedianClick}>Apply</button>
+              </div>
+              // End filter sliders
+              : null
+          }
         </Col>
-        <Col style={{ height: "85vh", display: "flex", flexDirection: "column",  justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>
+        <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>
           <label className='output-label'>Output</label>
           <div className='output-img-contain'>
             <img className='output-img' src="" alt="" />

@@ -1,6 +1,7 @@
 import random
 import string
 from matplotlib import pyplot as plt
+from processing.Filters import Filters
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view
 from rest_framework import viewsets
@@ -103,10 +104,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         imageArr2 = self._readImage(image2, 1)
 
         # get cuttof frequancies
-        # lowCutoff = request.data.get("lowCutoff")
-        # highCutoff = request.data.get("highCutoff")
-        lowCutoff = 0
-        highCutoff = 0
+        firstCutoff = request.data.get("f_cutoff")
+        secondCutoff = request.data.get("s_cutoff")
 
         option = request.data.get("option")
 
@@ -120,8 +119,8 @@ class ImageViewSet(viewsets.ModelViewSet):
             return Response(data={"image": ""})
 
         imgOperator = Frequency()
-        lowPass = imgOperator.low_pass_filter(L_image, lowCutoff)
-        highPass = imgOperator.high_pass_filter(H_image, highCutoff)
+        lowPass = imgOperator.low_pass_filter(L_image, firstCutoff)
+        highPass = imgOperator.high_pass_filter(H_image, secondCutoff)
 
         hybrid = imgOperator.hypridImages(lowPass, highPass)
         serializerRes = ImageSerializerArr(data={"image": hybrid})
@@ -131,8 +130,57 @@ class ImageViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializerRes.errors, status=400)
 
+    # the api that process third tab (filter) functions
+
+    @action(detail=True, methods=["post"], url_path=r'filter_process')
+    def filterProcess(self, request, pk=None):
+        # get the image given its id (pk = primary key)
+        image = get_object_or_404(self.queryset, pk=pk)
+        # read the image to 2d array
+        imageArr = self._readImage(image)
+
+        option = request.data.get("option")
+        range = request.data.get("range")
+        imgOperator = Filters()
+
+        # add noise
+        if(option == '1'):
+            operatedImg = imgOperator.uniform_noise(imageArr, range)
+        elif(option == '2'):
+            operatedImg = imgOperator.gaussian_noise(imageArr, range)
+        elif(option == '3'):
+            operatedImg = imgOperator.salt_pepper_noise(imageArr, range)
+
+        # filter image
+        elif(option == '4'):
+            operatedImg = imgOperator.average_filter(imageArr, range)
+        elif(option == '5'):
+            operatedImg = imgOperator.gaussian_filter(imageArr, range)
+        elif(option == '6'):
+            operatedImg = imgOperator.median_filter(imageArr, range)
+
+        # edge detection
+        elif(option == '7'):
+            operatedImg = imgOperator.sobel_edge_detector(imageArr, range)
+        elif(option == '8'):
+            operatedImg = imgOperator.roberts_edge_detector(imageArr, range)
+        elif(option == '9'):
+            operatedImg = imgOperator.prewitt_edge_detector(imageArr, range)
+        # elif(option == '10'):
+            # operatedImg = imgOperator.cany(imageArr, range)
+        else:
+            return Response(data={"image": ""})
+
+        serializerRes = ImageSerializerArr(data={"image": operatedImg})
+        if serializerRes.is_valid():
+            serializerRes.save()
+            return Response(data=serializerRes.data, status=200)
+        else:
+            return Response(serializerRes.errors, status=400)
+
 
 ########################## Helper Functions ##########################
+
 
     def _readImage(self, image, falg=0):
         serializer = self.serializer_class(image)

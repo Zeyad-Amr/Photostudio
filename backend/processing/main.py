@@ -9,7 +9,7 @@ import numpy as np
 img = cv2.imread('../images/lena.jpg', 0)
 
 imgOperator = Histograms(img)
-newImg = imgOperator.applyGlobalThreshold(50)
+newImg = imgOperator.getHistoGram()
 cv2.imwrite('../images/localthreshold.jpg', newImg)
 
 img = cv2.imread('../images/Red_Color.jpg')

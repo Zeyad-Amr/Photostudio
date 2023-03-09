@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState , useEffect } from 'react'
+import React, { useRef, useContext, useState, useEffect } from 'react'
 import { FileContext } from '../../contexts/fileContext'
 import axios from '../../../Components/global/API/axios';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -13,52 +13,65 @@ const Inputimg = () => {
   const inputFilefirst = useRef<HTMLInputElement | null>(null);
   const inputFilesecond = useRef<HTMLInputElement | null>(null);
   const [thirdTabOptions, setThirdTabOptions] = useState<string>('');
+  const [imgOutput, setImgOutput] = useState<string | undefined>('')
+  const [firstImgId, setFirstImgId] = useState<string | undefined>('')
+  const [secondImgId, setSecondImgId] = useState<string | undefined>('')
+
 
   const {
     uploadImgfirst,
     setUploadImgfirst,
     uploadImgsecond,
-    setUploadImgsecond
+    setUploadImgsecond,
+    baseURL
   } = useContext(FileContext);
 
   // integration with Back
-    // useEffect(() => {
-    //     axios.post('',
-    //         thirdTabOptions
-    //     ).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
-    // }, [thirdTabOptions])
+  useEffect(() => {
+    axios.post('/image/frequancy_process/',
+      {
+        option: thirdTabOptions,
+        f_imgId: firstImgId,
+        s_imgId: secondImgId
+      }
+    ).then((res: any) => {
+      setImgOutput(baseURL + res.data.image)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
+  }, [thirdTabOptions])
 
-    console.log(thirdTabOptions)
+  console.log(thirdTabOptions)
 
 
   const handleUploadfirst = (e: any) => {
-    setUploadImgfirst(URL.createObjectURL(e.target.files[0]));
     const formData = new FormData();
-    formData.append("image1", e.target.files[0])
-    // axios.post('/image/',
-    //   formData
-    // ).then((response: any) => {
-    //   console.log(response)
-    // }).catch((err: any) => {
-    //   console.log(err)
-    // })
+    formData.append("image", e.target.files[0])
+    axios.post('/image/',
+      formData
+    ).then((res: any) => {
+      setUploadImgfirst(baseURL + res.data.image);
+      setFirstImgId(res.data.id)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
   }
 
   const handleUploadsecond = (e: any) => {
     setUploadImgsecond(URL.createObjectURL(e.target.files[0]));
     const formData = new FormData();
-    formData.append("image2", e.target.files[0])
-    // axios.post('/image/',
-    //   formData
-    // ).then((response: any) => {
-    //   console.log(response)
-    // }).catch((err: any) => {
-    //   console.log(err)
-    // })
+    formData.append("image", e.target.files[0])
+    axios.post('/image/',
+      formData
+    ).then((res: any) => {
+      setUploadImgsecond(baseURL + res.data.image);
+      setSecondImgId(res.data.id)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
   }
 
   const handleButtonClickfirst = () => {
@@ -75,7 +88,7 @@ const Inputimg = () => {
 
   const handleChangeOptions = (event: SelectChangeEvent) => {
     setThirdTabOptions(event.target.value);
-};
+  };
 
   return (
     <Container fluid>
@@ -131,9 +144,9 @@ const Inputimg = () => {
               <MenuItem value="2">Low 1 + High 2</MenuItem>
             </Select>
           </FormControl>
-            {/* <label className='output-label'>Output</label> */}
+          {/* <label className='output-label'>Output</label> */}
           <div className='output-img-contain'>
-            <img className='output-img' style={{ display: uploadImgsecond === undefined || uploadImgsecond === "" ? "none" : "block" }} src={uploadImgsecond} alt="" />
+            <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
           </div>
         </Col>
       </Row>

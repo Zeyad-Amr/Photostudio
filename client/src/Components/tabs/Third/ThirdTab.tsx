@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
 import './ThirdTab.css'
 
 const Inputimg = () => {
@@ -16,6 +17,8 @@ const Inputimg = () => {
   const [imgOutput, setImgOutput] = useState<string | undefined>('')
   const [firstImgId, setFirstImgId] = useState<string | undefined>('')
   const [secondImgId, setSecondImgId] = useState<string | undefined>('')
+  const [firstCutoffSlider, setFirstCutoffSlider] = useState<number>(10)
+  const [secondCutoffSlider, setSecondCutoffSlider] = useState<number>(40)
 
 
   const {
@@ -26,21 +29,6 @@ const Inputimg = () => {
     baseURL
   } = useContext(FileContext);
 
-  // integration with Back
-  useEffect(() => {
-    axios.post('/image/frequancy_process/',
-      {
-        option: thirdTabOptions,
-        f_imgId: firstImgId,
-        s_imgId: secondImgId
-      }
-    ).then((res: any) => {
-      setImgOutput(baseURL + res.data.image)
-      console.log(res)
-    }).catch((err: any) => {
-      console.log(err)
-    })
-  }, [thirdTabOptions])
 
   console.log(thirdTabOptions)
 
@@ -90,6 +78,23 @@ const Inputimg = () => {
     setThirdTabOptions(event.target.value);
   };
 
+  const handleCutoffButton = () => {
+    axios.post('/image/frequancy_process/',
+      {
+        option: thirdTabOptions,
+        f_imgId: firstImgId,
+        s_imgId: secondImgId,
+        // lowCutoff:
+        // highCutoff:
+      }
+    ).then((res: any) => {
+      setImgOutput(baseURL + res.data.image)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
+  }
+
   return (
     <Container fluid>
       <Row>
@@ -128,7 +133,7 @@ const Inputimg = () => {
           </div>
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
-          <FormControl style={{ marginTop: "-1rem", marginBottom: "1rem", marginLeft: "2.5rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+          <FormControl style={{ marginTop: "-1rem", marginBottom: "1rem",width:"12rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
             <InputLabel id="demo-simple-select-autowidth-label">Choose merge</InputLabel>
             <Select
               labelId="demo-simple-select-autowidth-label"
@@ -148,6 +153,21 @@ const Inputimg = () => {
           <div className='output-img-contain'>
             <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
           </div>
+          {
+            thirdTabOptions === "1" || thirdTabOptions === "2" ?
+              <div className='all-sliders'>
+                <div className='sliders-contain'>
+                  <label htmlFor="">First Cutoff</label>
+                  <Slider value={firstCutoffSlider} onChange={(e: any) => setFirstCutoffSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <div className='sliders-contain'>
+                  <label htmlFor="">Second Cutoff</label>
+                  <Slider value={secondCutoffSlider} onChange={(e: any) => setSecondCutoffSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+                <button className='apply-btn' onClick={handleCutoffButton}>Apply</button>
+              </div>
+              : null
+          }
         </Col>
       </Row>
     </Container>
@@ -156,56 +176,3 @@ const Inputimg = () => {
 
 export default Inputimg
 
-
-
-
-
-// import Plot from 'react-plotly.js';
-{/* <Plot data={[angle]} layout={layout} config={config} /> */ }
-  // var angle = {
-  //   x: frequency,
-  //   y: phase,
-  //   type: "scatter",
-  //   line: {
-  //     color: "#333",
-  //     width: 2,
-  //   },
-  //   yaxis:"y2"
-
-  // };
-
-  // var config = {
-  //   displayModeBar: false,
-  //   displaylogo: false
-  // }
-
-  // var layout = {
-  //   width: 420,
-  //   height: 240,
-  //   margin: {
-  //     l: 20,
-  //     r: 0,
-  //     // b: 0,
-  //     t: 0
-  //   },
-  //   xaxis: {
-  //     automargin: true,
-  //     title: {
-  //       text: "Frequency",
-  //       standoff: 20
-  //     }},
-  //     yaxis1: {
-  //       automargin: true,
-  //       tickangle: 90,
-  //       title: {
-  //         text: "Magnitude",
-  //         standoff: 20
-  //       }},
-  //       yaxis2: {
-  //         automargin: true,
-  //         tickangle: 90,
-  //         title: {
-  //           text: "Phase",
-  //           standoff: 20
-  //         }},
-  // };

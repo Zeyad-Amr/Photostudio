@@ -16,3 +16,9 @@
 .output-label {
     margin-bottom: 1rem;
 }
+
+.all-sliders {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}

@@ -104,10 +104,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         imageArr2 = self._readImage(image2, 1)
 
         # get cuttof frequancies
-        # lowCutoff = request.data.get("lowCutoff")
-        # highCutoff = request.data.get("highCutoff")
-        lowCutoff = 0
-        highCutoff = 0
+        firstCutoff = request.data.get("f_cutoff")
+        secondCutoff = request.data.get("s_cutoff")
 
         option = request.data.get("option")
 
@@ -121,8 +119,8 @@ class ImageViewSet(viewsets.ModelViewSet):
             return Response(data={"image": ""})
 
         imgOperator = Frequency()
-        lowPass = imgOperator.low_pass_filter(L_image, lowCutoff)
-        highPass = imgOperator.high_pass_filter(H_image, highCutoff)
+        lowPass = imgOperator.low_pass_filter(L_image, firstCutoff)
+        highPass = imgOperator.high_pass_filter(H_image, secondCutoff)
 
         hybrid = imgOperator.hypridImages(lowPass, highPass)
         serializerRes = ImageSerializerArr(data={"image": hybrid})

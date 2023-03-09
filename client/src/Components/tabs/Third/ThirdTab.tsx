@@ -84,8 +84,8 @@ const Inputimg = () => {
         option: thirdTabOptions,
         f_imgId: firstImgId,
         s_imgId: secondImgId,
-        // lowCutoff:
-        // highCutoff:
+        f_cutoff: firstCutoffSlider,
+        s_cutoff: secondCutoffSlider
       }
     ).then((res: any) => {
       setImgOutput(baseURL + res.data.image)

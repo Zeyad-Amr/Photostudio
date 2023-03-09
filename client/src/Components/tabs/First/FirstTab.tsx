@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Col, Container, Row } from 'react-bootstrap'
 import Inputimg from '../../inputImg/Inputimg'
 import InputLabel from '@mui/material/InputLabel';
@@ -8,11 +8,21 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import axios from '../../global/API/axios';
 import './FirstTab.css'
+import { FileContext } from '../../contexts/fileContext';
 
 const FirstTab = () => {
 
+  const {
+    imgId,
+    baseURL
+  } = useContext(FileContext);
+
+
   const [selectionMode, setSelectionMode] = useState<string>('');
   const [firstTabOptions, setFirstTabOptions] = useState<string>('');
+  const [imgOutput, setImgOutput] = useState<string | undefined>('')
+  const [outputId, setOutputId] = useState<string | undefined>('')
+
 
   // noise sliders & functions
   const [uniformSlider, setUniformSlider] = useState<number>(50)
@@ -20,23 +30,30 @@ const FirstTab = () => {
   const [saltPepperSlider, setSaltPepperSlider] = useState<number>(30)
 
 
-  const sendRequest = (range?: number ) => {
-    // axios.post('', {
-    //   option: firstTabOptions, range
-    // }).then((response: any) => {
-    //   console.log(response)
-    // }).catch((err: any) => {
-    //   console.log(err)
-    // })
+  const sendRequest = (id: string | undefined, range?: number) => {
+    console.log(id);
+
+    if (id === '') {
+      id = imgId
+    }
+    axios.post(`/image/${id}/filter_process/`, {
+      option: firstTabOptions, range
+    }).then((res: any) => {
+      setImgOutput(baseURL + res.data.image)
+      setOutputId(res.data.id)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
   }
   const handleUniformClick = () => {
-    sendRequest(uniformSlider)
+    sendRequest(outputId, uniformSlider)
   }
   const handleGaussianClick = () => {
-    sendRequest(gaussianSlider)
+    sendRequest(outputId, gaussianSlider)
   }
   const handleSaltPepperClick = () => {
-    sendRequest(saltPepperSlider)
+    sendRequest(outputId, saltPepperSlider)
   }
 
   // filter slider & functions
@@ -44,27 +61,27 @@ const FirstTab = () => {
   const [gaussianFilterSlider, setGaussianFilterSlider] = useState<number>(80)
   const [medianSlider, setMedianSlider] = useState<number>(20)
   const handleAverageClick = () => {
-    sendRequest(averageSlider)
+    sendRequest(outputId, averageSlider)
   }
   const handleGaussianFilterClick = () => {
-    sendRequest(gaussianFilterSlider)
+    sendRequest(outputId, gaussianFilterSlider)
   }
   const handleMedianClick = () => {
-    sendRequest(medianSlider)
+    sendRequest(outputId, medianSlider)
   }
 
   // edge detection slider & functions
   const handleSobelClick = () => {
-    sendRequest()
+    sendRequest(outputId)
   }
   const handleRobertsClick = () => {
-    sendRequest()
+    sendRequest(outputId)
   }
   const handlePrewittClick = () => {
-    sendRequest()
+    sendRequest(outputId)
   }
   const handleCannyClick = () => {
-    sendRequest()
+    sendRequest(outputId)
   }
 
   console.log(selectionMode)
@@ -217,7 +234,7 @@ const FirstTab = () => {
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>
           <label className='output-label'>Output</label>
           <div className='output-img-contain'>
-            <img className='output-img' src="" alt="" />
+            <img className='output-img' src={imgOutput} alt="" />
           </div>
         </Col>
       </Row>

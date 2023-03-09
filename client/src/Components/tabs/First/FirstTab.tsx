@@ -18,32 +18,25 @@ const FirstTab = () => {
   const [uniformSlider, setUniformSlider] = useState<number>(50)
   const [gaussianSlider, setGaussianSlider] = useState<number>(90)
   const [saltPepperSlider, setSaltPepperSlider] = useState<number>(30)
-  const handleUniformClick = () => {
-    // axios.post('',{
-    //         firstTabOptions,uniformSlider
+
+
+  const sendRequest = (range: number) => {
+    // axios.post('', {
+    //   option: firstTabOptions, range
     // }).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
+    //   console.log(response)
+    // }).catch((err: any) => {
+    //   console.log(err)
+    // })
+  }
+  const handleUniformClick = () => {
+    sendRequest(uniformSlider)
   }
   const handleGaussianClick = () => {
-    // axios.post('',{
-    //         firstTabOptions,gaussianSlider
-    // }).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
+    sendRequest(gaussianSlider)
   }
   const handleSaltPepperClick = () => {
-    // axios.post('',{
-    //         firstTabOptions,saltPepperSlider
-    // }).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
+    sendRequest(saltPepperSlider)
   }
 
   // filter slider & functions
@@ -51,31 +44,13 @@ const FirstTab = () => {
   const [gaussianFilterSlider, setGaussianFilterSlider] = useState<number>(80)
   const [medianSlider, setMedianSlider] = useState<number>(20)
   const handleAverageClick = () => {
-    // axios.post('',{
-    //         firstTabOptions,averageSlider
-    // }).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
+    sendRequest(averageSlider)
   }
   const handleGaussianFilterClick = () => {
-    // axios.post('',{
-    //         firstTabOptions,gaussianFilterSlider
-    // }).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
+    sendRequest(gaussianFilterSlider)
   }
   const handleMedianClick = () => {
-    // axios.post('',{
-    //         firstTabOptions,medianSlider
-    // }).then((response: any) => {
-    //         console.log(response)
-    //     }).catch((err: any) => {
-    //         console.log(err)
-    //     })
+    sendRequest(medianSlider)
   }
 
   console.log(selectionMode)
@@ -185,44 +160,44 @@ const FirstTab = () => {
                 <button className='apply-btn' onClick={handleUniformClick}>Apply</button>
               </div>
               : firstTabOptions === "2" ?
-              <div className='btn-slider-contain'>
-                <div className='sliders-contain'>
-                  <Slider value={gaussianSlider} onChange={(e: any) => setGaussianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                <div className='btn-slider-contain'>
+                  <div className='sliders-contain'>
+                    <Slider value={gaussianSlider} onChange={(e: any) => setGaussianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                  </div>
+                  <button className='apply-btn' onClick={handleGaussianClick}>Apply</button>
                 </div>
-                <button className='apply-btn' onClick={handleGaussianClick}>Apply</button>
-              </div>
-              : firstTabOptions === "3" ?
-              <div className='btn-slider-contain'>
-                <div className='sliders-contain'>
-                  <Slider value={saltPepperSlider} onChange={(e: any) => setSaltPepperSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
-                </div>
-                <button className='apply-btn' onClick={handleSaltPepperClick}>Apply</button>
-              </div>
-              // End noise sliders
-              // Start filter sliders
-              : firstTabOptions === "4" ?
-              <div className='btn-slider-contain'>
-                <div className='sliders-contain'>
-                  <Slider value={averageSlider} onChange={(e: any) => setAverageSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
-                </div>
-                <button className='apply-btn' onClick={handleAverageClick}>Apply</button>
-              </div>
-              : firstTabOptions === "5" ?
-              <div className='btn-slider-contain'>
-                <div className='sliders-contain'>
-                  <Slider value={gaussianFilterSlider} onChange={(e: any) => setGaussianFilterSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
-                </div>
-                <button className='apply-btn' onClick={handleGaussianFilterClick}>Apply</button>
-              </div>
-              : firstTabOptions === "6" ?
-              <div className='btn-slider-contain'>
-                <div className='sliders-contain'>
-                  <Slider value={medianSlider} onChange={(e: any) => setMedianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
-                </div>
-                <button className='apply-btn' onClick={handleMedianClick}>Apply</button>
-              </div>
-              // End filter sliders
-              : null
+                : firstTabOptions === "3" ?
+                  <div className='btn-slider-contain'>
+                    <div className='sliders-contain'>
+                      <Slider value={saltPepperSlider} onChange={(e: any) => setSaltPepperSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                    </div>
+                    <button className='apply-btn' onClick={handleSaltPepperClick}>Apply</button>
+                  </div>
+                  // End noise sliders
+                  // Start filter sliders
+                  : firstTabOptions === "4" ?
+                    <div className='btn-slider-contain'>
+                      <div className='sliders-contain'>
+                        <Slider value={averageSlider} onChange={(e: any) => setAverageSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                      </div>
+                      <button className='apply-btn' onClick={handleAverageClick}>Apply</button>
+                    </div>
+                    : firstTabOptions === "5" ?
+                      <div className='btn-slider-contain'>
+                        <div className='sliders-contain'>
+                          <Slider value={gaussianFilterSlider} onChange={(e: any) => setGaussianFilterSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                        </div>
+                        <button className='apply-btn' onClick={handleGaussianFilterClick}>Apply</button>
+                      </div>
+                      : firstTabOptions === "6" ?
+                        <div className='btn-slider-contain'>
+                          <div className='sliders-contain'>
+                            <Slider value={medianSlider} onChange={(e: any) => setMedianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                          </div>
+                          <button className='apply-btn' onClick={handleMedianClick}>Apply</button>
+                        </div>
+                        // End filter sliders
+                        : null
           }
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>

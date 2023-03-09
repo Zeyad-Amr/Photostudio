@@ -123,9 +123,13 @@ class Filters:
             [[1, 0, -1], [1, 0, -1], [1, 0, -1]])
         return self.__detect_edges_helper(image, vertical_grad_filter, horizontal_grad_filter)
 
+    def roberts_edge_detector(self, image):
+        vertical_grad_filter = np.array([[0, 0, 0], [0, 1, 0], [0, 0, -1]])
+        horizontal_grad_filter = np.array([[0, 0, 0], [0, 0, 1], [0, -1, 0]])
+        return self.__detect_edges_helper(image, vertical_grad_filter, horizontal_grad_filter)
+
     def __detect_edges_helper(self, image, vertical_grad_filter=None, horizontal_grad_filter=None):
         # convert to grayscale image
-        # image = np.dot(image, [1, 1, 1])//3
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
         # normalize the image

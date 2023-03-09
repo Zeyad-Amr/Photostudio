@@ -20,7 +20,7 @@ const FirstTab = () => {
   const [saltPepperSlider, setSaltPepperSlider] = useState<number>(30)
 
 
-  const sendRequest = (range: number) => {
+  const sendRequest = (range?: number ) => {
     // axios.post('', {
     //   option: firstTabOptions, range
     // }).then((response: any) => {
@@ -51,6 +51,20 @@ const FirstTab = () => {
   }
   const handleMedianClick = () => {
     sendRequest(medianSlider)
+  }
+
+  // edge detection slider & functions
+  const handleSobelClick = () => {
+    sendRequest()
+  }
+  const handleRobertsClick = () => {
+    sendRequest()
+  }
+  const handlePrewittClick = () => {
+    sendRequest()
+  }
+  const handleCannyClick = () => {
+    sendRequest()
   }
 
   console.log(selectionMode)
@@ -142,10 +156,10 @@ const FirstTab = () => {
                       <MenuItem value="0">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value="7">Sobel</MenuItem>
-                      <MenuItem value="8">Roberts</MenuItem>
-                      <MenuItem value="9">Prewitt</MenuItem>
-                      <MenuItem value="10">Canny</MenuItem>
+                      <MenuItem value="7" onClick={handleSobelClick}>Sobel</MenuItem>
+                      <MenuItem value="8" onClick={handleRobertsClick}>Roberts</MenuItem>
+                      <MenuItem value="9" onClick={handlePrewittClick}>Prewitt</MenuItem>
+                      <MenuItem value="10" onClick={handleCannyClick}>Canny</MenuItem>
                     </Select>
                   </FormControl>
                   : null

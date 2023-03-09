@@ -31,9 +31,9 @@ const FirstTab = () => {
 
 
   const sendRequest = (id: string | undefined, range?: number) => {
-    console.log(id);
 
     if (id === '') {
+      console.log("aHa");
       id = imgId
     }
     axios.post(`/image/${id}/filter_process/`, {
@@ -84,8 +84,8 @@ const FirstTab = () => {
     sendRequest(outputId)
   }
 
-  console.log(selectionMode)
-  console.log(firstTabOptions)
+  // console.log(selectionMode)
+  // console.log(firstTabOptions)
 
   const handleChangeSelection = (event: SelectChangeEvent) => {
     setSelectionMode(event.target.value);
@@ -94,12 +94,17 @@ const FirstTab = () => {
   const handleChangeOptions = (event: SelectChangeEvent) => {
     setFirstTabOptions(event.target.value);
   };
+  const showId = () => {
+    console.log(outputId);
+  };
 
   return (
     <Container fluid>
       <Row>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
           <Inputimg />
+          <button className='apply-btn' onClick={showId}>show Id</button>
+
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
           {/* selection mode */}

@@ -114,6 +114,16 @@ const Inputimg = () => {
               <img className='upload-img' style={{ display: uploadImgfirst === undefined || uploadImgfirst === "" ? "none" : "block" }} src={uploadImgfirst} alt="" />
             </div>
           </div>
+          {
+            thirdTabOptions === "1" || thirdTabOptions === "2" ?
+              <div className='all-sliders'>
+                <div className='sliders-contain'>
+                  <label htmlFor="">First Cutoff</label>
+                  <Slider value={firstCutoffSlider} onChange={(e: any) => setFirstCutoffSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+              </div>
+              : null
+          }
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
           <div className='input-contain'>
@@ -131,9 +141,19 @@ const Inputimg = () => {
               <img className='upload-img' style={{ display: uploadImgsecond === undefined || uploadImgsecond === "" ? "none" : "block" }} src={uploadImgsecond} alt="" />
             </div>
           </div>
+          {
+            thirdTabOptions === "1" || thirdTabOptions === "2" ?
+              <div className='all-sliders'>
+                <div className='sliders-contain'>
+                  <label htmlFor="">Second Cutoff</label>
+                  <Slider value={secondCutoffSlider} onChange={(e: any) => setSecondCutoffSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                </div>
+              </div>
+              : null
+          }
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
-          <FormControl style={{ marginTop: "-1rem", marginBottom: "1rem",width:"12rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+          <FormControl style={{ marginTop: "-1rem", marginBottom: "1rem", width: "12rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
             <InputLabel id="demo-simple-select-autowidth-label">Choose merge</InputLabel>
             <Select
               labelId="demo-simple-select-autowidth-label"
@@ -156,14 +176,6 @@ const Inputimg = () => {
           {
             thirdTabOptions === "1" || thirdTabOptions === "2" ?
               <div className='all-sliders'>
-                <div className='sliders-contain'>
-                  <label htmlFor="">First Cutoff</label>
-                  <Slider value={firstCutoffSlider} onChange={(e: any) => setFirstCutoffSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
-                </div>
-                <div className='sliders-contain'>
-                  <label htmlFor="">Second Cutoff</label>
-                  <Slider value={secondCutoffSlider} onChange={(e: any) => setSecondCutoffSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
-                </div>
                 <button className='apply-btn' onClick={handleCutoffButton}>Apply</button>
               </div>
               : null

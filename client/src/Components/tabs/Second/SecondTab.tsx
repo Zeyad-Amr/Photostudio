@@ -35,7 +35,7 @@ const SecondTab = () => {
     // integration with Back
     useEffect(() => {
         if (imgId) {
-            axios.post(`/image/${imgId}/process/`,
+            axios.post(`/image/${imgId}/histograms_process/`,
                 { option: secondTabOptions }
             ).then((res: any) => {
                 setImgOutput(baseURL + res.data.image);
@@ -55,7 +55,7 @@ const SecondTab = () => {
     };
 
     const handleGlobalButton = () => {        
-        axios.post(`/image/${imgId}/process/`,
+        axios.post(`/image/${imgId}/histograms_process/`,
             { option: secondTabOptions, globalThreshold: sliderGlobal }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);
@@ -67,7 +67,7 @@ const SecondTab = () => {
     }
     
     const handleLocalButton = () => {
-        axios.post(`/image/${imgId}/process/`,
+        axios.post(`/image/${imgId}/histograms_process/`,
             { option: secondTabOptions, blocksize: sliderBlock, c: sliderC }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);

@@ -32,19 +32,20 @@ const FirstTab = () => {
 
   const sendRequest = (id: string | undefined, range?: number) => {
 
-    if (id === '') {
+    if (id === '' || firstTabOptions === '7' || firstTabOptions === '8' || firstTabOptions === '9' || firstTabOptions === '10') {
       console.log("aHa");
       id = imgId
     }
-    axios.post(`/image/${id}/filter_process/`, {
-      option: firstTabOptions, range
-    }).then((res: any) => {
-      setImgOutput(baseURL + res.data.image)
-      setOutputId(res.data.id)
-      console.log(res)
-    }).catch((err: any) => {
-      console.log(err)
-    })
+    if (firstTabOptions === '7' || firstTabOptions === '8' || firstTabOptions === '9' || firstTabOptions === '10')
+      axios.post(`/image/${id}/filter_process/`, {
+        option: firstTabOptions, range
+      }).then((res: any) => {
+        setImgOutput(baseURL + res.data.image)
+        setOutputId(res.data.id)
+        console.log(res)
+      }).catch((err: any) => {
+        console.log(err)
+      })
   }
   const handleUniformClick = () => {
     sendRequest(outputId, uniformSlider)
@@ -85,7 +86,7 @@ const FirstTab = () => {
   }
 
   // console.log(selectionMode)
-  // console.log(firstTabOptions)
+  console.log(firstTabOptions)
 
   const handleChangeSelection = (event: SelectChangeEvent) => {
     setSelectionMode(event.target.value);

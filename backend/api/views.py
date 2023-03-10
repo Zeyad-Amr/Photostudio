@@ -38,14 +38,60 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["delete"], url_path=r'delete')
-    def delete_all(self, request):
-        instance = Image.objects.all()
-        instance.delete()
-        # you custom logic #
-        return Response(instance)
+    # the api that process First tab (filter) functions
 
-    # the api that process second tab (histograms) functions
+    @action(detail=True, methods=["post"], url_path=r'filter_process')
+    def filterProcess(self, request, pk=None):
+        # get the image given its id (pk = primary key)
+        image = get_object_or_404(self.queryset, pk=pk)
+        # read the image to 2d array
+        imageArr = self._readImage(image)
+
+        option = request.data.get("option")
+        print(option)
+
+        range = request.data.get("range")
+        imgOperator = Filters()
+
+        # add noise
+        if(option == '1'):
+            operatedImg = imgOperator.uniform_noise(imageArr, range)
+        elif(option == '2'):
+            operatedImg = imgOperator.gaussian_noise(imageArr, range)
+        elif(option == '3'):
+            operatedImg = imgOperator.salt_pepper_noise(imageArr, range)
+
+        # filter image
+        elif(option == '4'):
+            operatedImg = imgOperator.average_filter(imageArr, range)
+        elif(option == '5'):
+            operatedImg = imgOperator.gaussian_filter(imageArr, range)
+        elif(option == '6'):
+            operatedImg = imgOperator.median_filter(imageArr, range)
+
+        # edge detection
+        elif(option == '7'):
+            print("aywa 7ena")
+            operatedImg = imgOperator.sobel_edge_detector(imageArr)
+        elif(option == '8'):
+            print("aywa 8ena")
+            operatedImg = imgOperator.roberts_edge_detector(imageArr)
+        elif(option == '9'):
+            print("aywa 9ena")
+            operatedImg = imgOperator.prewitt_edge_detector(imageArr)
+        elif(option == '10'):
+            operatedImg = imgOperator.canny_edge_detector(imageArr, 10)
+        else:
+            return Response(data={"image": "", "id": ""})
+
+        serializerRes = ImageSerializerArr(data={"image": operatedImg})
+        if serializerRes.is_valid():
+            serializerRes.save()
+            return Response(data=serializerRes.data, status=200)
+        else:
+            return Response(serializerRes.errors, status=400)
+
+    # the api that process Second tab (histograms) functions
 
     @action(detail=True, methods=["post"], url_path=r'histograms_process')
     def histoProcess(self, request, pk=None):
@@ -90,7 +136,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializerRes.errors, status=400)
 
-    # the api that process third tab (frequancy) functions
+    # the api that process Third tab (frequancy) functions
 
     @action(detail=False, methods=["post"], url_path=r'frequancy_process')
     def freqProcess(self, request):
@@ -100,8 +146,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         image1 = get_object_or_404(self.queryset, pk=f_imgId)
         image2 = get_object_or_404(self.queryset, pk=s_imgId)
         # read the image to 2d array
-        imageArr1 = self._readImage(image1, 1)
-        imageArr2 = self._readImage(image2, 1)
+        imageArr1 = self._readImage(image1)
+        imageArr2 = self._readImage(image2)
 
         # get cuttof frequancies
         firstCutoff = request.data.get("f_cutoff")
@@ -124,54 +170,6 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         hybrid = imgOperator.hypridImages(lowPass, highPass)
         serializerRes = ImageSerializerArr(data={"image": hybrid})
-        if serializerRes.is_valid():
-            serializerRes.save()
-            return Response(data=serializerRes.data, status=200)
-        else:
-            return Response(serializerRes.errors, status=400)
-
-    # the api that process third tab (filter) functions
-
-    @action(detail=True, methods=["post"], url_path=r'filter_process')
-    def filterProcess(self, request, pk=None):
-        # get the image given its id (pk = primary key)
-        image = get_object_or_404(self.queryset, pk=pk)
-        # read the image to 2d array
-        imageArr = self._readImage(image)
-
-        option = request.data.get("option")
-        range = request.data.get("range")
-        imgOperator = Filters()
-
-        # add noise
-        if(option == '1'):
-            operatedImg = imgOperator.uniform_noise(imageArr, range)
-        elif(option == '2'):
-            operatedImg = imgOperator.gaussian_noise(imageArr, range)
-        elif(option == '3'):
-            operatedImg = imgOperator.salt_pepper_noise(imageArr, range)
-
-        # filter image
-        elif(option == '4'):
-            operatedImg = imgOperator.average_filter(imageArr, range)
-        elif(option == '5'):
-            operatedImg = imgOperator.gaussian_filter(imageArr, range)
-        elif(option == '6'):
-            operatedImg = imgOperator.median_filter(imageArr, range)
-
-        # edge detection
-        elif(option == '7'):
-            operatedImg = imgOperator.sobel_edge_detector(imageArr, range)
-        elif(option == '8'):
-            operatedImg = imgOperator.roberts_edge_detector(imageArr, range)
-        elif(option == '9'):
-            operatedImg = imgOperator.prewitt_edge_detector(imageArr, range)
-        # elif(option == '10'):
-            # operatedImg = imgOperator.cany(imageArr, range)
-        else:
-            return Response(data={"image": ""})
-
-        serializerRes = ImageSerializerArr(data={"image": operatedImg})
         if serializerRes.is_valid():
             serializerRes.save()
             return Response(data=serializerRes.data, status=200)

@@ -9,10 +9,10 @@ import cv2
 # from matplotlib import pyplot as plt
 
 img = cv2.imread('images/02.jpeg',0)
-print(img)
+# print(img)
 imgOperator = Histograms(img)
-newImg = imgOperator.applyLocalThreshold()
-cv2.imwrite('../images/localthreshold5.jpg', newImg)
+newImg = imgOperator.applyLocalThreshold(100,5)
+cv2.imwrite('images/localthreshold5.jpg', newImg)
 
 # img = cv2.imread('../images/Red_Color.jpg')
 # print(img.shape)

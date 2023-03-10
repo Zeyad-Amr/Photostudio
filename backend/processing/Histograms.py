@@ -3,6 +3,7 @@ from copy import deepcopy
 import numpy as np
 
 
+
 class Histograms:
 
     def __init__(self, img):

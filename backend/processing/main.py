@@ -1,17 +1,18 @@
-# from Histograms import Histograms
-# from Histograms import ColoredOperator
-# from matplotlib import pyplot as plt
+from Histograms import Histograms
+from Histograms import ColoredOperator
+from matplotlib import pyplot as plt
 from Filters import Filters
 from matplotlib import pyplot as plt
+import os
 
 import cv2
 # from matplotlib import pyplot as plt
 
-img = cv2.imread('images/02.jpeg')
+img = cv2.imread('images/02.jpeg',0)
 print(img)
-# imgOperator = Histograms(img)
-# newImg = imgOperator.getHistoGram()
-# cv2.imwrite('../images/localthreshold.jpg', newImg)
+imgOperator = Histograms(img)
+newImg = imgOperator.applyLocalThreshold()
+cv2.imwrite('../images/localthreshold5.jpg', newImg)
 
 # img = cv2.imread('../images/Red_Color.jpg')
 # print(img.shape)

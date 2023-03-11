@@ -31,22 +31,34 @@ const FirstTab = () => {
 
 
   const sendRequest = (id: string | undefined, range?: number) => {
-
-    if (id === '' || firstTabOptions === '7' || firstTabOptions === '8' || firstTabOptions === '9' || firstTabOptions === '10') {
+    const edge = ['7', '8', '9', '10']
+    if (id === '' || edge.includes(firstTabOptions)) {
       console.log("aHa");
       id = imgId
     }
-    if (firstTabOptions === '7' || firstTabOptions === '8' || firstTabOptions === '9' || firstTabOptions === '10')
-      axios.post(`/image/${id}/filter_process/`, {
-        option: firstTabOptions, range
-      }).then((res: any) => {
-        setImgOutput(baseURL + res.data.image)
-        setOutputId(res.data.id)
-        console.log(res)
-      }).catch((err: any) => {
-        console.log(err)
-      })
+    axios.post(`/image/${id}/filter_process/`, {
+      option: firstTabOptions, range
+    }).then((res: any) => {
+      setImgOutput(baseURL + res.data.image)
+      setOutputId(res.data.id)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
   }
+
+  const edgeRequest = (range?: number) => {
+
+    axios.post(`/image/${imgId}/edge_detiction/`, {
+      option: firstTabOptions, range
+    }).then((res: any) => {
+      setImgOutput(res.data.image)
+      console.log(res)
+    }).catch((err: any) => {
+      console.log(err)
+    })
+  }
+
   const handleUniformClick = () => {
     sendRequest(outputId, uniformSlider)
   }
@@ -73,16 +85,16 @@ const FirstTab = () => {
 
   // edge detection slider & functions
   const handleSobelClick = () => {
-    sendRequest(outputId)
+    edgeRequest()
   }
   const handleRobertsClick = () => {
-    sendRequest(outputId)
+    edgeRequest()
   }
   const handlePrewittClick = () => {
-    sendRequest(outputId)
+    edgeRequest()
   }
   const handleCannyClick = () => {
-    sendRequest(outputId)
+    edgeRequest()
   }
 
   // console.log(selectionMode)

@@ -3,8 +3,6 @@ from copy import deepcopy
 import numpy as np
 
 
-
-
 class Histograms:
 
     def __init__(self, img):
@@ -52,20 +50,21 @@ class Histograms:
 
     def applyLocalThreshold(self, blockSize=10, C=5):
         inputImg = self.getImg()
-        
+
         output = np.zeros_like(inputImg)
         cumulative = getCumulative2d(inputImg)
 
         for x in range(inputImg.shape[0]):
             for y in range(inputImg.shape[1]):
-                
+
                 halfHeight = blockSize // 2
-                
-                neighborhoodSum,num = getSumAndNum(cumulative,x + halfHeight,y + halfHeight,x - halfHeight,y - halfHeight)
+
+                neighborhoodSum, num = getSumAndNum(
+                    cumulative, x + halfHeight, y + halfHeight, x - halfHeight, y - halfHeight)
 
                 # Compute the local threshold using the mean and constant C
                 threshold = int(round(neighborhoodSum / (num) - C))
-                
+
                 # Apply the threshold to the pixel
                 if inputImg[x][y] >= threshold:
                     output[x][y] = 255
@@ -98,7 +97,7 @@ class Histograms:
         return r, g, b
 
     # takes 1darray and return its cumulative sum
-    def getCumSum(self,arr):
+    def getCumSum(self, arr):
         a = np.array(arr)
         b = []
 
@@ -117,6 +116,7 @@ class Histograms:
     # the intensity and the value at each index represents the frequency of that intennsity
     def getHistoGram(self, arr2d, bins=256):
         flattenedImage = self.flatten(arr2d)
+        print(flattenedImage)
 
         # array with size of bins, set to zeros
         histogram = np.zeros(bins)
@@ -129,43 +129,46 @@ class Histograms:
         return histogram
 
     # takes a 2darray and return it as just 1d.
-    def flatten(self,arr2d):
+    def flatten(self, arr2d):
         img = np.asarray(arr2d)
         img = img.flatten()
         return img
 
+
 def getCumulative2d(img):
-    
+
     w = img.shape[0]
     h = img.shape[1]
-    print(w,h)
-    cumulative = np.zeros_like(img,dtype=np.uint32)
+    # print(w, h)
+    cumulative = np.zeros_like(img, dtype=np.uint32)
     cumulative[0][0] = img[0][0]
-    for i in range(1,w):
+    for i in range(1, w):
         cumulative[i][0] = cumulative[i-1][0] + img[i][0]
-    for i in range(1,h):
+    for i in range(1, h):
         cumulative[0][i] = cumulative[0][i-1] + img[0][i]
-    for i in range(1,w):
-        for j in range(1,h):
-            cumulative[i][j] = cumulative[i-1][j] + cumulative[i][j-1] - cumulative[i-1][j-1] + img[i][j]   
+    for i in range(1, w):
+        for j in range(1, h):
+            cumulative[i][j] = cumulative[i-1][j] + \
+                cumulative[i][j-1] - cumulative[i-1][j-1] + img[i][j]
     return cumulative
 
-def getSumAndNum(cumulative,bottomRightX,bottomRightY,topLeftX,topLeftY):
+
+def getSumAndNum(cumulative, bottomRightX, bottomRightY, topLeftX, topLeftY):
     w = cumulative.shape[0]
     h = cumulative.shape[1]
 
-    #make sure coordinates are inside the shape and if not let it be.
-    bottomRightX = max(min(w-1,bottomRightX),0)
-    bottomRightY = max(min(h-1,bottomRightY),0)
-    topLeftX = max(min(w-1,topLeftX),0)
-    topLeftY = max(min(h-1,topLeftY),0)
-    
+    # make sure coordinates are inside the shape and if not let it be.
+    bottomRightX = max(min(w-1, bottomRightX), 0)
+    bottomRightY = max(min(h-1, bottomRightY), 0)
+    topLeftX = max(min(w-1, topLeftX), 0)
+    topLeftY = max(min(h-1, topLeftY), 0)
+
     bottomLeftX = bottomRightX
     bottomLeftY = topLeftY
-    
+
     topRightX = topLeftX
     topRightY = bottomRightY
-    
+
     # print(cumulative[bottomRightX][bottomRightY])
     blockSum = int(cumulative[bottomRightX][bottomRightY])
     if topRightX > 0:
@@ -174,10 +177,11 @@ def getSumAndNum(cumulative,bottomRightX,bottomRightY,topLeftX,topLeftY):
         blockSum -= cumulative[bottomLeftX][bottomLeftY-1]
     if topLeftX > 0 and topLeftY > 0:
         blockSum += cumulative[topLeftX-1][topLeftY-1]
-        
+
     n = (bottomRightX-topRightX+1)*(bottomRightY-bottomLeftY+1)
 
-    return blockSum,n
+    return blockSum, n
+
 
 class ColoredOperator:
 

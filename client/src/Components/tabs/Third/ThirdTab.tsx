@@ -15,8 +15,8 @@ const Inputimg = () => {
   const inputFilesecond = useRef<HTMLInputElement | null>(null);
   const [thirdTabOptions, setThirdTabOptions] = useState<string>('');
   const [imgOutput, setImgOutput] = useState<string | undefined>('')
-  const [firstImgId, setFirstImgId] = useState<string | undefined>('')
-  const [secondImgId, setSecondImgId] = useState<string | undefined>('')
+  const [firstImgId, setFirstImgId] = useState<string | undefined>()
+  const [secondImgId, setSecondImgId] = useState<string | undefined>()
   const [firstCutoffSlider, setFirstCutoffSlider] = useState<number>(10)
   const [secondCutoffSlider, setSecondCutoffSlider] = useState<number>(40)
 

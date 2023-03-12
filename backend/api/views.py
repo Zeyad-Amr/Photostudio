@@ -8,7 +8,7 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from django.core.files import File
 from image.models import Image
-from processing.Histograms import Histograms
+from processing.Histograms import Histograms, ColoredOperator
 from processing.Frequency import Frequency
 from .serializer import *
 import numpy as np
@@ -38,14 +38,81 @@ class ImageViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["delete"], url_path=r'delete')
-    def delete_all(self, request):
-        instance = Image.objects.all()
-        instance.delete()
-        # you custom logic #
-        return Response(instance)
+    #################### the api that process First tab (filter) functions ####################
 
-    # the api that process second tab (histograms) functions
+    @action(detail=True, methods=["post"], url_path=r'filter_process')
+    def filterProcess(self, request, pk=None):
+        # get the image given its id (pk = primary key)
+        image = get_object_or_404(self.queryset, pk=pk)
+        # read the image to 2d array
+        imageArr = self._readImage(image)
+
+        option = request.data.get("option")
+        print(option)
+        # random name to prevent histogram or cumulative images from overwriting
+        randomName = ''.join(random.choices(string.ascii_letters, k=3)) + pk
+
+        range = request.data.get("range")
+        imgOperator = Filters()
+
+        # add noise
+        if(option == '1'):
+            operatedImg = imgOperator.uniform_noise(imageArr, range)
+        elif(option == '2'):
+            operatedImg = imgOperator.gaussian_noise(imageArr, range)
+        elif(option == '3'):
+            operatedImg = imgOperator.salt_pepper_noise(imageArr, range)
+
+        # filter image
+        elif(option == '4'):
+            operatedImg = imgOperator.average_filter(imageArr, range)
+        elif(option == '5'):
+            operatedImg = imgOperator.gaussian_filter(imageArr, range)
+        elif(option == '6'):
+            operatedImg = imgOperator.median_filter(imageArr, range)
+
+        serializerRes = ImageSerializerArr(data={"image": operatedImg})
+        if serializerRes.is_valid():
+            serializerRes.save()
+            return Response(data=serializerRes.data, status=200)
+        else:
+            return Response(serializerRes.errors, status=400)
+
+    #################### the api that process First tab (edge detiction) functions ####################
+
+    @action(detail=True, methods=["post"], url_path=r'edge_detiction')
+    def edgeDetiction(self, request, pk=None):
+        # get the image given its id (pk = primary key)
+        image = get_object_or_404(self.queryset, pk=pk)
+        # read the image to 2d array
+        imageArr = self._readImage(image)
+
+        option = request.data.get("option")
+        print(option)
+        # random name to prevent histogram or cumulative images from overwriting
+        randomName = ''.join(random.choices(string.ascii_letters, k=3)) + pk
+
+        range = request.data.get("range")
+        imgOperator = Filters()
+
+        # edge detection
+        if(option == '7'):
+            operatedImg = imgOperator.sobel_edge_detector(imageArr)
+        elif(option == '8'):
+            operatedImg = imgOperator.roberts_edge_detector(imageArr)
+        elif(option == '9'):
+            operatedImg = imgOperator.prewitt_edge_detector(imageArr)
+        elif(option == '10'):
+            operatedImg = imgOperator.canny_edge_detector(imageArr, range)
+        else:
+            return Response(data={"image": "", "id": ""})
+
+        plt.imsave(IMAGES_FOLDER + "/edge" + randomName +
+                   ".jpg", operatedImg, cmap='gray')
+
+        return Response(data={"image": "http://127.0.0.1:8000/edge" + randomName + ".jpg"}, status=200)
+
+#################### the api that process Second tab (histograms) functions ####################
 
     @action(detail=True, methods=["post"], url_path=r'histograms_process')
     def histoProcess(self, request, pk=None):
@@ -90,7 +157,47 @@ class ImageViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializerRes.errors, status=400)
 
-    # the api that process third tab (frequancy) functions
+    #################### the api that process Second tab Transformation (Split to RGB) functions ####################
+
+    @action(detail=True, methods=["post"], url_path=r'transformation')
+    def transProcess(self, request, pk=None):
+        # get the image given its id (pk = primary key)
+        image = get_object_or_404(self.queryset, pk=pk)
+        # get the image path to read it w/ cv2 and pass it to Histogram class
+        imageArr = self._readImage(image)
+
+        imgOperator = Histograms(imageArr)
+        option = request.data.get("option")
+
+        # random name to prevent histogram or cumulative images from overwriting
+        redName = 'red_' + \
+            ''.join(random.choices(string.ascii_letters, k=3)) + pk
+        greenName = 'green_' + \
+            ''.join(random.choices(string.ascii_letters, k=3)) + pk
+        blueName = 'blue_' + \
+            ''.join(random.choices(string.ascii_letters, k=3)) + pk
+
+        if(option == '5'):
+            coloredImg = ColoredOperator(self._readImage(image, 1))
+            self._drawHistAndCum(
+                imgOperator, coloredImg.getRedFrame(), redName)
+            self._drawHistAndCum(
+                imgOperator, coloredImg.getGreenFrame(), greenName)
+            self._drawHistAndCum(
+                imgOperator, coloredImg.getBlueFrame(), blueName)
+            return Response(data={
+                "redHistURL": "http://127.0.0.1:8000/result/hist" + redName + ".jpg",
+                "greenHistURL": "http://127.0.0.1:8000/result/hist" + greenName + ".jpg",
+                "blueHistURL": "http://127.0.0.1:8000/result/hist" + blueName + ".jpg",
+                "redCumURL": "http://127.0.0.1:8000/result/cum" + redName + ".jpg",
+                "greenCumURL": "http://127.0.0.1:8000/result/cum" + greenName + ".jpg",
+                "blueCumURL": "http://127.0.0.1:8000/result/cum" + blueName + ".jpg",
+            },
+                status=200)
+        else:
+            return Response(data={"image": ""})
+
+    #################### the api that process Third tab (frequancy) functions ####################
 
     @action(detail=False, methods=["post"], url_path=r'frequancy_process')
     def freqProcess(self, request):
@@ -100,8 +207,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         image1 = get_object_or_404(self.queryset, pk=f_imgId)
         image2 = get_object_or_404(self.queryset, pk=s_imgId)
         # read the image to 2d array
-        imageArr1 = self._readImage(image1, 1)
-        imageArr2 = self._readImage(image2, 1)
+        imageArr1 = self._readImage(image1)
+        imageArr2 = self._readImage(image2)
 
         # get cuttof frequancies
         firstCutoff = request.data.get("f_cutoff")
@@ -130,62 +237,13 @@ class ImageViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializerRes.errors, status=400)
 
-    # the api that process third tab (filter) functions
-
-    @action(detail=True, methods=["post"], url_path=r'filter_process')
-    def filterProcess(self, request, pk=None):
-        # get the image given its id (pk = primary key)
-        image = get_object_or_404(self.queryset, pk=pk)
-        # read the image to 2d array
-        imageArr = self._readImage(image)
-
-        option = request.data.get("option")
-        range = request.data.get("range")
-        imgOperator = Filters()
-
-        # add noise
-        if(option == '1'):
-            operatedImg = imgOperator.uniform_noise(imageArr, range)
-        elif(option == '2'):
-            operatedImg = imgOperator.gaussian_noise(imageArr, range)
-        elif(option == '3'):
-            operatedImg = imgOperator.salt_pepper_noise(imageArr, range)
-
-        # filter image
-        elif(option == '4'):
-            operatedImg = imgOperator.average_filter(imageArr, range)
-        elif(option == '5'):
-            operatedImg = imgOperator.gaussian_filter(imageArr, range)
-        elif(option == '6'):
-            operatedImg = imgOperator.median_filter(imageArr, range)
-
-        # edge detection
-        elif(option == '7'):
-            operatedImg = imgOperator.sobel_edge_detector(imageArr, range)
-        elif(option == '8'):
-            operatedImg = imgOperator.roberts_edge_detector(imageArr, range)
-        elif(option == '9'):
-            operatedImg = imgOperator.prewitt_edge_detector(imageArr, range)
-        # elif(option == '10'):
-            # operatedImg = imgOperator.cany(imageArr, range)
-        else:
-            return Response(data={"image": ""})
-
-        serializerRes = ImageSerializerArr(data={"image": operatedImg})
-        if serializerRes.is_valid():
-            serializerRes.save()
-            return Response(data=serializerRes.data, status=200)
-        else:
-            return Response(serializerRes.errors, status=400)
-
 
 ########################## Helper Functions ##########################
-
 
     def _readImage(self, image, falg=0):
         serializer = self.serializer_class(image)
         imgPath = IMAGES_FOLDER+serializer.data.get("image")
-        print(imgPath)
+        # print(imgPath)
         # print(image)
         imageArr = cv2.imread(imgPath, falg)
         return imageArr

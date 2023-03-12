@@ -11,6 +11,7 @@ import Slider from '@mui/material/Slider';
 import './SecondTab.css'
 import { FileContext } from '../../contexts/fileContext'
 import axios from '../../global/API/axios';
+import { formControlClasses } from '@mui/material';
 
 
 const SecondTab = () => {
@@ -31,21 +32,49 @@ const SecondTab = () => {
     const [imgOutput, setImgOutput] = useState<string | undefined>('')
     const [imgOutputHisto, setimgOutputHisto] = useState<string | undefined>('')
     const [imgOutputCum, setimgOutputCum] = useState<string | undefined>('')
+    const [redHist, setRedHist] = useState<string | undefined>('')
+    const [redCum, setRedCum] = useState<string | undefined>('')
+    const [blueHist, setBlueHist] = useState<string | undefined>('')
+    const [blueCum, setBlueCum] = useState<string | undefined>('')
+    const [greenHist, setGreenHist] = useState<string | undefined>('')
+    const [greenCum, setGreenCum] = useState<string | undefined>('')
+    const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
 
     // integration with Back
     useEffect(() => {
-        if (imgId) {
-            axios.post(`/image/${imgId}/histograms_process/`,
+        if (secondTabOptions === '5') {
+            setSpinnerFlag(true)     
+            axios.post(`/image/${imgId}/transformation/`,
                 { option: secondTabOptions }
             ).then((res: any) => {
-                setImgOutput(baseURL + res.data.image);
-                setimgOutputHisto(res.data.histURL)
-                setimgOutputCum(res.data.cumURL)
-
+                const urls = res.data
+                setRedHist(urls.redHistURL)
+                setBlueHist(urls.blueHistURL)
+                setGreenHist(urls.greenHistURL)
+                setRedCum(urls.redCumURL)
+                setBlueCum(urls.blueCumURL)
+                setGreenCum(urls.greenCumURL)
+                setSpinnerFlag(false)
                 console.log(res)
             }).catch((err: any) => {
                 console.log(err)
             })
+        } else {
+
+            if (imgId) {
+                setSpinnerFlag(true) 
+                axios.post(`/image/${imgId}/histograms_process/`,
+                    { option: secondTabOptions }
+                ).then((res: any) => {
+                    setImgOutput(baseURL + res.data.image);
+                    setimgOutputHisto(res.data.histURL)
+                    setimgOutputCum(res.data.cumURL)
+                    setSpinnerFlag(false) 
+                    console.log(res)
+                }).catch((err: any) => {
+                    console.log(err)
+                })
+            }
         }
     }, [secondTabOptions, imgId])
 
@@ -54,25 +83,29 @@ const SecondTab = () => {
         setSecondTabOptions(event.target.value);
     };
 
-    const handleGlobalButton = () => {        
+    const handleGlobalButton = () => {
+        setSpinnerFlag(true) 
         axios.post(`/image/${imgId}/histograms_process/`,
             { option: secondTabOptions, globalThreshold: sliderGlobal }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);
             setimgOutputHisto(res.data.histURL)
             setimgOutputCum(res.data.cumURL)
+            setSpinnerFlag(false) 
         }).catch((err: any) => {
             console.log(err)
         })
     }
-    
+
     const handleLocalButton = () => {
+        setSpinnerFlag(true) 
         axios.post(`/image/${imgId}/histograms_process/`,
             { option: secondTabOptions, blocksize: sliderBlock, c: sliderC }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);
             setimgOutputHisto(res.data.histURL)
             setimgOutputCum(res.data.cumURL)
+            setSpinnerFlag(false) 
         }).catch((err: any) => {
             console.log(err)
         })
@@ -145,19 +178,20 @@ const SecondTab = () => {
                                     :
                                     <>
                                         <div className='img-label-contain'>
-                                            <label htmlFor="">Output</label>
+                                            <label htmlFor="">Red Histogram</label>
                                             <div className='img-contain'>
-                                                <img className='output-images' src="" alt="" />
+                                                <img className='output-images' src={redHist} alt="" />
                                             </div>
                                         </div>
                                         <div className='img-label-contain'>
-                                            <label htmlFor="">img</label>
+                                            <label htmlFor="">Red Cumulative</label>
                                             <div className='img-contain'>
-                                                <img className='output-images' src="" alt="" />
+                                                <img className='output-images' src={redCum} alt="" />
                                             </div>
                                         </div>
                                     </>
                                 }
+                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                             </Col>
                             <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
                                 {secondTabOptions !== "5" ?
@@ -170,24 +204,25 @@ const SecondTab = () => {
                                     :
                                     <>
                                         <div className='img-label-contain'>
-                                            <label htmlFor="">Histogram</label>
+                                            <label htmlFor="">Green Histogram</label>
                                             <div className='img-contain'>
-                                                <img className='output-images' src="" alt="" />
+                                                <img className='output-images' src={greenHist} alt="" />
                                             </div>
                                         </div>
                                         <div className='img-label-contain'>
-                                            <label htmlFor="">img</label>
+                                            <label htmlFor="">Green Cumulative</label>
                                             <div className='img-contain'>
-                                                <img className='output-images' src="" alt="" />
+                                                <img className='output-images' src={greenCum} alt="" />
                                             </div>
                                         </div>
                                     </>
+
                                 }
                             </Col>
                             <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
                                 {secondTabOptions !== "5" ?
                                     <div className='img-label-contain'>
-                                        <label htmlFor="">Comulative</label>
+                                        <label htmlFor="">Cumulative</label>
                                         <div className='img-contain'>
                                             <img className='output-images' src={imgOutputCum} alt="" />
                                         </div>
@@ -195,15 +230,15 @@ const SecondTab = () => {
                                     :
                                     <>
                                         <div className='img-label-contain'>
-                                            <label htmlFor="">Comulative</label>
+                                            <label htmlFor="">Blue Histogram</label>
                                             <div className='img-contain'>
-                                                <img className='output-images' src="" alt="" />
+                                                <img className='output-images' src={blueHist} alt="" />
                                             </div>
                                         </div>
                                         <div className='img-label-contain'>
-                                            <label htmlFor="">img</label>
+                                            <label htmlFor="">Blue Cumulative</label>
                                             <div className='img-contain'>
-                                                <img className='output-images' src="" alt="" />
+                                                <img className='output-images' src={blueCum} alt="" />
                                             </div>
                                         </div>
                                     </>

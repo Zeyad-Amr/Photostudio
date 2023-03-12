@@ -14,7 +14,8 @@ const FirstTab = () => {
 
   const {
     imgId,
-    baseURL
+    baseURL,
+    uploadImg,
   } = useContext(FileContext);
 
 
@@ -22,6 +23,7 @@ const FirstTab = () => {
   const [firstTabOptions, setFirstTabOptions] = useState<string>('');
   const [imgOutput, setImgOutput] = useState<string | undefined>('')
   const [outputId, setOutputId] = useState<string | undefined>('')
+  const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
 
 
   // noise sliders & functions
@@ -36,23 +38,26 @@ const FirstTab = () => {
       console.log("aHa");
       id = imgId
     }
+    setSpinnerFlag(true)
     axios.post(`/image/${id}/filter_process/`, {
       option: firstTabOptions, range
     }).then((res: any) => {
       setImgOutput(baseURL + res.data.image)
       setOutputId(res.data.id)
+      setSpinnerFlag(false)
       console.log(res)
     }).catch((err: any) => {
       console.log(err)
     })
   }
 
-  const edgeRequest = (range?: number) => {
-
+  const edgeRequest = (option: string, range?: number) => {
+    setSpinnerFlag(true)
     axios.post(`/image/${imgId}/edge_detiction/`, {
-      option: firstTabOptions, range
+      option, range
     }).then((res: any) => {
       setImgOutput(res.data.image)
+      setSpinnerFlag(false)
       console.log(res)
     }).catch((err: any) => {
       console.log(err)
@@ -84,17 +89,23 @@ const FirstTab = () => {
   }
 
   // edge detection slider & functions
+  const [cannySlider, setCannySlider] = useState<number>(20)
   const handleSobelClick = () => {
-    edgeRequest()
+    edgeRequest("7")
   }
   const handleRobertsClick = () => {
-    edgeRequest()
+    edgeRequest("8")
   }
   const handlePrewittClick = () => {
-    edgeRequest()
+    edgeRequest("9")
   }
   const handleCannyClick = () => {
-    edgeRequest()
+    edgeRequest("10", cannySlider)
+  }
+
+  const handleReset = () => {
+    setImgOutput(uploadImg)
+    setOutputId(imgId)
   }
 
   // console.log(selectionMode)
@@ -107,17 +118,13 @@ const FirstTab = () => {
   const handleChangeOptions = (event: SelectChangeEvent) => {
     setFirstTabOptions(event.target.value);
   };
-  const showId = () => {
-    console.log(outputId);
-  };
+
 
   return (
     <Container fluid>
       <Row>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
           <Inputimg />
-          <button className='apply-btn' onClick={showId}>show Id</button>
-
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
           {/* selection mode */}
@@ -194,7 +201,7 @@ const FirstTab = () => {
                       <MenuItem value="7" onClick={handleSobelClick}>Sobel</MenuItem>
                       <MenuItem value="8" onClick={handleRobertsClick}>Roberts</MenuItem>
                       <MenuItem value="9" onClick={handlePrewittClick}>Prewitt</MenuItem>
-                      <MenuItem value="10" onClick={handleCannyClick}>Canny</MenuItem>
+                      <MenuItem value="10">Canny</MenuItem>
                     </Select>
                   </FormControl>
                   : null
@@ -246,14 +253,24 @@ const FirstTab = () => {
                           <button className='apply-btn' onClick={handleMedianClick}>Apply</button>
                         </div>
                         // End filter sliders
-                        : null
+                        // start edge detection sliders
+                        : firstTabOptions === "10" ?
+                          <div className='btn-slider-contain'>
+                            <div className='sliders-contain'>
+                              <Slider value={cannySlider} onChange={(e: any) => setCannySlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                            </div>
+                            <button className='apply-btn' onClick={handleCannyClick}>Apply</button>
+                          </div>
+                          : null
           }
         </Col>
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>
           <label className='output-label'>Output</label>
           <div className='output-img-contain'>
-            <img className='output-img' src={imgOutput} alt="" />
+            <img className='output-img' style={{display: imgOutput === undefined || imgOutput === "" ? "none" : "block"}} src={imgOutput} alt="" />
           </div>
+          <button className='reset-btn' onClick={handleReset}>Reset</button>
+          <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
         </Col>
       </Row>
     </Container>

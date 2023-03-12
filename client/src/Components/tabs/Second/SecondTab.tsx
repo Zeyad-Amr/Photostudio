@@ -11,6 +11,7 @@ import Slider from '@mui/material/Slider';
 import './SecondTab.css'
 import { FileContext } from '../../contexts/fileContext'
 import axios from '../../global/API/axios';
+import { formControlClasses } from '@mui/material';
 
 
 const SecondTab = () => {
@@ -37,10 +38,12 @@ const SecondTab = () => {
     const [blueCum, setBlueCum] = useState<string | undefined>('')
     const [greenHist, setGreenHist] = useState<string | undefined>('')
     const [greenCum, setGreenCum] = useState<string | undefined>('')
+    const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
 
     // integration with Back
     useEffect(() => {
         if (secondTabOptions === '5') {
+            setSpinnerFlag(true)     
             axios.post(`/image/${imgId}/transformation/`,
                 { option: secondTabOptions }
             ).then((res: any) => {
@@ -51,7 +54,7 @@ const SecondTab = () => {
                 setRedCum(urls.redCumURL)
                 setBlueCum(urls.blueCumURL)
                 setGreenCum(urls.greenCumURL)
-
+                setSpinnerFlag(false)
                 console.log(res)
             }).catch((err: any) => {
                 console.log(err)
@@ -59,13 +62,14 @@ const SecondTab = () => {
         } else {
 
             if (imgId) {
+                setSpinnerFlag(true) 
                 axios.post(`/image/${imgId}/histograms_process/`,
                     { option: secondTabOptions }
                 ).then((res: any) => {
                     setImgOutput(baseURL + res.data.image);
                     setimgOutputHisto(res.data.histURL)
                     setimgOutputCum(res.data.cumURL)
-
+                    setSpinnerFlag(false) 
                     console.log(res)
                 }).catch((err: any) => {
                     console.log(err)
@@ -80,24 +84,28 @@ const SecondTab = () => {
     };
 
     const handleGlobalButton = () => {
+        setSpinnerFlag(true) 
         axios.post(`/image/${imgId}/histograms_process/`,
             { option: secondTabOptions, globalThreshold: sliderGlobal }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);
             setimgOutputHisto(res.data.histURL)
             setimgOutputCum(res.data.cumURL)
+            setSpinnerFlag(false) 
         }).catch((err: any) => {
             console.log(err)
         })
     }
 
     const handleLocalButton = () => {
+        setSpinnerFlag(true) 
         axios.post(`/image/${imgId}/histograms_process/`,
             { option: secondTabOptions, blocksize: sliderBlock, c: sliderC }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);
             setimgOutputHisto(res.data.histURL)
             setimgOutputCum(res.data.cumURL)
+            setSpinnerFlag(false) 
         }).catch((err: any) => {
             console.log(err)
         })
@@ -183,6 +191,7 @@ const SecondTab = () => {
                                         </div>
                                     </>
                                 }
+                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                             </Col>
                             <Col style={{ height: "35rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={4} sm={12} xs={12}>
                                 {secondTabOptions !== "5" ?

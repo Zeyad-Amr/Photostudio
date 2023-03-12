@@ -6,3 +6,15 @@
     margin-top: 0.5rem;
     margin-left: -2.6rem;
 }
+
+.reset-btn {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: #1976d2;
+    color: white;
+    width: 5rem;
+    height: 2rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}

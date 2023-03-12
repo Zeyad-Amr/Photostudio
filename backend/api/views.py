@@ -97,16 +97,13 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         # edge detection
         if(option == '7'):
-            print("aywa 7ena")
             operatedImg = imgOperator.sobel_edge_detector(imageArr)
         elif(option == '8'):
-            print("aywa 8ena")
             operatedImg = imgOperator.roberts_edge_detector(imageArr)
         elif(option == '9'):
-            print("aywa 9ena")
             operatedImg = imgOperator.prewitt_edge_detector(imageArr)
         elif(option == '10'):
-            operatedImg = imgOperator.canny_edge_detector(imageArr, 10)
+            operatedImg = imgOperator.canny_edge_detector(imageArr, range)
         else:
             return Response(data={"image": "", "id": ""})
 

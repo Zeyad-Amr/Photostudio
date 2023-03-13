@@ -48,6 +48,7 @@ const SecondTab = () => {
                 { option: secondTabOptions }
             ).then((res: any) => {
                 const urls = res.data
+                setImgOutput(baseURL + urls.image)
                 setRedHist(urls.redHistURL)
                 setBlueHist(urls.blueHistURL)
                 setGreenHist(urls.greenHistURL)
@@ -159,16 +160,16 @@ const SecondTab = () => {
                                     </div>
                                     <button className='apply-btn' onClick={handleGlobalButton}>Apply</button>
                                 </div>
-                            : 
-                            // secondTabOptions === "5" ?
-                            //         <div className='img-label-contain'>
-                            //             <label htmlFor=""></label>
-                            //             <div className='img-contain'>
-                            //                 <img className='output-images' style={{ display: redHist === undefined || redHist === "" ? "none" : "block" }} src={redHist} alt="" />
-                            //             </div>
-                            //         </div>
-                            //     :
-                                 null
+                                :
+                                secondTabOptions === "5" ?
+                                    <div className='img-label-contain'>
+                                        <label htmlFor=""></label>
+                                        <div className='img-contain'>
+                                            <img className='output-images' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
+                                        </div>
+                                    </div>
+                                    :
+                                    null
                         }
                     </div>
                 </Col>
@@ -180,7 +181,7 @@ const SecondTab = () => {
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Output</label>
                                         <div className='img-contain'>
-                                        <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                             <img className='output-images' style={{ display: imgOutput === undefined || imgOutput === "" || imgOutput === baseURL ? "none" : "block" }} src={imgOutput} alt="" />
                                         </div>
                                     </div>
@@ -189,14 +190,14 @@ const SecondTab = () => {
                                         <div className='img-label-contain'>
                                             <label htmlFor="">Red Histogram</label>
                                             <div className='img-contain'>
-                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                                 <img className='output-images' style={{ display: redHist === undefined || redHist === "" ? "none" : "block" }} src={redHist} alt="" />
                                             </div>
                                         </div>
                                         <div className='img-label-contain'>
                                             <label htmlFor="">Red Cumulative</label>
                                             <div className='img-contain'>
-                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                                 <img className='output-images' style={{ display: redCum === undefined || redCum === "" ? "none" : "block" }} src={redCum} alt="" />
                                             </div>
                                         </div>
@@ -208,7 +209,7 @@ const SecondTab = () => {
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Histogram</label>
                                         <div className='img-contain'>
-                                        <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                             <img className='output-images' style={{ display: imgOutputHisto === undefined || imgOutputHisto === "" ? "none" : "block" }} src={imgOutputHisto} alt="" />
                                         </div>
                                     </div>
@@ -217,14 +218,14 @@ const SecondTab = () => {
                                         <div className='img-label-contain'>
                                             <label htmlFor="">Green Histogram</label>
                                             <div className='img-contain'>
-                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                                 <img className='output-images' style={{ display: greenHist === undefined || greenHist === "" ? "none" : "block" }} src={greenHist} alt="" />
                                             </div>
                                         </div>
                                         <div className='img-label-contain'>
                                             <label htmlFor="">Green Cumulative</label>
                                             <div className='img-contain'>
-                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                                 <img className='output-images' style={{ display: greenCum === undefined || greenCum === "" ? "none" : "block" }} src={greenCum} alt="" />
                                             </div>
                                         </div>
@@ -237,7 +238,7 @@ const SecondTab = () => {
                                     <div className='img-label-contain'>
                                         <label htmlFor="">Cumulative</label>
                                         <div className='img-contain'>
-                                        <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                             <img className='output-images' style={{ display: imgOutputCum === undefined || imgOutputCum === "" ? "none" : "block" }} src={imgOutputCum} alt="" />
                                         </div>
                                     </div>
@@ -246,14 +247,14 @@ const SecondTab = () => {
                                         <div className='img-label-contain'>
                                             <label htmlFor="">Blue Histogram</label>
                                             <div className='img-contain'>
-                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                                 <img className='output-images' style={{ display: blueHist === undefined || blueHist === "" ? "none" : "block" }} src={blueHist} alt="" />
                                             </div>
                                         </div>
                                         <div className='img-label-contain'>
                                             <label htmlFor="">Blue Cumulative</label>
                                             <div className='img-contain'>
-                                            <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+                                                <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
                                                 <img className='output-images' style={{ display: blueCum === undefined || blueCum === "" ? "none" : "block" }} src={blueCum} alt="" />
                                             </div>
                                         </div>

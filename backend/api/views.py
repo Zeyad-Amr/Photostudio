@@ -179,23 +179,32 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         if(option == '5'):
             coloredImg = ColoredOperator(self._readImage(image, 1))
+            grayImg = coloredImg.grayScale()
+            # plt.imsave(IMAGES_FOLDER + "/gray.jpg", grayImg)
             self._drawHistAndCum(
                 imgOperator, coloredImg.getRedFrame(), redName)
             self._drawHistAndCum(
                 imgOperator, coloredImg.getGreenFrame(), greenName)
             self._drawHistAndCum(
                 imgOperator, coloredImg.getBlueFrame(), blueName)
-            return Response(data={
-                "redHistURL": "http://127.0.0.1:8000/result/hist" + redName + ".jpg",
-                "greenHistURL": "http://127.0.0.1:8000/result/hist" + greenName + ".jpg",
-                "blueHistURL": "http://127.0.0.1:8000/result/hist" + blueName + ".jpg",
-                "redCumURL": "http://127.0.0.1:8000/result/cum" + redName + ".jpg",
-                "greenCumURL": "http://127.0.0.1:8000/result/cum" + greenName + ".jpg",
-                "blueCumURL": "http://127.0.0.1:8000/result/cum" + blueName + ".jpg",
-            },
-                status=200)
         else:
             return Response(data={"image": ""})
+
+        serializerRes = ImageSerializerArr(data={"image": grayImg})
+        if serializerRes.is_valid():
+            serializerRes.save()
+            return Response(data={**serializerRes.data,
+                                  **{
+                                      "redHistURL": "http://127.0.0.1:8000/result/hist" + redName + ".jpg",
+                                      "greenHistURL": "http://127.0.0.1:8000/result/hist" + greenName + ".jpg",
+                                      "blueHistURL": "http://127.0.0.1:8000/result/hist" + blueName + ".jpg",
+                                      "redCumURL": "http://127.0.0.1:8000/result/cum" + redName + ".jpg",
+                                      "greenCumURL": "http://127.0.0.1:8000/result/cum" + greenName + ".jpg",
+                                      "blueCumURL": "http://127.0.0.1:8000/result/cum" + blueName + ".jpg",
+                                  }},
+                            status=200)
+        else:
+            return Response(serializerRes.errors, status=400)
 
     #################### the api that process Third tab (frequancy) functions ####################
 
@@ -239,6 +248,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
 
 ########################## Helper Functions ##########################
+
 
     def _readImage(self, image, falg=0):
         serializer = self.serializer_class(image)

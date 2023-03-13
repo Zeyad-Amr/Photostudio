@@ -227,3 +227,6 @@ class ColoredOperator:
                 g[i][j] = (img[i][j][1])
                 r[i][j] = (img[i][j][2])
         return r, g, b
+
+    def grayScale(self):
+        return self.getRedFrame() / 3 + self.getGreenFrame() / 3 + self.getBlueFrame() / 3

@@ -32,6 +32,7 @@ const Inputimg = () => {
 
   console.log(thirdTabOptions)
 
+  const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
 
   const handleUploadfirst = (e: any) => {
     const formData = new FormData();
@@ -79,6 +80,7 @@ const Inputimg = () => {
   };
 
   const handleCutoffButton = () => {
+    setSpinnerFlag(true)
     axios.post('/image/frequancy_process/',
       {
         option: thirdTabOptions,
@@ -89,6 +91,7 @@ const Inputimg = () => {
       }
     ).then((res: any) => {
       setImgOutput(baseURL + res.data.image)
+      setSpinnerFlag(false)
       console.log(res)
     }).catch((err: any) => {
       console.log(err)
@@ -171,7 +174,11 @@ const Inputimg = () => {
           </FormControl>
           {/* <label className='output-label'>Output</label> */}
           <div className='output-img-contain'>
+            {spinnerFlag === true ?
+          <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+          :
             <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
+}
           </div>
           {
             thirdTabOptions === "1" || thirdTabOptions === "2" ?

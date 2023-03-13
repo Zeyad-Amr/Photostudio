@@ -8,11 +8,11 @@ import os
 import cv2
 # from matplotlib import pyplot as plt
 
-img = cv2.imread('images/02.jpeg',0)
+img = cv2.imread('images/3.jpeg')
 # print(img)
-imgOperator = Histograms(img)
-newImg = imgOperator.applyLocalThreshold(100,5)
-cv2.imwrite('images/localthreshold5.jpg', newImg)
+imgOperator = ColoredOperator(img)
+newImg = imgOperator.getGreyScale()
+cv2.imwrite('images/greyScaled.jpg', newImg)
 
 # img = cv2.imread('../images/Red_Color.jpg')
 # print(img.shape)

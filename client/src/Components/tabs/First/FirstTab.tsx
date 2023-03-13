@@ -267,8 +267,11 @@ const FirstTab = () => {
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>
           <label className='output-label'>Output</label>
           <div className='output-img-contain'>
+            {spinnerFlag === true ? 
           <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+          :
             <img className='output-img' style={{display: imgOutput === undefined || imgOutput === "" ? "none" : "block"}} src={imgOutput} alt="" />
+}
           </div>
           <button className='reset-btn' onClick={handleReset}>Reset</button>
         </Col>

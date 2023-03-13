@@ -24,7 +24,6 @@ class Filters:
         var = range
         sigma = var ** 0.5
         gauss = np.random.normal(mean, sigma, (row, col))
-        gauss = gauss.reshape(row, col)
         noisy = image + gauss
         return noisy
 

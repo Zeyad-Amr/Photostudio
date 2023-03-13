@@ -22,9 +22,9 @@ const Tabs = () => {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange} centered>
-                        <Tab style={{width:"calc(100% /3 )"}} label="Item One" value="1" />
-                        <Tab style={{width:"calc(100% /3 )"}} label="Item Two" value="2" />
-                        <Tab style={{width:"calc(100% /3 )"}} label="Item Three" value="3" />
+                        <Tab style={{width:"calc(100% /3 )"}} label="Filters" value="1" />
+                        <Tab style={{width:"calc(100% /3 )"}} label="Histograms" value="2" />
+                        <Tab style={{width:"calc(100% /3 )"}} label="Frequency" value="3" />
                     </TabList>
                 </Box>
                 <TabPanel value="1">

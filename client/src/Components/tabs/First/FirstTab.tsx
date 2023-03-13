@@ -27,9 +27,9 @@ const FirstTab = () => {
 
 
   // noise sliders & functions
-  const [uniformSlider, setUniformSlider] = useState<number>(50)
-  const [gaussianSlider, setGaussianSlider] = useState<number>(90)
-  const [saltPepperSlider, setSaltPepperSlider] = useState<number>(30)
+  const [uniformSlider, setUniformSlider] = useState<number>(250)
+  const [gaussianSlider, setGaussianSlider] = useState<number>(250)
+  const [saltPepperSlider, setSaltPepperSlider] = useState<number>(25)
 
 
   const sendRequest = (id: string | undefined, range?: number) => {
@@ -75,9 +75,9 @@ const FirstTab = () => {
   }
 
   // filter slider & functions
-  const [averageSlider, setAverageSlider] = useState<number>(40)
-  const [gaussianFilterSlider, setGaussianFilterSlider] = useState<number>(80)
-  const [medianSlider, setMedianSlider] = useState<number>(20)
+  const [averageSlider, setAverageSlider] = useState<number>(3)
+  const [gaussianFilterSlider, setGaussianFilterSlider] = useState<number>(3)
+  const [medianSlider, setMedianSlider] = useState<number>(3)
   const handleAverageClick = () => {
     sendRequest(outputId, averageSlider)
   }
@@ -89,7 +89,7 @@ const FirstTab = () => {
   }
 
   // edge detection slider & functions
-  const [cannySlider, setCannySlider] = useState<number>(20)
+  const [cannySlider, setCannySlider] = useState<number>(25)
   const handleSobelClick = () => {
     edgeRequest("7")
   }
@@ -211,21 +211,21 @@ const FirstTab = () => {
             firstTabOptions === "1" ?
               <div className='btn-slider-contain'>
                 <div className='sliders-contain'>
-                  <Slider value={uniformSlider} onChange={(e: any) => setUniformSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                  <Slider value={uniformSlider} onChange={(e: any) => setUniformSlider(e.target.value)} min={0} max={500} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                 </div>
                 <button className='apply-btn' onClick={handleUniformClick}>Apply</button>
               </div>
               : firstTabOptions === "2" ?
                 <div className='btn-slider-contain'>
                   <div className='sliders-contain'>
-                    <Slider value={gaussianSlider} onChange={(e: any) => setGaussianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                    <Slider value={gaussianSlider} onChange={(e: any) => setGaussianSlider(e.target.value)} min={0} max={500} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                   </div>
                   <button className='apply-btn' onClick={handleGaussianClick}>Apply</button>
                 </div>
                 : firstTabOptions === "3" ?
                   <div className='btn-slider-contain'>
                     <div className='sliders-contain'>
-                      <Slider value={saltPepperSlider} onChange={(e: any) => setSaltPepperSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                      <Slider value={saltPepperSlider} onChange={(e: any) => setSaltPepperSlider(e.target.value)} min={0} max={50} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                     </div>
                     <button className='apply-btn' onClick={handleSaltPepperClick}>Apply</button>
                   </div>
@@ -234,21 +234,21 @@ const FirstTab = () => {
                   : firstTabOptions === "4" ?
                     <div className='btn-slider-contain'>
                       <div className='sliders-contain'>
-                        <Slider value={averageSlider} onChange={(e: any) => setAverageSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                        <Slider value={averageSlider} onChange={(e: any) => setAverageSlider(e.target.value)} min={1} max={11} step={2} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                       </div>
                       <button className='apply-btn' onClick={handleAverageClick}>Apply</button>
                     </div>
                     : firstTabOptions === "5" ?
                       <div className='btn-slider-contain'>
                         <div className='sliders-contain'>
-                          <Slider value={gaussianFilterSlider} onChange={(e: any) => setGaussianFilterSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                          <Slider value={gaussianFilterSlider} onChange={(e: any) => setGaussianFilterSlider(e.target.value)} min={1} max={11} step={2} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                         </div>
                         <button className='apply-btn' onClick={handleGaussianFilterClick}>Apply</button>
                       </div>
                       : firstTabOptions === "6" ?
                         <div className='btn-slider-contain'>
                           <div className='sliders-contain'>
-                            <Slider value={medianSlider} onChange={(e: any) => setMedianSlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                            <Slider value={medianSlider} onChange={(e: any) => setMedianSlider(e.target.value)} min={1} max={11} step={2} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                           </div>
                           <button className='apply-btn' onClick={handleMedianClick}>Apply</button>
                         </div>
@@ -257,7 +257,7 @@ const FirstTab = () => {
                         : firstTabOptions === "10" ?
                           <div className='btn-slider-contain'>
                             <div className='sliders-contain'>
-                              <Slider value={cannySlider} onChange={(e: any) => setCannySlider(e.target.value)} min={0} max={100} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                              <Slider value={cannySlider} onChange={(e: any) => setCannySlider(e.target.value)} min={0} max={50} step={1} style={{ width: "10rem" }} aria-label="Default" valueLabelDisplay="auto" />
                             </div>
                             <button className='apply-btn' onClick={handleCannyClick}>Apply</button>
                           </div>
@@ -267,10 +267,10 @@ const FirstTab = () => {
         <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={12} sm={12} xs={12}>
           <label className='output-label'>Output</label>
           <div className='output-img-contain'>
+          <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
             <img className='output-img' style={{display: imgOutput === undefined || imgOutput === "" ? "none" : "block"}} src={imgOutput} alt="" />
           </div>
           <button className='reset-btn' onClick={handleReset}>Reset</button>
-          <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
         </Col>
       </Row>
     </Container>

@@ -42,6 +42,9 @@
     height: 15rem;
     border-radius: 5px;
     border: 1px solid #1976d2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .img-label-contain {

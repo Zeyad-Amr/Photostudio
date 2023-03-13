@@ -18,3 +18,9 @@
     margin-bottom: 1rem;
     margin-top: 1rem;
 }
+
+.output-img-contain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

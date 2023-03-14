@@ -36,7 +36,7 @@ class Histograms:
         columns = img.shape[1]
         for i in range(rows):
             for j in range(columns):
-                newImg[i][j] = newImg[i][j]/(255) * 400
+                newImg[i][j] = newImg[i][j] / np.max(img) * 255
 
         return newImg
 

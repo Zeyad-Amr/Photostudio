@@ -1,5 +1,18 @@
 # Photostudio
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Technologies](#technologies)
+- [How to Use](#how-to-use)
+- [Features](#features)
+- [Filters Class](#filters-class)
+- [Histogram Class](#histogram-class)
+- [Frequency Class](#frequency-class)
+- [Contributing](#contributing)
+- [Developers](#developers)
+
+## Introduction
 Photostudio is a web project that aims to enhance images using various image processing techniques. It covers noise removal, edge detection, and histogram analysis, as well as color to grayscale transformation and frequency domain filters. Local and global thresholding is also included, as well as hybrid image creation. The project is designed to provide a comprehensive understanding of image processing techniques and their practical applications.
 
 ## Technologies
@@ -7,8 +20,43 @@ Photostudio is a web project that aims to enhance images using various image pro
 - Backend: Django
 - Processing: Python, opencv, matplotlib, numpy
 
+## How to Use
+
+1. Clone the repository using the command `git clone https://github.com/your-username/your-repo.git`
+2. Install dependencies using `npm install`
+3. Start the development server using `npm start`
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+
+### Frontend
+This is a React TypeScript project that uses components to render UI elements. It uses React Router for navigation and Redux for state management.
+
+In the project directory, you can run:
+```
+$ npm install
+Install all needed dependencies.
+
+$ npm start
+Builds the app for production to the `build` folder.
+```
+
+### Backend
+This is a Django project that provides APIs for the frontend React app. It uses Django REST framework for building APIs.
+
+In the project directory, you can run:
+
+```
+$ python manage.py runserver
+Runs the development server for the backend.
+
+$ python manage.py test
+Runs the tests for the backend.
+
+$ python manage.py migrate
+Applies any pending migrations to the database.
+```
+
 ## Features
-### Filters
+### Filters Class
 The given class Filters contains various image processing algorithms for adding noise, applying smoothing filters and detecting edges to an image.
 
 #### Add Noise Algorithms
@@ -247,4 +295,26 @@ Hybriding two images, low frequencies of the first first and high frequencies of
 
 ![WhatsApp Image 2023-03-14 at 9 03 26 PM](https://user-images.githubusercontent.com/68791488/225130098-e262ff2f-ed82-40f4-8af2-6dbdd0cf6b18.jpeg)
 
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/new-feature`
+3. Make changes and commit them: `git commit -m "Add new feature"`
+4. Push the changes to the branch: `git push origin feature/new-feature`
+5. Submit a pull request
+
+## Developers
+
+<table align="center">
+  <tr>
+    <td align="center"><a href="https://github.com/AhmedRaouf481"><img src="https://avatars.githubusercontent.com/u/62951712?v=4" width="100px;" alt=""/><br /><sub><b>Ahmed Abdelraouf</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Zeyad-Amr"><img src="https://avatars.githubusercontent.com/u/68791488?v=4" width="100px;" alt=""/><br /><sub><b>Zeyad Amr</b></sub></a></td>
+    <td align="center"><a href="https://github.com/momen882001"><img src="https://avatars.githubusercontent.com/u/84360276?v=4" width="100px;" alt=""/><br /><sub><b>Mo'men Mohamed</b></sub></a></td>
+    <td align="center"><a href="https://github.com/michaelhany510"><img src="https://avatars.githubusercontent.com/u/69060386?v=4" width="100px;" alt=""/><br /><sub><b>Micheal Hany</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Mazen-Aboulkhair"><img src="https://avatars.githubusercontent.com/u/84642500?v=4" width="100px;" alt=""/><br /><sub><b>Mazen Tarek</b></sub></a></td>
+  </tr>
+</table>
 

@@ -139,3 +139,112 @@ The given class Filters contains various image processing algorithms for adding 
     - To perform hysteresis, the code starts with a strong edge pixel and checks its 8 neighboring pixels in all directions using the `dx` and `dy` arrays. 
     - If a neighboring pixel is a weak edge pixel, it is marked as strong and added to the strong edge list. The process continues until all weak edge pixels that are connected to strong
 
+
+### Histogram Class
+
+The given class Histogram contains methods for performing image processing tasks such as histogram equalization, normalization, global and local thresholding, and color channel splitting.
+
+1. `getImg()`
+    - This method returns the image array associated with the instance.
+
+2. `operateOn(img)`
+    - This method sets the image array associated with the instance to the passed image array `img`.
+
+3. `equalize()`
+    - This method performs histogram equalization on the image array. It computes the histogram and the cumulative sum of the pixel intensities and then scales the cumulative sum to the range of [0, 255].
+    - Then, it maps each pixel intensity of the input image to its corresponding intensity in the equalized image using the scaled cumulative sum.
+    - The output of the function is the equalized image.
+
+![WhatsApp Image 2023-03-14 at 8 10 57 PM](https://user-images.githubusercontent.com/68791488/225128966-fb6a8497-0232-4ff8-ad70-e66a5001c9dd.jpeg)
+
+4. `normalize()`
+    - This method normalizes the image array by dividing each pixel intensity by maximum intensity and then scaling it to a range of [0, 255].
+    - The output of the function is the normalized image.
+    
+![WhatsApp Image 2023-03-14 at 9 02 51 PM](https://user-images.githubusercontent.com/68791488/225129270-9833f26a-5d54-4905-b2f4-e8dc3474ecb8.jpeg)
+
+
+5. `applyGlobalThreshold(threshold)`
+    - This method applies a global thresholding operation on the image array.
+    - It sets all pixel intensities greater than the threshold to 255 and all other pixel intensities to 0. 
+    - The output of the function is the thresholded image.
+
+![WhatsApp Image 2023-03-14 at 8 11 51 PM](https://user-images.githubusercontent.com/68791488/225129172-52485c8b-81a2-473b-85ad-b8c83f73783e.jpeg)
+
+6. `applyLocalThreshold(blockSize=10, C=5)`
+    - This method applies a local thresholding operation on the image array.
+    - It uses a sliding window of size blockSize to compute a local threshold for each pixel based on the mean intensity of the pixels in the window and a constant C.
+    - If the intensity of the pixel is greater than or equal to the local threshold, it is set to 255, otherwise it is set to 0.
+    - The output of the function is the thresholded image.
+    
+![WhatsApp Image 2023-03-14 at 8 11 35 PM](https://user-images.githubusercontent.com/68791488/225129114-4e9042f9-0e74-44e3-9760-d734a402bfd1.jpeg)
+
+7. `split()`
+    - This method splits the image array into its three color channels, i.e., red, green, and blue.
+    - It creates three new arrays of the same size as the input image and assigns the red, green, and blue values of each pixel to their corresponding arrays.
+    - The output of the function is a tuple containing the red, green, and blue arrays.
+
+
+8. `getCumSum(arr)`
+    - This method takes a one-dimensional array `arr` and returns its cumulative sum.
+
+9. `grayScale()`
+    - This method is a function that returns a grayscale representation of an image. It achieves this by averaging the intensity values of the red, green, and blue color channels of the image.
+    - It first extracts the individual red, green, and blue color channels using the getRedFrame(), getGreenFrame(), and getBlueFrame() methods. It then divides each channel by 3 and adds them together to obtain a single grayscale value for each pixel.
+
+![WhatsApp Image 2023-03-14 at 8 12 08 PM](https://user-images.githubusercontent.com/68791488/225129241-527bd6b1-e04f-4a3f-8d32-4149ce672d49.jpeg)
+
+
+10. `getHistoGram(arr2d, bins=256)`
+    - This method takes a two-dimensional array arr2d and computes its histogram using the specified number of bins.
+    - It returns a one-dimensional array representing the histogram.
+
+11. `flatten(arr2d)`
+    - This method takes a two-dimensional array `arr2d` and returns a flattened one-dimensional array.
+
+12. `getCumulative2d(img)`
+    - This is a helper method that takes a two-dimensional image array and returns its two-dimensional cumulative sum array.
+
+13. `getSumAndNum(cumulative, bottomRightX, bottomRightY, topLeftX, topLeftY)`
+    - This is a helper method that takes a two-dimensional cumulative sum array `cumulative` and the coordinates of the top-left and bottom-right corners of a rectangular region and returns the sum of the pixel intensities in the region and the number of pixels in the region.
+
+
+### Frequency Class
+
+The given class Frequency contains methods for applying frequency-based image processing techniques, specifically Fourier transforms, high-pass/low-pass filtering and hybrid images.
+
+1. `high_pass_filter(img, filter_range)`
+    - This method applies a high-pass filter on the input image img. 
+    - It starts by resizing the image to a fixed size (512x512). It then applies a Fourier transform on the image using the np.fft.fft2 method.
+    - The Fourier transform shifts the low frequency components of the image towards the corners and high frequency components towards the center of the image.
+    - The next step is to define a filter mask which will be applied on the Fourier transformed image to remove the low frequency components from the image.
+    - The filter mask is a binary mask of size the same as input image with values 1 for pixels where the distance from the center of the image is greater than the filter_range and 0 otherwise. The mask is applied to the Fourier transformed image by element-wise multiplication with the np.fft.fftshift method. 
+    - After applying the inverse Fourier transform to the filtered image using the np.fft.ifft2 method, it returns the absolute value of the filtered image.
+
+
+
+2. `low_pass_filter(img, filter_range)`
+    - This method applies a low-pass filter on the input image img. It starts by resizing the image to a fixed size (512x512).
+    - It then applies a Fourier transform on the image using the np.fft.fft2 method.
+    - The Fourier transform shifts the low frequency components of the image towards the corners and high frequency components towards the center of the image.
+    - The next step is to define a filter mask which will be applied on the Fourier transformed image to remove the high frequency components from the image.
+    - The filter mask is a binary mask of size the same as input image with values 1 for pixels where the distance from the center of the image is less than the filter_range and 0 otherwise.
+    - The mask is applied to the Fourier transformed image by element-wise multiplication with the np.fft.fftshift method.
+    - After applying the inverse Fourier transform to the filtered image using the np.fft.ifft2 method, it returns the absolute value of the filtered image.
+
+
+3. `hypridImages(img1, img2)`
+    - This method takes two input images img1 and img2, adds them together and returns the result as the hybrid image.
+    - The hybrid image is normalized by dividing by 255 before returning.
+    - This method can be used to create hybrid images by combining the low frequency components of one image with the high frequency components of another image.
+
+Hybriding two images, high frequencies of the first first and low frequencies of the second.
+
+![WhatsApp Image 2023-03-14 at 9 03 08 PM](https://user-images.githubusercontent.com/68791488/225130072-580bf255-50cb-4c71-8288-331972b935d6.jpeg)
+
+
+Hybriding two images, low frequencies of the first first and high frequencies of the second.
+
+![WhatsApp Image 2023-03-14 at 9 03 26 PM](https://user-images.githubusercontent.com/68791488/225130098-e262ff2f-ed82-40f4-8af2-6dbdd0cf6b18.jpeg)
+
+

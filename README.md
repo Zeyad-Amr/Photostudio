@@ -1,4 +1,7 @@
-# Photostudio
+<h1 align="center">
+ <strong>Photostudio</strong>
+ <br/><br/>
+</h1>
 
 ## Table of Contents
 

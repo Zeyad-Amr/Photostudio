@@ -130,7 +130,7 @@ class Filters:
     def __detect_edges_helper(self, image, vertical_grad_filter=None, horizontal_grad_filter=None):
 
         # normalize the image
-        image = image/255
+        image = image/image.max() * 255
 
         # kernel width initialization
         kernel_width = vertical_grad_filter.shape[0]//2

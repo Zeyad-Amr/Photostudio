@@ -68,5 +68,5 @@ class Frequency:
     def hypridImages(self, img1, img2):
         hyprid_image = img1+img2
         # normalize the image
-        hyprid_image = hyprid_image / 255
+        hyprid_image = hyprid_image / hyprid_image.max() * 255
         return

@@ -66,4 +66,7 @@ class Frequency:
         return filtered_image
 
     def hypridImages(self, img1, img2):
-        return img1+img2
+        hyprid_image = img1+img2
+        # normalize the image
+        hyprid_image = hyprid_image / 255
+        return

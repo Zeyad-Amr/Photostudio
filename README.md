@@ -47,6 +47,8 @@ The given class Filters contains various image processing algorithms for adding 
     - The algorithm convolves the kernel of the given size with the input image to obtain the filtered image. The value of each pixel in the filtered image is the average of the values of the corresponding pixels in the kernel.
     - Finally, the function will apply an average filter to the input image.
     
+![WhatsApp Image 2023-03-14 at 7 59 27 PM](https://user-images.githubusercontent.com/68791488/225125058-17cb0214-6759-44b2-8d35-4aa922aab3c1.jpeg)
+
 2. `median_filter(image, kernel_size)`:
     - This function applies a median filter to the image.
     - The function takes two arguments: the input image and the kernel size of the filter.
@@ -54,10 +56,16 @@ The given class Filters contains various image processing algorithms for adding 
     - The value of each pixel in the filtered image is the median of the values of the corresponding pixels in the kernel.
     - Finally, the function will apply a median filter to the input image.
     
+![WhatsApp Image 2023-03-14 at 7 59 55 PM](https://user-images.githubusercontent.com/68791488/225125248-7d9f8c86-98cd-4423-aa9c-86c2ab770eca.jpeg)
+
+    
 3. `gaussian_filter(image, kernel_size)`:
     - This function applies a Gaussian filter to the image. The function takes two arguments: the input image and the kernel size of the filter.
     - The algorithm generates a Gaussian kernel of the given size and standard deviation of 2. It then convolves this kernel with the input image to obtain the filtered image.
     - Finally, The function will apply a Gaussian filter to the input image.
+
+![WhatsApp Image 2023-03-14 at 7 59 41 PM](https://user-images.githubusercontent.com/68791488/225125229-87c7ed2b-c6ea-44c3-ac1b-a0984b3996d5.jpeg)
+
 
 #### Edges Detection Algorithms
 1. `sobel_edge_detector(image)`:
@@ -67,6 +75,8 @@ The given class Filters contains various image processing algorithms for adding 
     - Then, the method calls the __detect_edges_helper method with the input image and these two filters as arguments. The __detect_edges_helper method applies the filters on the image to detect edges and returns a gradient image that represents the strength of the edges and the angles of the gradients at each pixel.
     - Finally, the sobel_edge_detector method returns the gradient image obtained from __detect_edges_helper.
 
+![WhatsApp Image 2023-03-14 at 8 05 24 PM](https://user-images.githubusercontent.com/68791488/225125506-8efcfe2f-f217-41c8-b804-d3f265df8ec1.jpeg)
+
     
 2. `prewitt_edge_detector(image)`:
     - This function performs edge detection using the Prewitt operator.
@@ -75,13 +85,17 @@ The given class Filters contains various image processing algorithms for adding 
     - Then, the method calls the __detect_edges_helper method with the input image and these two filters as arguments. The __detect_edges_helper method applies the filters on the image to detect edges and returns a gradient image that represents the strength of the edges and the angles of the gradients at each pixel.
     - Finally, the sobel_edge_detector method returns the gradient image obtained from __detect_edges_helper.
 
-    
+![WhatsApp Image 2023-03-14 at 8 05 34 PM](https://user-images.githubusercontent.com/68791488/225125555-55136785-ca5f-4d85-84aa-f45826f9aaa0.jpeg)
+
+
 3. `roberts_edge_detector(image)`:
     - This function performs edge detection using the Prewitt operator.
     - The method initializes two 3x3 filters, vertical_grad_filter and horizontal_grad_filter, which are the Prewitt operators for detecting vertical and horizontal edges in an image, respectively.
     - The filters are designed to give more weight to the diagonal pixels and less weight to the surrounding pixels.
     - Then, the method calls the __detect_edges_helper method with the input image and these two filters as arguments. The __detect_edges_helper method applies the filters on the image to detect edges and returns a gradient image that represents the strength of the edges and the angles of the gradients at each pixel.
     - Finally, the sobel_edge_detector method returns the gradient image obtained from __detect_edges_helper.
+
+![WhatsApp Image 2023-03-14 at 8 05 44 PM](https://user-images.githubusercontent.com/68791488/225125574-4147227e-d6be-4190-bedf-0cb1dca2a1c9.jpeg)
 
     
 4. `canny_edge_detector(image, range)`:
@@ -94,3 +108,7 @@ The given class Filters contains various image processing algorithms for adding 
     - The pixels between the two thresholds are classified as edge pixels only if they are connected to other edge pixels.
     - The range parameter is used to set the high threshold of the double thresholding step. The low threshold is set to zero.
     - Finally, the output image is returned. It will have white pixels indicating edges and black pixels indicating non-edges.
+
+![WhatsApp Image 2023-03-14 at 8 05 54 PM](https://user-images.githubusercontent.com/68791488/225125600-dcbf4932-e85c-4968-a590-146f3bc2cc82.jpeg)
+
+

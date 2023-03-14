@@ -111,4 +111,31 @@ The given class Filters contains various image processing algorithms for adding 
 
 ![WhatsApp Image 2023-03-14 at 8 05 54 PM](https://user-images.githubusercontent.com/68791488/225125600-dcbf4932-e85c-4968-a590-146f3bc2cc82.jpeg)
 
+5. `__detect_edges_helper(image, kernel_size, vertical_grad_filter=None, horizontal_grad_filter=None):`
+    - This function takes in an image and two optional filter arrays - `vertical_grad_filter` and `horizontal_grad_filter` - that are used to calculate the gradient in the vertical and horizontal directions.
+    - The image is normalized by dividing every pixel value by 255, which scales the pixel values to be between 0 and 1. 
+    - The function initializes the width of the kernel as half the height of the `vertical_grad_filter`.
+    - It initializes two empty arrays - `gradient` and `self.angles` - to hold the gradient magnitude and direction information, respectively.
+    - The image is padded with zeros around its edges to ensure that the kernel can be applied to all pixels in the image.
+    - The function loops through every pixel in the image, skipping the padded edges.
+    - For each pixel, the function extracts a sub-image of size `(kernel_width*2 + 1, kernel_width*2 + 1)` centered at the pixel.
+    - The filter is applied to the sub-image by element-wise multiplication of the filter array with the sub-image, followed by a summation of the resulting array. This process is repeated for both the vertical and horizontal filters to obtain the vertical and horizontal gradient components.
+    - The gradient magnitude at the pixel is calculated by taking the square root of the sum of the squared vertical and horizontal gradient components.
+    - The gradient direction at the pixel is calculated using the `arctan2` function in numpy, which returns the angle between the positive x-axis and the line passing through the origin and the pixel.
+    - The gradient magnitude and direction values are stored in the `gradient` and `self.angles` arrays, respectively.
+    - The `gradient` array is returned as the output of the function.
+
+6. `__non_maximum_suppression(image):`
+    - This function performs non-maximum suppression on the gradient magnitude image to thin the edges and keep only the strongest edges. The input to the function is obtained from the output of the `__detect_edges_helper` function.
+    - The function first converts the angles from radians to degrees and removes negative angles. Then it creates a zero matrix of the same size as the input image to store the output. It then loops through the image and for each pixel, it checks the angle of the gradient and compares the pixel's value to its neighbors in the direction of the gradient.
+    - If the pixel's value is greater than or equal to the value of its neighbors in the direction of the gradient, the pixel's value is kept in the output.
+    - Otherwise, the pixel's value is set to zero. This process eliminates all pixels that are not local maxima in the direction of the gradient.
+    - Finally, the output image is scaled to have values between 0 and 255 and returned.
+
+7. `__double_threshold_hysteresis(image, low, high):`
+    - This function performs hysteresis thresholding on the input image.
+    - After applying the Canny edge detection algorithm, the edges are classified as strong edges or weak edges. The thresholds for strong and weak edges are defined by the `high` and `low` values respectively.
+    - The code creates a zero matrix called `result` with the same dimensions as the input image. Then, it sets the pixels that are above the high threshold to strong and the pixels that are above the low threshold but below the high threshold to weak.
+    - To perform hysteresis, the code starts with a strong edge pixel and checks its 8 neighboring pixels in all directions using the `dx` and `dy` arrays. 
+    - If a neighboring pixel is a weak edge pixel, it is marked as strong and added to the strong edge list. The process continues until all weak edge pixels that are connected to strong
 

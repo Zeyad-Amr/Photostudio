@@ -1,21 +1,18 @@
-import random
-import string
-from matplotlib import pyplot as plt
-from processing.Filters import Filters
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from django.core.files import File
 from image.models import Image
+from processing.Filters import Filters
 from processing.Histograms import Histograms, ColoredOperator
 from processing.Frequency import Frequency
 from .serializer import *
-import numpy as np
 import cv2
 import matplotlib
+from matplotlib import pyplot as plt
+import random
+import string
 matplotlib.use('Agg')
-
 
 IMAGES_FOLDER = './mediaFiles/'
 
@@ -48,7 +45,6 @@ class ImageViewSet(viewsets.ModelViewSet):
         imageArr = self._readImage(image)
 
         option = request.data.get("option")
-        print(option)
         # random name to prevent histogram or cumulative images from overwriting
         randomName = ''.join(random.choices(string.ascii_letters, k=3)) + pk
 
@@ -88,7 +84,6 @@ class ImageViewSet(viewsets.ModelViewSet):
         imageArr = self._readImage(image)
 
         option = request.data.get("option")
-        print(option)
         # random name to prevent histogram or cumulative images from overwriting
         randomName = ''.join(random.choices(string.ascii_letters, k=3)) + pk
 
@@ -151,8 +146,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         if serializerRes.is_valid():
             serializerRes.save()
             return Response(data={**serializerRes.data,
-                                  **{"histURL": "http://127.0.0.1:8000/result/hist" + randomName + ".jpg",
-                                     "cumURL": "http://127.0.0.1:8000/result/cum" + randomName + ".jpg"}},
+                                  **{"histURL": "http://127.0.0.1:8000/hist" + randomName + ".jpg",
+                                     "cumURL": "http://127.0.0.1:8000/cum" + randomName + ".jpg"}},
                             status=200)
         else:
             return Response(serializerRes.errors, status=400)
@@ -195,12 +190,12 @@ class ImageViewSet(viewsets.ModelViewSet):
             serializerRes.save()
             return Response(data={**serializerRes.data,
                                   **{
-                                      "redHistURL": "http://127.0.0.1:8000/result/hist" + redName + ".jpg",
-                                      "greenHistURL": "http://127.0.0.1:8000/result/hist" + greenName + ".jpg",
-                                      "blueHistURL": "http://127.0.0.1:8000/result/hist" + blueName + ".jpg",
-                                      "redCumURL": "http://127.0.0.1:8000/result/cum" + redName + ".jpg",
-                                      "greenCumURL": "http://127.0.0.1:8000/result/cum" + greenName + ".jpg",
-                                      "blueCumURL": "http://127.0.0.1:8000/result/cum" + blueName + ".jpg",
+                                      "redHistURL": "http://127.0.0.1:8000/hist" + redName + ".jpg",
+                                      "greenHistURL": "http://127.0.0.1:8000/hist" + greenName + ".jpg",
+                                      "blueHistURL": "http://127.0.0.1:8000/hist" + blueName + ".jpg",
+                                      "redCumURL": "http://127.0.0.1:8000/cum" + redName + ".jpg",
+                                      "greenCumURL": "http://127.0.0.1:8000/cum" + greenName + ".jpg",
+                                      "blueCumURL": "http://127.0.0.1:8000/cum" + blueName + ".jpg",
                                   }},
                             status=200)
         else:
@@ -253,16 +248,14 @@ class ImageViewSet(viewsets.ModelViewSet):
     def _readImage(self, image, falg=0):
         serializer = self.serializer_class(image)
         imgPath = IMAGES_FOLDER+serializer.data.get("image")
-        # print(imgPath)
-        # print(image)
         imageArr = cv2.imread(imgPath, falg)
         return imageArr
 
     def _drawHistAndCum(self, imgOperator, img, pk):
         hist = imgOperator.getHistoGram(img)
         plt.hist(imgOperator.flatten(img))
-        plt.savefig(IMAGES_FOLDER + "/result/hist" + pk + ".jpg")
+        plt.savefig(IMAGES_FOLDER + "/hist" + pk + ".jpg")
         plt.clf()
         plt.plot(imgOperator.getCumSum(hist))
-        plt.savefig(IMAGES_FOLDER + "/result/cum" + pk + ".jpg")
+        plt.savefig(IMAGES_FOLDER + "/cum" + pk + ".jpg")
         plt.close()

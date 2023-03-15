@@ -26,14 +26,16 @@ Photostudio is a web project that aims to enhance images using various image pro
 ## How to Use
 
 1. Clone the repository using the command `git clone https://github.com/your-username/your-repo.git`
-2. Install dependencies using `npm install`
-3. Start the development server using `npm start`
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+2. Install frontend dependencies using `npm install`
+3. Install backend packages in virtual enviroment using `pip install -r requirements.txt`
+4. Start the development server for the backend using `py manage.py runserver`
+5. Start the development server for the frontend using `npm start`
+6. Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
 ### Frontend
 This is a React TypeScript project that uses components to render UI elements. It uses React Router for navigation and Redux for state management.
 
-In the project directory, you can run:
+In the client directory, you can run:
 ```
 $ npm install
 Install all needed dependencies.
@@ -45,17 +47,21 @@ Builds the app for production to the `build` folder.
 ### Backend
 This is a Django project that provides APIs for the frontend React app. It uses Django REST framework for building APIs.
 
-In the project directory, you can run:
+In the backend directory, you can run:
 
 ```
+$ pip install -r requirements.txt
+install all required packages for the project.
+
+$ python manage.py migrate
+Applies any pending migrations to the database.
+
 $ python manage.py runserver
 Runs the development server for the backend.
 
 $ python manage.py test
 Runs the tests for the backend.
 
-$ python manage.py migrate
-Applies any pending migrations to the database.
 ```
 
 ## Features

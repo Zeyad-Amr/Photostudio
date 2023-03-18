@@ -25,7 +25,7 @@ Photostudio is a web project that aims to enhance images using various image pro
 
 ## How to Use
 
-1. Clone the repository using the command `git clone https://github.com/your-username/your-repo.git`
+1. Clone the repository using the command `git clone https://github.com/Zeyad-Amr/Photostudio`
 2. Install frontend dependencies using `npm install`
 3. Install backend packages in virtual enviroment using `pip install -r requirements.txt`
 4. Start the development server for the backend using `py manage.py runserver`

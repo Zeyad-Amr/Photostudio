@@ -32,11 +32,7 @@ class Histograms:
     def normalise(self):
         img = self.getImg()
         newImg = deepcopy(img)
-        rows = img.shape[0]
-        columns = img.shape[1]
-        for i in range(rows):
-            for j in range(columns):
-                newImg[i][j] = newImg[i][j] / np.max(img) * 255
+        newImg = newImg / np.max(img) * 255
 
         return newImg
 
@@ -123,7 +119,7 @@ class Histograms:
 
         # loop through pixels and sum up counts of pixels
         for pixel in flattenedImage:
-            histogram[pixel] += 1
+            histogram[int(pixel)] += 1
 
         # return our final result
         return histogram

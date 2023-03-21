@@ -39,7 +39,7 @@ const FirstTab = () => {
       id = imgId
     }
     setSpinnerFlag(true)
-    axios.post(`/image/${id}/filter_process/`, {
+    axios.post(`/image/filter/${id}/filter_process/`, {
       option: firstTabOptions, range
     }).then((res: any) => {
       setImgOutput(baseURL + res.data.image)
@@ -53,7 +53,7 @@ const FirstTab = () => {
 
   const edgeRequest = (option: string, range?: number) => {
     setSpinnerFlag(true)
-    axios.post(`/image/${imgId}/edge_detiction/`, {
+    axios.post(`/image/filter/${imgId}/edge_detiction/`, {
       option, range
     }).then((res: any) => {
       setImgOutput(res.data.image)

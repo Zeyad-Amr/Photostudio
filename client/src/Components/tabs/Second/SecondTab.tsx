@@ -44,7 +44,7 @@ const SecondTab = () => {
     useEffect(() => {
         if (secondTabOptions === '5') {
             setSpinnerFlag(true)
-            axios.post(`/image/${imgId}/transformation/`,
+            axios.post(`/image/filter/${imgId}/transformation/`,
                 { option: secondTabOptions }
             ).then((res: any) => {
                 const urls = res.data
@@ -64,7 +64,7 @@ const SecondTab = () => {
 
             if (imgId) {
                 setSpinnerFlag(true)
-                axios.post(`/image/${imgId}/histograms_process/`,
+                axios.post(`/image/filter/${imgId}/histograms_process/`,
                     { option: secondTabOptions }
                 ).then((res: any) => {
                     setImgOutput(baseURL + res.data.image);
@@ -86,7 +86,7 @@ const SecondTab = () => {
 
     const handleGlobalButton = () => {
         setSpinnerFlag(true)
-        axios.post(`/image/${imgId}/histograms_process/`,
+        axios.post(`/image/filter/${imgId}/histograms_process/`,
             { option: secondTabOptions, globalThreshold: sliderGlobal }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);
@@ -100,7 +100,7 @@ const SecondTab = () => {
 
     const handleLocalButton = () => {
         setSpinnerFlag(true)
-        axios.post(`/image/${imgId}/histograms_process/`,
+        axios.post(`/image/filter/${imgId}/histograms_process/`,
             { option: secondTabOptions, blocksize: sliderBlock, c: sliderC }
         ).then((res: any) => {
             setImgOutput(baseURL + res.data.image);

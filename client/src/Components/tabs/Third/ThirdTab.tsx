@@ -81,7 +81,7 @@ const Inputimg = () => {
 
   const handleCutoffButton = () => {
     setSpinnerFlag(true)
-    axios.post('/image/frequancy_process/',
+    axios.post('/image/filter/frequancy_process/',
       {
         option: thirdTabOptions,
         f_imgId: firstImgId,
@@ -175,10 +175,10 @@ const Inputimg = () => {
           {/* <label className='output-label'>Output</label> */}
           <div className='output-img-contain'>
             {spinnerFlag === true ?
-          <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
-          :
-            <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
-}
+              <div className="spinner-border" role="status" style={{ display: spinnerFlag === true ? "block" : "none" }}></div>
+              :
+              <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
+            }
           </div>
           {
             thirdTabOptions === "1" || thirdTabOptions === "2" ?

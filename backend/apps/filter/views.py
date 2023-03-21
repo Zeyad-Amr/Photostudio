@@ -3,10 +3,11 @@ from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from image.models import Image
+from filter.models import FilteredImage
 from processing.Filters import Filters
 from processing.Histograms import Histograms, ColoredOperator
 from processing.Frequency import Frequency
-from .serializer import *
+from api.serializer import FilteredImageSerializer
 import cv2
 import matplotlib
 from matplotlib import pyplot as plt
@@ -14,26 +15,12 @@ import random
 import string
 matplotlib.use('Agg')
 
-IMAGES_FOLDER = './mediaFiles/'
+IMAGES_FOLDER = './mediaFiles'
 
 
-class ImageViewSet(viewsets.ModelViewSet):
-    serializer_class = ImageSerializer
+class FilterViewSet(viewsets.ModelViewSet):
+    serializer_class = FilteredImageSerializer
     queryset = Image.objects.all()
-
-    # create image obj then save it and return the image url in the response
-    def create(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=200)
-        else:
-            return Response(serializer.errors, status=400)
-
-    def list(self, request):
-        queryset = Image.objects.all()
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
 
     #################### the api that process First tab (filter) functions ####################
 
@@ -67,7 +54,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         elif(option == '6'):
             operatedImg = imgOperator.median_filter(imageArr, range)
 
-        serializerRes = ImageSerializerArr(data={"image": operatedImg})
+        serializerRes = self.serializer_class(data={"image": operatedImg})
         if serializerRes.is_valid():
             serializerRes.save()
             return Response(data=serializerRes.data, status=200)
@@ -142,7 +129,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             return Response({"histURL": "", "cumURL": "", "image": ""}, status=200)
 
         # create the output image
-        serializerRes = ImageSerializerArr(data={"image": operatedImg})
+        serializerRes = self.serializer_class(data={"image": operatedImg})
         if serializerRes.is_valid():
             serializerRes.save()
             return Response(data={**serializerRes.data,
@@ -185,7 +172,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         else:
             return Response(data={"image": ""})
 
-        serializerRes = ImageSerializerArr(data={"image": grayImg})
+        serializerRes = self.serializer_class(data={"image": grayImg})
         if serializerRes.is_valid():
             serializerRes.save()
             return Response(data={**serializerRes.data,
@@ -210,6 +197,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         s_imgId = request.data.get("s_imgId")
         image1 = get_object_or_404(self.queryset, pk=f_imgId)
         image2 = get_object_or_404(self.queryset, pk=s_imgId)
+        print(image1)
+        print(image2)
         # read the image to 2d array
         imageArr1 = self._readImage(image1)
         imageArr2 = self._readImage(image2)
@@ -234,7 +223,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         highPass = imgOperator.high_pass_filter(H_image, secondCutoff)
 
         hybrid = imgOperator.hypridImages(lowPass, highPass)
-        serializerRes = ImageSerializerArr(data={"image": hybrid})
+        serializerRes = self.serializer_class(data={"image": hybrid})
         if serializerRes.is_valid():
             serializerRes.save()
             return Response(data=serializerRes.data, status=200)

@@ -36,8 +36,8 @@ const ForthTab = () => {
                 </Col>
                 <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
                     <UploadImg />
-                    <FormControl style={{ marginBottom: "2rem", width: "13rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
-                        <InputLabel id="demo-simple-select-autowidth-label">Choose edge detectors</InputLabel>
+                    <FormControl style={{ marginTop: "2rem", width: "14rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
+                        <InputLabel id="demo-simple-select-autowidth-label">Choose shape detector</InputLabel>
                         <Select
                             labelId="demo-simple-select-autowidth-label"
                             id="demo-simple-select-autowidth"

@@ -1,0 +1,14 @@
+.output-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.output-label.uploadimg {
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+
+.btn-slider-contain.forthtab {
+    margin-top: 1.2rem;
+}

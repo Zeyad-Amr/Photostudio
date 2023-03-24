@@ -6,34 +6,6 @@ import matplotlib.pyplot as plt
 
 def points_distance(x1, y1, x2, y2):
     return math.sqrt((x2-x1)**2 + (y2-y1)**2)
-def is_point_inside_polygon(x_list, y_list, x, y):
-    """
-    Determines whether a point is inside a closed polygon.
-
-    Parameters:
-        x_list (list): A list of x-coordinates of the polygon vertices in order.
-        y_list (list): A list of y-coordinates of the polygon vertices in order.
-        x (float): The x-coordinate of the point to test.
-        y (float): The y-coordinate of the point to test.
-
-    Returns:
-        bool: True if the point is inside the polygon, False otherwise.
-    """
-    n = len(x_list)
-    inside = False
-    p1x, p1y = x_list[0], y_list[0]
-    for i in range(1, n + 1):
-        p2x, p2y = x_list[i % n], y_list[i % n]
-        if y > min(p1y, p2y):
-            if y <= max(p1y, p2y):
-                if x <= max(p1x, p2x):
-                    if p1y != p2y:
-                        xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
-                        if p1x == p2x or x <= xinters:
-                            inside = not inside
-        p1x, p1y = p2x, p2y
-    return inside
-
 
 def circle_contour(center, radius, numberOfPoints, x_coordinates, y_coordinates):
     # Compute the angular resolution of the contour
@@ -57,8 +29,8 @@ def draw_contour(Image, numberOfPoints, x_coordinates, y_coordinates):
     img = 0
     for i in range(numberOfPoints):
         next = (i + 1) % numberOfPoints
-        img = cv2.line(Image, (y_coordinates[i], x_coordinates[i]), (y_coordinates[next], x_coordinates[next]), (255, 0, 0), 2)
-    
+        img = cv2.line(Image, (y_coordinates[i], x_coordinates[i]), (y_coordinates[next], x_coordinates[next]), (0, 255, 0), 2)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
     # plt.imshow(img)
     # plt.axis('off')
@@ -84,69 +56,6 @@ def contour_perimeter(x_points, y_points, points_n):
         distance_sum += distance
     return distance_sum
 
-
-def internal_energy(x_points, y_points, points_n, alpha, beta):
-    curv_sum = 0
-    cont_sum = 0
-    avg_dist = contour_perimeter(x_points, y_points, points_n) / points_n
-
-    # Compute the average angle between adjacent line segments
-    avg_angle = 0
-    for i in range(points_n):
-        next_point = (i + 1) % points_n
-        dx = x_points[next_point] - x_points[i]
-        dy = y_points[next_point] - y_points[i]
-        angle = math.atan2(dy, dx)
-        if angle < 0:
-            angle += 2 * math.pi
-        avg_angle += angle
-    avg_angle /= points_n
-
-    # Compute the energy due to contour smoothness and curvature
-    for i in range(points_n):
-        next_point = (i + 1) % points_n
-        prev_point = (i + points_n - 1) % points_n
-
-        # Compute the distance between adjacent contour points
-        dist = points_distance(x_points[i], y_points[i], x_points[next_point], y_points[next_point])
-
-        # Compute the deviation from the desired distance
-        cont_dev = dist - avg_dist
-        cont_sum += cont_dev * cont_dev
-
-        # Compute the angle deviation between adjacent line segments
-        dx1 = x_points[i] - x_points[prev_point]
-        dy1 = y_points[i] - y_points[prev_point]
-        dx2 = x_points[next_point] - x_points[i]
-        dy2 = y_points[next_point] - y_points[i]
-        angle1 = math.atan2(dy1, dx1)
-        angle2 = math.atan2(dy2, dx2)
-        if angle1 < 0:
-            angle1 += 2 * math.pi
-        if angle2 < 0:
-            angle2 += 2 * math.pi
-        curv_sum += abs(angle1 - angle2 - avg_angle) * abs(angle1 - angle2 - avg_angle)
-
-    energy = alpha * cont_sum + beta * curv_sum
-    return energy
-
-def external_energy(source):
-    filtered_Gaussian = cv2.GaussianBlur(source, (3, 3), 0)
-    gray = cv2.cvtColor(filtered_Gaussian, cv2.COLOR_BGR2GRAY)
-    edges = (cv2.Canny(gray, 0, 255))
-    # cv2.imshow('Grayscale Image', gray_img)
-    
-
-    # Convert the image to grayscale
-    gray_img = cv2.cvtColor(filtered_Gaussian, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite('edges.jpg',edges)
-    # Show the grayscale image
-    plt.imshow(edges, cmap='gray')
-    plt.axis('off')
-    plt.show()
-    return edges
-
-
 def window_neighbours(size):
     window = []
     point = []
@@ -158,6 +67,24 @@ def window_neighbours(size):
             window.append(point)
 
     return window
+def convert(list):
+	
+	# Converting integer list to string list
+	s = [str(i) for i in list]
+	
+	# Join list items using join()
+	res = int("".join(s))
+	
+	return(res)
+def getAllOccurences(lst,val):
+    ret = []
+    for i,value in enumerate(lst):
+        if value == val:
+            ret.append(i)
+    return ret
+
+
+
 
 def greedy_contour(source, iterations, alpha, beta, gamma, x_points, y_points, points_n, window_size, plot):
     sobel_energy = external_energy(source)
@@ -222,6 +149,68 @@ def greedy_contour(source, iterations, alpha, beta, gamma, x_points, y_points, p
             
 
     return x_points,y_points
+def internal_energy(x_points, y_points, points_n, alpha, beta):
+    curv_sum = 0
+    cont_sum = 0
+    avg_dist = contour_perimeter(x_points, y_points, points_n) / points_n
+
+    # Compute the average angle between adjacent line segments
+    avg_angle = 0
+    for i in range(points_n):
+        next_point = (i + 1) % points_n
+        dx = x_points[next_point] - x_points[i]
+        dy = y_points[next_point] - y_points[i]
+        angle = math.atan2(dy, dx)
+        if angle < 0:
+            angle += 2 * math.pi
+        avg_angle += angle
+    avg_angle /= points_n
+
+    # Compute the energy due to contour smoothness and curvature
+    for i in range(points_n):
+        next_point = (i + 1) % points_n
+        prev_point = (i + points_n - 1) % points_n
+
+        # Compute the distance between adjacent contour points
+        dist = points_distance(x_points[i], y_points[i], x_points[next_point], y_points[next_point])
+
+        # Compute the deviation from the desired distance
+        cont_dev = dist - avg_dist
+        cont_sum += cont_dev * cont_dev
+
+        # Compute the angle deviation between adjacent line segments
+        dx1 = x_points[i] - x_points[prev_point]
+        dy1 = y_points[i] - y_points[prev_point]
+        dx2 = x_points[next_point] - x_points[i]
+        dy2 = y_points[next_point] - y_points[i]
+        angle1 = math.atan2(dy1, dx1)
+        angle2 = math.atan2(dy2, dx2)
+        if angle1 < 0:
+            angle1 += 2 * math.pi
+        if angle2 < 0:
+            angle2 += 2 * math.pi
+        curv_sum += abs(angle1 - angle2 - avg_angle) * abs(angle1 - angle2 - avg_angle)
+
+    energy = alpha * cont_sum + beta * curv_sum
+    return energy
+
+def external_energy(source):
+    filtered_Gaussian = cv2.GaussianBlur(source, (3, 3), 0)
+    gray = cv2.cvtColor(filtered_Gaussian, cv2.COLOR_BGR2GRAY)
+    edges = (cv2.Canny(gray, 0, 255))
+    # cv2.imshow('Grayscale Image', gray_img)
+    
+
+    # Convert the image to grayscale
+    gray_img = cv2.cvtColor(filtered_Gaussian, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('edges.jpg',edges)
+    # Show the grayscale image
+    plt.imshow(edges, cmap='gray')
+    plt.axis('off')
+    plt.show()
+    return edges
+
+
 
 
 def normaliseToRotation(chain_code):
@@ -237,22 +226,6 @@ def normaliseToRotation(chain_code):
         normalized_code[(i+1)%len(chain_code)] = normalized_difference
     # Return the normalized chain code list
     return normalized_code
-
-def convert(list):
-	
-	# Converting integer list to string list
-	s = [str(i) for i in list]
-	
-	# Join list items using join()
-	res = int("".join(s))
-	
-	return(res)
-def getAllOccurences(lst,val):
-    ret = []
-    for i,value in enumerate(lst):
-        if value == val:
-            ret.append(i)
-    return ret
 def normaliseToStartingPoint(chaincode):
     sortedLst = sorted(chaincode)
     occurencesOfMinIndices = getAllOccurences(chaincode,sortedLst[0])
@@ -265,7 +238,6 @@ def normaliseToStartingPoint(chaincode):
              normalisedChainCode = rotated_lst
              mn = intgr
     return normalisedChainCode
-
 def parametersToAppend(mulByMn,mulByDx,mulByDy,mn,dx,dy):
     codeList = []
     codeList += [mulByMn]*mn
@@ -274,7 +246,6 @@ def parametersToAppend(mulByMn,mulByDx,mulByDy,mn,dx,dy):
     codeList += [mulByDx] * dx
     codeList += [mulByDy] * dy
     return codeList
-
 def getCodeBetweenTwoPoints(x1,y1,x2,y2):
     dx = x2-x1
     dy = y2-y1
@@ -290,7 +261,6 @@ def getCodeBetweenTwoPoints(x1,y1,x2,y2):
         codeList += parametersToAppend(7,0,6,mn,dx,dy)
     # print(x1,y1,x2,y2,codeList)
     return codeList
-
 def getChainCode(contourX,contourY):
     numOfPoints = len(contourX)
     chaincode = []

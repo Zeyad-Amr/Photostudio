@@ -21,5 +21,6 @@ print(f"contour area : {cn.contour_area(len(x_cooridinates),x_cooridinates,y_coo
 # calculate area of the contour
 perimeter = cn.contour_perimeter(x_cooridinates, y_cooridinates, points)
 # area = contour_area(points, x_cooridinates, y_cooridinates)
-cn.draw_contour(original_image,points,x_cooridinates,y_cooridinates)
+img = cn.draw_contour(original_image,points,x_cooridinates,y_cooridinates)
+
 print(f"contour perimeter : {perimeter} m")

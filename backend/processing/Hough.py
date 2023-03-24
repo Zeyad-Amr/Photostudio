@@ -12,55 +12,6 @@ class Hough:
     def getImg(self):
         return self.img
 
-    def detect_lines(self, threshold, color=(255, 0, 0)):
-        img = self.getImg()
-        edges = self.__get_edges(img, 50)
-        lines = self.__hough_lines(edges, threshold)
-        # draw the lines on the original image
-        res = self.__superimpose(lines, color)
-
-        return res
-
-    def detect_circles(self, min_radius=10, max_radius=200, threshold=0.4, color=(255, 0, 0)):
-        img = self.getImg()
-
-        delta_r = 1
-        num_thetas = 100
-
-        edge_image = self.__get_edges(img)
-
-        if edge_image is not None:
-
-            print("Detecting Hough Circles Started!")
-            circle_img = self.__hough_circles(
-                img, edge_image, min_radius, max_radius, delta_r, num_thetas, threshold)
-            return circle_img
-
-        else:
-            print("Error in input image!")
-            return img
-
-    def detect_ellipses(self, min_radius1=10, max_radius1=200, min_radius2=10, max_radius2=200, threshold=0.4, color=(255, 0, 0)):
-        img = self.getImg()
-
-        delta_r1 = 1
-        delta_r2 = 1
-        num_thetas = 100
-
-        edge_image = self.__get_edges(img)
-
-        if edge_image is not None:
-
-            print("Detecting Hough Ellipse Started!")
-
-            ellipse_img = self.__hough_ellipses(
-                img, edge_image, min_radius1, max_radius1, delta_r1, min_radius2, max_radius2, delta_r2, num_thetas, threshold)
-            return ellipse_img
-
-        else:
-            print("Error in input image!")
-            return img
-
     def __get_edges(self, img, min_edge_threshold=100, max_edge_threshold=200):
 
         # convert to gray scale
@@ -107,6 +58,15 @@ class Hough:
                     lines.append((i, j - 90))
 
         return lines
+
+    def detect_lines(self, threshold, color=(255, 0, 0)):
+        img = self.getImg()
+        edges = self.__get_edges(img, 50)
+        lines = self.__hough_lines(edges, threshold)
+        # draw the lines on the original image
+        res = self.__superimpose(lines, color)
+
+        return res
 
     def __hough_circles(self, image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True):
         # image size
@@ -175,6 +135,25 @@ class Hough:
             output_img = cv2.circle(output_img, (x, y), r, (0, 0, 255), 5)
 
         return output_img
+
+    def detect_circles(self, min_radius=10, max_radius=200, threshold=0.4, color=(255, 0, 0)):
+        img = self.getImg()
+
+        delta_r = 1
+        num_thetas = 100
+
+        edge_image = self.__get_edges(img)
+
+        if edge_image is not None:
+
+            print("Detecting Hough Circles Started!")
+            circle_img = self.__hough_circles(
+                img, edge_image, min_radius, max_radius, delta_r, num_thetas, threshold)
+            return circle_img
+
+        else:
+            print("Error in input image!")
+            return img
 
     def __hough_ellipses(self, image, edge_image, a_min, a_max, delta_a, b_min, b_max, delta_b, num_thetas, bin_threshold, post_process=True):
         # Image size
@@ -264,3 +243,24 @@ class Hough:
                 output_img, center, axes, angle, 0, 360, (0, 0, 255), 5)
 
         return output_img
+
+    def detect_ellipses(self, min_radius1=10, max_radius1=200, min_radius2=10, max_radius2=200, threshold=0.4, color=(255, 0, 0)):
+        img = self.getImg()
+
+        delta_r1 = 1
+        delta_r2 = 1
+        num_thetas = 100
+
+        edge_image = self.__get_edges(img)
+
+        if edge_image is not None:
+
+            print("Detecting Hough Ellipse Started!")
+
+            ellipse_img = self.__hough_ellipses(
+                img, edge_image, min_radius1, max_radius1, delta_r1, min_radius2, max_radius2, delta_r2, num_thetas, threshold)
+            return ellipse_img
+
+        else:
+            print("Error in input image!")
+            return img

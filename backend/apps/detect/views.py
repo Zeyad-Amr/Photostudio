@@ -1,4 +1,4 @@
-import processing.contour as cn
+import processing.ActiveContour as cn
 import numpy as np
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -36,9 +36,9 @@ class DetectViewSet(viewsets.ModelViewSet):
 
         imgOperator = Hough(imageArr)
 
-        if(option == '1'):
+        if (option == '1'):
             operatedImg = imgOperator.detect_lines(firstValue)
-        elif(option == '2'):
+        elif (option == '2'):
             operatedImg = imgOperator.detect_circles(
                 firstValue, secondValue, thirdValue)
 
@@ -66,28 +66,28 @@ class DetectViewSet(viewsets.ModelViewSet):
                 'yShift': 50,
                 'radius': 50,
                 'iterations': 25,
-                'gamma':100
+                'gamma': 100
             },
             'circle': {
                 'xShift': 0,
                 'yShift': 50,
                 'radius': 90,
                 'iterations': 35,
-                'gamma':100
+                'gamma': 100
             },
             'BlackApple': {
                 'xShift': 40,
                 'yShift': 30,
                 'radius': 100,
                 'iterations': 25,
-                'gamma':5
+                'gamma': 5
             },
             'Convex-Polygon': {
                 'xShift': 10,
                 'yShift': 50,
                 'radius': 110,
                 'iterations': 35,
-                'gamma':5
+                'gamma': 5
             }
         }
         points = 60
@@ -124,7 +124,6 @@ class DetectViewSet(viewsets.ModelViewSet):
 
 
 ########################## Helper Functions ##########################
-
 
     def _readImage(self, image, falg=0):
         serializer = self.serializer_class(image)

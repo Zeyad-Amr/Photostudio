@@ -18,3 +18,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.contour-values {
+    margin-top: 1.5rem;
+}
+
+.contour-values p {
+    margin-bottom: 0.5rem;
+}

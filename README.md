@@ -347,6 +347,8 @@ The Hough Transform is a technique that allows detecting shapes (such as lines, 
     - First, the function calls the getImg method of the Image class to retrieve the image. Then it calls the private method __get_edges to detect the edges in the image using the Canny edge detection algorithm with a minimum threshold of 50.
     - Next, it calls the private method __hough_lines to detect the lines in the image using the Hough Transform algorithm. This method creates an accumulator matrix with dimensions that cover the range of possible values for r and theta in the Hough space. It then finds the location of the edges in the edge image and calculates the Hough transform for each edge, incrementing the corresponding cells in the accumulator matrix. Finally, it extracts the lines with a number of votes above the specified threshold value.
     - Finally, the function calls the private method __superimpose to draw the detected lines on the original image. This method creates a copy of the original image and iterates over the detected lines, drawing each one in the specified color. The resulting image is returned as the output of the detect_lines function.
+   
+![WhatsApp Image 2023-03-25 at 12 08 40 AM](https://user-images.githubusercontent.com/68791488/227657323-ea84f0cd-a436-44ed-a324-749ab7da199a.jpeg)
 
 6. `__hough_circles(image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True)`
     - This is an implementation of the Hough transform algorithm for detecting circles in an image.
@@ -365,6 +367,8 @@ The Hough Transform is a technique that allows detecting shapes (such as lines, 
     - If the edge image is not None, the method proceeds to call the __hough_circles() method with the input image, edge image, minimum radius, maximum radius, delta radius, number of thetas, and the bin threshold as arguments.
     - The __hough_circles() method applies the Hough Circle Transform to the edge image to detect circles.
     - Finally, it returns the output image which is the input image with the detected circles superimposed on it.
+ 
+![WhatsApp Image 2023-03-25 at 12 38 35 AM](https://user-images.githubusercontent.com/68791488/227657297-f1a5bdb5-477d-4855-9c27-ee62890dc31b.jpeg)
 
 
 8. `__hough_ellipses(self, image, edge_image, a_min, a_max, delta_a, b_min, b_max, delta_b, num_thetas, bin_threshold, post_process=True)`
@@ -476,6 +480,11 @@ numberOfPoints, x_coordinates, and y_coordinates are the output of the circle_co
     - This is done using the internal_energy function, which takes as input the current set of points (current_x, current_y) and the various parameters (alpha, beta, gamma).
     - The internal energy is used to prevent the contour from becoming too jagged.
     - The function returns the final set of points that define the contour after the algorithm has converged.
+
+![WhatsApp Image 2023-03-25 at 12 41 26 AM](https://user-images.githubusercontent.com/68791488/227657208-e72c150c-1e79-4fac-a5f2-7cba26b7f129.jpeg)
+
+![WhatsApp Image 2023-03-25 at 12 38 37 AM](https://user-images.githubusercontent.com/68791488/227657212-9ed11af3-93cf-4119-bce8-89ea2fb1d938.jpeg)
+
 
 9. `internal_energy(x_points, y_points, points_n, alpha, beta)`
     - This code defines a function internal_energy which takes as input x_points and y_points which represent the x and y coordinates of the points of a contour, points_n which is the number of points in the contour, alpha and beta which are weighting factors for the two types of internal energy computed, respectively.

@@ -21,10 +21,11 @@ class FilteredImageSerializer(serializers.ModelSerializer):
         model = FilteredImage
         fields = ['id', 'image']
 
+class DetectedImageSerializer(serializers.ModelSerializer):
 
-class ImageSerializerArr(serializers.ModelSerializer):
     image = NumpyArrayToImageField()
 
     class Meta:
-        model = Image
+        model = FilteredImage
         fields = ['id', 'image']
+

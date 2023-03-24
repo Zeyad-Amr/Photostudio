@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from image.models import Image
-from filter.models import FilteredImage
 from processing.Filters import Filters
 from processing.Histograms import Histograms, ColoredOperator
 from processing.Frequency import Frequency
@@ -11,9 +10,9 @@ from api.serializer import FilteredImageSerializer
 import cv2
 import matplotlib
 from matplotlib import pyplot as plt
+matplotlib.use('Agg')
 import random
 import string
-matplotlib.use('Agg')
 
 IMAGES_FOLDER = './mediaFiles'
 
@@ -63,7 +62,7 @@ class FilterViewSet(viewsets.ModelViewSet):
 
     #################### the api that process First tab (edge detiction) functions ####################
 
-    @action(detail=True, methods=["post"], url_path=r'edge_detiction')
+    @action(detail=True, methods=["post"], url_path=r'edge_detection')
     def edgeDetiction(self, request, pk=None):
         # get the image given its id (pk = primary key)
         image = get_object_or_404(self.queryset, pk=pk)

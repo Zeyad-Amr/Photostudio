@@ -349,7 +349,6 @@ The Hough Transform is a technique that allows detecting shapes (such as lines, 
     - Finally, the function calls the private method __superimpose to draw the detected lines on the original image. This method creates a copy of the original image and iterates over the detected lines, drawing each one in the specified color. The resulting image is returned as the output of the detect_lines function.
 
 6. `__hough_circles(image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True)`
-![Screenshot 2023-03-24 at 11 18 25 PM](https://user-images.githubusercontent.com/68791488/227646202-92622299-b772-43a9-88ce-3ff6292b9d11.png)
     - This is an implementation of the Hough transform algorithm for detecting circles in an image.
     - The function takes as input the original image, an edge-detected image, and various parameters such as the minimum and maximum radius of the circles to be detected, the step size for the radius, the number of angles to use in the Hough transform, and a threshold for how many votes a circle must receive to be considered a valid candidate.
     - The function first generates a list of all possible circles in the image based on the given radius range and number of angles.
@@ -366,6 +365,20 @@ The Hough Transform is a technique that allows detecting shapes (such as lines, 
     - If the edge image is not None, the method proceeds to call the __hough_circles() method with the input image, edge image, minimum radius, maximum radius, delta radius, number of thetas, and the bin threshold as arguments.
     - The __hough_circles() method applies the Hough Circle Transform to the edge image to detect circles.
     - Finally, it returns the output image which is the input image with the detected circles superimposed on it.
+
+
+8. `__hough_ellipses(self, image, edge_image, a_min, a_max, delta_a, b_min, b_max, delta_b, num_thetas, bin_threshold, post_process=True)`
+    - This is a private method called __hough_ellipses which takes an image, an edge image (binary image with detected edges), the minimum and maximum values for the semi-major and semi-minor axes (a and b), their respective increments (delta_a and delta_b), the number of angles to consider (num_thetas), a bin threshold value (bin_threshold) and a boolean flag to perform post-processing (post_process).
+    - The method uses the Hough transform to detect ellipses in the edge image.
+    - The accumulator is a dictionary where the key is a tuple of ellipse parameters (x_center, y_center, a, b, t) and the value is the number of votes for that ellipse.
+    - The loop over edge pixels is used to vote for all possible ellipses that pass through that point, using the ranges of a, b, and t specified as arguments.
+    - The parameter t is the angle at which the major axis is oriented.
+    - After all edge pixels have voted, the method sorts the accumulator by the number of votes in descending order and loops through each candidate ellipse. 
+    - The current_vote_percentage is the percentage of angles that voted for that ellipse.
+    - If it is greater than or equal to the bin threshold, the method checks if there are any previously found ellipses that overlap with this one. If there is no overlap, the ellipse is added to the list of ellipses found.
+    - If post-processing is enabled, the method applies a pixel threshold value to filter out very similar ellipses and draws the shortlisted ellipses on the output image in red.
+    - Finally, the method returns the output image with the detected ellipses drawn on it.
+
 
 9. `detect_ellipses(self, min_radius1, max_radius1, min_radius2, max_radius2, threshold, color)`
     - This is a method that uses the Hough transform to detect ellipses in an input image.

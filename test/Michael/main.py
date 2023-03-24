@@ -3,16 +3,44 @@ import contour as cn
 import cv2
 import numpy as np
 
+parametersDict = {
+    'apple3.jpeg':{
+        'xShift':10,
+        'yShift':50,
+        'radius':100,
+        'iterations':25
+    },
+    'circle.jpeg':{
+        'xShift':0,
+        'yShift':50,
+        'radius':90,
+        'iterations':35
+    },
+    'BlackApple_1.jpg':{
+        'xShift':40,
+        'yShift':30,
+        'radius':100,
+        'iterations':25
+    },
+    'Convex-Polygon-1.png':{
+        'xShift':10,
+        'yShift':50,
+        'radius':110,
+        'iterations':35
+    }
+}
 
 # active contour
 original_image = cv2.imread("images/circle.jpeg")
+name = ''
+
 points = 60
 sz = original_image.shape
 x_cooridinates = np.zeros(points, dtype=np.int32)
 y_cooridinates = np.zeros(points, dtype=np.int32)
-x_cooridinates,y_cooridinates = cn.circle_contour((sz[0] // 2, sz[1] // 2+50), 90, points, x_cooridinates, y_cooridinates)
+x_cooridinates,y_cooridinates = cn.circle_contour((sz[0] // 2+parametersDict[name]['xShift'], sz[1] // 2+parametersDict[name]['yShift']), parametersDict[name]['radius'], points, x_cooridinates, y_cooridinates)
 # greedy_contour(original_image, 100, 2, 0.9, 20, x_cooridinates, y_cooridinates, points, 5)
-x_cooridinates,y_cooridinates = cn.greedy_contour(original_image, 30, 1, 2, 100, x_cooridinates, y_cooridinates, points, 11, True)
+x_cooridinates,y_cooridinates = cn.greedy_contour(original_image, parametersDict[name]['iterations'], 1, 2, 5, x_cooridinates, y_cooridinates, points, 11, True)
 # external_energy(original_image)
 chaincode,normalisedToRotation,normalisedToStartingPoint = cn.getChainCode(x_cooridinates,y_cooridinates)
 print(normalisedToStartingPoint)

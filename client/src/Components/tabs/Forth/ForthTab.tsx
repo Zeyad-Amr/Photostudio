@@ -58,7 +58,6 @@ const ForthTab = () => {
     useEffect(() => {
         if (options === '4') {
             setSpinnerFlag(true)
-
             axios.post(`/image/detect/${imgId}/draw_contour/`).then((res: any) => {
                 setSpinnerFlag(false)
                 setImgOutput(baseURL + res.data.image)
@@ -157,10 +156,21 @@ const ForthTab = () => {
                                     <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
                             }
                         </div>
-                        <div className='contour-values'>
-                            <p>{area}</p>
-                            <p>{perimeter}</p>
-                        </div>
+                        {
+                            options === "4" ?
+                                <div className='contour-values'>
+                                    {
+                                        spinnerFlag === false ?
+                                            <>
+                                                <p>{area}</p>
+                                                <p>{perimeter}</p>
+                                            </>
+                                            : null
+
+                                    }
+                                </div>
+                                : null
+                        }
                     </div>
                 </Col>
             </Row>

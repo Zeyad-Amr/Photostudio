@@ -1,5 +1,4 @@
-import string
-import random
+
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets
@@ -23,6 +22,7 @@ class DetectViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path=r'detect_shapes')
     def detect(self, request, pk=None):
+        print(pk)
         # get the image given its id (pk = primary key)
         image = get_object_or_404(self.queryset, pk=pk)
         # read the image to 2d array

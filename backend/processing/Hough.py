@@ -21,7 +21,7 @@ class Hough:
 
         return res
 
-    def detect_circles(self, min_radius=10, max_radius=200, threshold=0.4, color=(255, 0, 0)):
+    def detect_circles(self, min_radius=10, max_radius=200, threshold=0.4, color=(0, 255, 0)):
         img = self.getImg()
 
         delta_r = 1
@@ -78,7 +78,7 @@ class Hough:
             cv2.line(src, pt1, pt2, color, 1, cv2.LINE_AA)
         return src
 
-    def find_hough_circles(image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True):
+    def find_hough_circles(self, image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True):
         # image size
         img_height, img_width = edge_image.shape[:2]
 

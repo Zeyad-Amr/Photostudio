@@ -117,7 +117,7 @@ class Hough:
             if current_vote_percentage >= bin_threshold:
                 # Shortlist the circle for final result
                 out_circles.append((x, y, r, current_vote_percentage))
-                print(x, y, r, current_vote_percentage)
+                # print(x, y, r, current_vote_percentage)
 
         # Post process the results, can add more post processing later.
         if post_process:
@@ -132,7 +132,7 @@ class Hough:
         # Draw shortlisted circles on the output image
         for x, y, r, v in out_circles:
             # draw red circle
-            output_img = cv2.circle(output_img, (x, y), r, (0, 0, 255), 5)
+            output_img = cv2.circle(output_img, (x, y), r, (255, 0, ), 5)
 
         return output_img
 
@@ -215,7 +215,7 @@ class Hough:
                 if not overlap:
                     # Add this ellipse to the list of found ellipses
                     ellipses.append((x, y, a, b, t, current_vote_percentage))
-                    print(x, y, a, b, t, current_vote_percentage)
+                    # print(x, y, a, b, t, current_vote_percentage)
 
         # Post-process the results
         if post_process:

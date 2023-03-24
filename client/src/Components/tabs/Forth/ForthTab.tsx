@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import UploadImg from './UploadImg'
 import InputLabel from '@mui/material/InputLabel';
@@ -52,6 +52,21 @@ const ForthTab = () => {
             console.log(err.message)
         })
     }
+
+    useEffect(() => {
+        if (options === '4') {
+            setSpinnerFlag(true)
+
+            axios.post(`/image/detect/${imgId}/draw_contour/`).then((res: any) => {
+                setSpinnerFlag(false)
+                setImgOutput(baseURL + res.data.image)
+
+                console.log(res)
+            }).catch((err: any) => {
+                console.log(err.message)
+            })
+        }
+    }, [options])
 
     const handleLineClick = () => {
         sendRequest(options, lineThreshold)

@@ -92,25 +92,25 @@ class DetectViewSet(viewsets.ModelViewSet):
         }
         points = 60
         sz = original_image.shape
-        x_cooridinates = np.zeros(points, dtype=np.int32)
-        y_cooridinates = np.zeros(points, dtype=np.int32)
+        xCoordinates = np.zeros(points, dtype=np.int32)
+        yCoordinates = np.zeros(points, dtype=np.int32)
         name = self._fileName(image)
-        x_cooridinates, y_cooridinates = cn.circle_contour(
-            (sz[0] // 2+parametersDict[name]['xShift'], sz[1] // 2+parametersDict[name]['yShift']), parametersDict[name]['radius'], points, x_cooridinates, y_cooridinates)
-        x_cooridinates, y_cooridinates = cn.greedy_contour(
-            original_image, parametersDict[name]['iterations'], 1, 2, parametersDict[name]['gamma'], x_cooridinates, y_cooridinates, points, 11, True)
+        xCoordinates, yCoordinates = cn.circle_contour(
+            (sz[0] // 2+parametersDict[name]['xShift'], sz[1] // 2+parametersDict[name]['yShift']), parametersDict[name]['radius'], points, xCoordinates, yCoordinates)
+        xCoordinates, yCoordinates = cn.greedy_contour(
+            original_image, parametersDict[name]['iterations'], 1, 2, parametersDict[name]['gamma'], xCoordinates, yCoordinates, points, 11, True)
         chaincode, normalisedToRotation, normalisedToStartingPoint = cn.getChainCode(
-            x_cooridinates, y_cooridinates)
+            xCoordinates, yCoordinates)
         print(normalisedToStartingPoint)
-        area = f"contour area : {cn.contour_area(len(x_cooridinates),x_cooridinates,y_cooridinates)} m^2"
+        area = f"contour area : {cn.contour_area(len(xCoordinates),xCoordinates,yCoordinates)} m^2"
         print(
-            f"contour area : {cn.contour_area(len(x_cooridinates),x_cooridinates,y_cooridinates)} m^2")
+            f"contour area : {cn.contour_area(len(xCoordinates),xCoordinates,yCoordinates)} m^2")
 
         # calculate area of the contour
-        perimeter = f"contour perimeter : {cn.contour_perimeter(x_cooridinates, y_cooridinates, points)} m"
-        # area = contour_area(points, x_cooridinates, y_cooridinates)
+        perimeter = f"contour perimeter : {cn.contour_perimeter(xCoordinates, yCoordinates, points)} m"
+        # area = contour_area(points, xCoordinates, yCoordinates)
         operatedImg = cn.draw_contour(
-            original_image, points, x_cooridinates, y_cooridinates)
+            original_image, points, xCoordinates, yCoordinates)
 
         print(f"contour perimeter : {perimeter} m")
 

@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 def points_distance(x1, y1, x2, y2):
     return math.sqrt((x2-x1)**2 + (y2-y1)**2)
-
 def circle_contour(center, radius, numberOfPoints, x_coordinates, y_coordinates):
     # Compute the angular resolution of the contour
     resolution = 2 * np.pi / numberOfPoints
@@ -24,7 +23,6 @@ def circle_contour(center, radius, numberOfPoints, x_coordinates, y_coordinates)
         x_coordinates[i] = int(round(x))
         y_coordinates[i] = int(round(y))
     return x_coordinates,y_coordinates
-
 def draw_contour(Image, numberOfPoints, x_coordinates, y_coordinates):
     img = 0
     for i in range(numberOfPoints):
@@ -35,7 +33,6 @@ def draw_contour(Image, numberOfPoints, x_coordinates, y_coordinates):
     # plt.imshow(img)
     # plt.axis('off')
     # plt.show()
-
 def contour_area(numberOfPoints, x_coordinates, y_coordinates):
     area = 0.0
     # Calculate value of shoelace formula => 1/2 [ (x1y2 + x2y3 + … + xn-1yn + xny1) – (x2y1 + x3y2 + … + xnyn-1 + x1yn) ]
@@ -44,7 +41,6 @@ def contour_area(numberOfPoints, x_coordinates, y_coordinates):
         area += (x_coordinates[j] + x_coordinates[i]) * (y_coordinates[j] - y_coordinates[i])
         j = i # j is previous vertex to i
     return abs(area / 2.0)
-
 def contour_perimeter(x_points, y_points, points_n):
     distance_sum = 0
     for i in range(points_n):
@@ -55,7 +51,6 @@ def contour_perimeter(x_points, y_points, points_n):
         distance = points_distance(x_points[i], y_points[i], x_points[next_point], y_points[next_point])
         distance_sum += distance
     return distance_sum
-
 def window_neighbours(size):
     window = []
     point = []
@@ -87,7 +82,7 @@ def getAllOccurences(lst,val):
 
 
 def greedy_contour(source, iterations, alpha, beta, gamma, x_points, y_points, points_n, window_size, plot):
-    sobel_energy = external_energy(source)
+    edges = external_energy(source)
     window = window_neighbours(window_size)
     current_x = np.zeros(180)
     current_y = np.zeros(180)
@@ -116,9 +111,9 @@ def greedy_contour(source, iterations, alpha, beta, gamma, x_points, y_points, p
                 # if not is_point_inside_polygon(x_points,y_points,current_x[i],current_y[i]):
                 #     continue
 
-                if (current_x[i] < sobel_energy.shape[0] and current_x[i] > 0 and current_y[i] > 0 and current_y[i] < sobel_energy.shape[1]):
+                if (current_x[i] < edges.shape[0] and current_x[i] > 0 and current_y[i] > 0 and current_y[i] < edges.shape[1]):
                     # print(current_x[i],current_y[i])
-                    point_energy = sobel_energy[int( current_x[i]),int( current_y[i])] * -1 * gamma + internal_energy(current_x, current_y,points_n, alpha, beta)
+                    point_energy = edges[int( current_x[i]),int( current_y[i])] * -1 * gamma + internal_energy(current_x, current_y,points_n, alpha, beta)
 
                     if point_energy < min_energy:
                         min_energy = point_energy
@@ -136,7 +131,7 @@ def greedy_contour(source, iterations, alpha, beta, gamma, x_points, y_points, p
         # plt.scatter(current_x,current_y, s=5, c='r')
         # plt.show()
         if plot == True:
-            plot_img = sobel_energy.copy()
+            plot_img = edges.copy()
             
             draw_contour(plot_img, points_n, x_points, y_points)
             cv2.imshow("Active Contour", plot_img)
@@ -193,7 +188,6 @@ def internal_energy(x_points, y_points, points_n, alpha, beta):
 
     energy = alpha * cont_sum + beta * curv_sum
     return energy
-
 def external_energy(source):
     filtered_Gaussian = cv2.GaussianBlur(source, (3, 3), 0)
     gray = cv2.cvtColor(filtered_Gaussian, cv2.COLOR_BGR2GRAY)
@@ -269,4 +263,3 @@ def getChainCode(contourX,contourY):
     normalisedToRotation = normaliseToRotation(chaincode)
     normalisedToStartingPoint = normaliseToStartingPoint(normalisedToRotation)
     return chaincode,normalisedToRotation,normalisedToStartingPoint
-

@@ -20,6 +20,8 @@ const ForthTab = () => {
     const [lineThreshold, setLineThreshold] = useState<number>(120)
     const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
     const [imgOutput, setImgOutput] = useState<string | undefined>('')
+    const [area, setArea] = useState<string>('')
+    const [perimeter, setPerimeter] = useState<string>('')
 
     const [imgId, setImgId] = useState<string | undefined>('')
 
@@ -60,7 +62,8 @@ const ForthTab = () => {
             axios.post(`/image/detect/${imgId}/draw_contour/`).then((res: any) => {
                 setSpinnerFlag(false)
                 setImgOutput(baseURL + res.data.image)
-
+                setArea(res.data.area)
+                setPerimeter(res.data.perimeter)
                 console.log(res)
             }).catch((err: any) => {
                 console.log(err.message)
@@ -153,6 +156,10 @@ const ForthTab = () => {
                                     :
                                     <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
                             }
+                        </div>
+                        <div className='contour-values'>
+                            <p>{area}</p>
+                            <p>{perimeter}</p>
                         </div>
                     </div>
                 </Col>

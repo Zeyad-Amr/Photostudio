@@ -14,10 +14,10 @@ import { FileContext } from '../../contexts/fileContext';
 const ForthTab = () => {
 
     const [options, setOptions] = useState<string>('');
-    const [minRadius, setMinRadius] = useState<number>(25)
-    const [maxRadius, setMaxRadius] = useState<number>(40)
-    const [circleThreshold, setCircleThreshold] = useState<number>(10)
-    const [lineThreshold, setLineThreshold] = useState<number>(10)
+    const [minRadius, setMinRadius] = useState<number>(20)
+    const [maxRadius, setMaxRadius] = useState<number>(200)
+    const [circleThreshold, setCircleThreshold] = useState<number>(0.4)
+    const [lineThreshold, setLineThreshold] = useState<number>(120)
     const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
     const [imgOutput, setImgOutput] = useState<string | undefined>('')
 
@@ -109,7 +109,7 @@ const ForthTab = () => {
                                     </div>
                                     <div className='sliders-contain'>
                                         <label htmlFor="">Threshold</label>
-                                        <Slider value={circleThreshold} onChange={(e: any) => setCircleThreshold(e.target.value)} min={0} max={5} step={0.1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                                        <Slider value={circleThreshold} onChange={(e: any) => setCircleThreshold(e.target.value)} min={0} max={1} step={0.01} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
                                     </div>
                                     <button className='apply-btn' onClick={handleCircleClick}>Apply</button>
                                 </div>

@@ -65,9 +65,9 @@ class DetectViewSet(viewsets.ModelViewSet):
         x_cooridinates = np.zeros(points, dtype=np.int32)
         y_cooridinates = np.zeros(points, dtype=np.int32)
         x_cooridinates, y_cooridinates = cn.circle_contour(
-            (sz[0] // 2, sz[1] // 2+50), 90, points, x_cooridinates, y_cooridinates)
+            (sz[0] // 2+10, sz[1] // 2+50), 50, points, x_cooridinates, y_cooridinates)
         x_cooridinates, y_cooridinates = cn.greedy_contour(
-            original_image, 30, 1, 2, 100, x_cooridinates, y_cooridinates, points, 11, True)
+            original_image, 25, 1, 2, 100, x_cooridinates, y_cooridinates, points, 11, True)
         chaincode, normalisedToRotation, normalisedToStartingPoint = cn.getChainCode(
             x_cooridinates, y_cooridinates)
         print(normalisedToStartingPoint)
@@ -86,7 +86,8 @@ class DetectViewSet(viewsets.ModelViewSet):
         serializerRes = self.serializer_class(data={"image": operatedImg})
         if serializerRes.is_valid():
             serializerRes.save()
-            return Response(data={**serializerRes, **{perimeter: perimeter, area: area}}.data, status=200)
+            return Response(data={**serializerRes.data,
+                                  **{"perimeter": perimeter, "area": area}}, status=200)
         else:
             return Response(serializerRes.errors, status=400)
 
@@ -99,3 +100,8 @@ class DetectViewSet(viewsets.ModelViewSet):
         imgPath = IMAGES_FOLDER+serializer.data.get("image")
         imageArr = cv2.imread(imgPath, falg)
         return imageArr
+
+    def _fileName(self, image):
+        serializer = self.serializer_class(image)
+        imgName = serializer.data.get("image").rsplit("/")[2]
+        return imgName

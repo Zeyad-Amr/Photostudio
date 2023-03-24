@@ -54,9 +54,12 @@ def circle_contour(center, radius, numberOfPoints, x_coordinates, y_coordinates)
     return x_coordinates,y_coordinates
 
 def draw_contour(Image, numberOfPoints, x_coordinates, y_coordinates):
+    img = 0
     for i in range(numberOfPoints):
         next = (i + 1) % numberOfPoints
         img = cv2.line(Image, (y_coordinates[i], x_coordinates[i]), (y_coordinates[next], x_coordinates[next]), (255, 0, 0), 2)
+    
+    return img
     # plt.imshow(img)
     # plt.axis('off')
     # plt.show()

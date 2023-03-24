@@ -8,6 +8,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import FirstTab from './First/FirstTab';
 import SecondTab from './Second/SecondTab';
 import ThirdTab from './Third/ThirdTab';
+import ForthTab from './Forth/ForthTab';
 
 const Tabs = () => {
 
@@ -22,9 +23,10 @@ const Tabs = () => {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange} centered>
-                        <Tab style={{width:"calc(100% /3 )"}} label="Filters" value="1" />
-                        <Tab style={{width:"calc(100% /3 )"}} label="Histograms" value="2" />
-                        <Tab style={{width:"calc(100% /3 )"}} label="Frequency" value="3" />
+                        <Tab style={{width:"calc(100% /4 )"}} label="Filters" value="1" />
+                        <Tab style={{width:"calc(100% /4 )"}} label="Histograms" value="2" />
+                        <Tab style={{width:"calc(100% /4 )"}} label="Frequency" value="3" />
+                        <Tab style={{width:"calc(100% /4 )"}} label="Detection" value="4" />
                     </TabList>
                 </Box>
                 <TabPanel value="1">
@@ -35,6 +37,9 @@ const Tabs = () => {
                 </TabPanel>
                 <TabPanel value="3">
                     <ThirdTab/>
+                </TabPanel>
+                <TabPanel value="4">
+                    <ForthTab/>
                 </TabPanel>
             </TabContext>
         </Box>

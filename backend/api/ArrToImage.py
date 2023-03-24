@@ -4,6 +4,7 @@ from PIL import Image as Img
 import numpy as np
 import io
 
+
 class NumpyArrayToImageField(serializers.ImageField):
     def to_internal_value(self, data):
         # Assuming the numpy array is in the request data
@@ -14,12 +15,12 @@ class NumpyArrayToImageField(serializers.ImageField):
 
         # Convert the PIL Image object to a file-like object
         file_obj = io.BytesIO()
-        pil_image.save(file_obj, 'JPEG')
+        pil_image.save(file_obj, 'PNG')
         file_obj.seek(0)
 
         # Create an InMemoryUploadedFile object from the file-like object
         uploaded_file = InMemoryUploadedFile(
-            file_obj, None, 'foo.jpg', 'image/jpeg', file_obj.getbuffer().nbytes, None
+            file_obj, None, 'foo.png', 'image/png', file_obj.getbuffer().nbytes, None
         )
 
         return uploaded_file

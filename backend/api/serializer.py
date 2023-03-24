@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from image.models import Image
 from filter.models import FilteredImage
+from detect.models import DetectedImage
 from .ArrToImage import NumpyArrayToImageField
 
 
@@ -22,9 +23,10 @@ class FilteredImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image']
 
 
-class ImageSerializerArr(serializers.ModelSerializer):
+class DetectedImageSerializer(serializers.ModelSerializer):
+
     image = NumpyArrayToImageField()
 
     class Meta:
-        model = Image
+        model = DetectedImage
         fields = ['id', 'image']

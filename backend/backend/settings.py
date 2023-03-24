@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'image',
     'filter',
+    'detect',
     "corsheaders",
 
 ]

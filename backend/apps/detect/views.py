@@ -60,14 +60,41 @@ class DetectViewSet(viewsets.ModelViewSet):
         image = get_object_or_404(self.queryset, pk=pk)
         # read the image to 2d array
         original_image = self._readImage(image, 1)
+        parametersDict = {
+            'apple3': {
+                'xShift': 10,
+                'yShift': 50,
+                'radius': 100,
+                'iterations': 25
+            },
+            'circle': {
+                'xShift': 0,
+                'yShift': 50,
+                'radius': 90,
+                'iterations': 35
+            },
+            'BlackApple': {
+                'xShift': 40,
+                'yShift': 30,
+                'radius': 100,
+                'iterations': 25
+            },
+            'Convex-Polygon': {
+                'xShift': 10,
+                'yShift': 50,
+                'radius': 110,
+                'iterations': 35
+            }
+        }
         points = 60
         sz = original_image.shape
         x_cooridinates = np.zeros(points, dtype=np.int32)
         y_cooridinates = np.zeros(points, dtype=np.int32)
+        name = self._fileName(image)
         x_cooridinates, y_cooridinates = cn.circle_contour(
-            (sz[0] // 2+10, sz[1] // 2+50), 50, points, x_cooridinates, y_cooridinates)
+            (sz[0] // 2+parametersDict[name]['xShift'], sz[1] // 2+parametersDict[name]['yShift']), parametersDict[name]['radius'], points, x_cooridinates, y_cooridinates)
         x_cooridinates, y_cooridinates = cn.greedy_contour(
-            original_image, 25, 1, 2, 100, x_cooridinates, y_cooridinates, points, 11, True)
+            original_image, parametersDict[name]['iterations'], 1, 2, 5, x_cooridinates, y_cooridinates, points, 11, True)
         chaincode, normalisedToRotation, normalisedToStartingPoint = cn.getChainCode(
             x_cooridinates, y_cooridinates)
         print(normalisedToStartingPoint)
@@ -104,4 +131,12 @@ class DetectViewSet(viewsets.ModelViewSet):
     def _fileName(self, image):
         serializer = self.serializer_class(image)
         imgName = serializer.data.get("image").rsplit("/")[2]
-        return imgName
+        if 'apple3' in imgName:
+            return 'apple3'
+        elif 'BlackApple' in imgName:
+            return 'BlackApple'
+        elif 'circle' in imgName:
+            return 'circle'
+        elif 'Convex-Polygon' in imgName:
+            return 'Convex-Polygon'
+        # return imgName

@@ -12,3 +12,9 @@
 .btn-slider-contain.forthtab {
     margin-top: 1.2rem;
 }
+
+.upload-img-contain.forthTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

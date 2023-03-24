@@ -41,15 +41,15 @@ const ForthTab = () => {
 
     const sendRequest = (option: string, firstValue: number, secondValue?: number, thirdValue?: number) => {
         setSpinnerFlag(true)
-        axios.post("/image/detect/36/detect_shapes/", {
+        axios.post(`/image/detect/${imgId}/detect_shapes/`, {
             option, firstValue, secondValue, thirdValue
         }).then((res: any) => {
             setSpinnerFlag(false)
             setImgOutput(baseURL + res.data.image)
 
             console.log(res)
-        }).catch((err: string) => {
-            console.log(err)
+        }).catch((err: any) => {
+            console.log(err.message)
         })
     }
 
@@ -105,11 +105,11 @@ const ForthTab = () => {
                                     </div>
                                     <div className='sliders-contain'>
                                         <label htmlFor="">Max Radius</label>
-                                        <Slider value={maxRadius} onChange={(e: any) => setMaxRadius(e.target.value)} min={0} max={100} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                                        <Slider value={maxRadius} onChange={(e: any) => setMaxRadius(e.target.value)} min={100} max={200} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
                                     </div>
                                     <div className='sliders-contain'>
                                         <label htmlFor="">Threshold</label>
-                                        <Slider value={circleThreshold} onChange={(e: any) => setCircleThreshold(e.target.value)} min={0} max={100} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                                        <Slider value={circleThreshold} onChange={(e: any) => setCircleThreshold(e.target.value)} min={0} max={5} step={0.1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
                                     </div>
                                     <button className='apply-btn' onClick={handleCircleClick}>Apply</button>
                                 </div>

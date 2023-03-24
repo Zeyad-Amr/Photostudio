@@ -64,7 +64,7 @@ class DetectViewSet(viewsets.ModelViewSet):
             'apple3': {
                 'xShift': 10,
                 'yShift': 50,
-                'radius': 100,
+                'radius': 50,
                 'iterations': 25,
                 'gamma':100
             },

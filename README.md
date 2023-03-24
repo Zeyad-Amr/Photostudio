@@ -12,11 +12,13 @@
 - [Filters Class](#filters-class)
 - [Histogram Class](#histogram-class)
 - [Frequency Class](#frequency-class)
+- [Hough Class](#hough-class)
+- [Active Contour Class](#active-contour-class)
 - [Contributing](#contributing)
 - [Developers](#developers)
 
 ## Introduction
-Photostudio is a web project that aims to enhance images using various image processing techniques. It covers noise removal, edge detection, and histogram analysis, as well as color to grayscale transformation and frequency domain filters. Local and global thresholding is also included, as well as hybrid image creation. The project is designed to provide a comprehensive understanding of image processing techniques and their practical applications.
+Photostudio is a web project that aims to enhance images using various image processing techniques. It covers noise removal, edge detection, and histogram analysis, as well as color to grayscale transformation and frequency domain filters. Local and global thresholding is also included, as well as hybrid image creation. In addition to hough transform for detecting lines, circles and ellipses in image and applying active contour to image. The project is designed to provide a comprehensive understanding of image processing techniques and their practical applications.
 
 ## Technologies
 - Frontend: React ts
@@ -303,6 +305,94 @@ Hybriding two images, high frequencies of the first first and low frequencies of
 Hybriding two images, low frequencies of the first first and high frequencies of the second.
 
 ![WhatsApp Image 2023-03-14 at 9 03 26 PM](https://user-images.githubusercontent.com/68791488/225130098-e262ff2f-ed82-40f4-8af2-6dbdd0cf6b18.jpeg)
+
+
+### Hough Class
+
+The given class Hough is a class that implements the Hough transform algorithm for detecting lines, circles, and ellipses in an image.
+The Hough Transform is a technique that allows detecting shapes (such as lines, circles, or ellipses) in an image by looking for patterns in a transformed version of the image. The basic idea is to represent the image in a parameter space that describes the geometric properties of the shapes to be detected, and then look for high-density regions in that space, which correspond to the presence of shapes in the original image.
+
+
+1. `getImg()`
+    - Get the image
+
+2. `__get_edges(img, min_edge_threshold, max_edge_threshold)`
+    - The function uses the OpenCV library to perform edge detection on the input image. Specifically, it first converts the input image from BGR color space to grayscale using the cv2.cvtColor() function.
+    - Then, it applies the Canny edge detection algorithm using the cv2.Canny() function, with the minimum and maximum edge thresholds as inputs. The Canny algorithm is a popular edge detection technique that uses a multi-stage process to detect a wide range of edges in an image.
+    - Finally, the function returns the resulting edge image as a NumPy array.
+    
+3. `__superimpose(lines, color)`
+    - This function takes in two arguments - lines and color.
+    - The lines parameter is a list of lines represented in the polar coordinate system, where each line is a tuple containing two values - the distance r and the angle theta.
+    - The color parameter is a tuple representing the color in RGB format.
+    - The function first retrieves the image using the getImg() method of the class, and then creates a copy of the image using np.copy().
+    - It then iterates over each line in the lines list and calculates the two endpoints of the line segment in the Cartesian coordinate system.
+    - The Cartesian coordinates of the endpoints are calculated using the formula: pt = (x0 + 1000*(-b), y0 + 1000*(a)) and pt2 = (x0 - 1000*(-b), y0 - 1000*(a)).
+    - Here, x0 and y0 are the coordinates of the closest point on the line to the origin (0,0) in the polar coordinate system. a and b are the sine and cosine values of theta respectively, which are calculated using math.sin() and math.cos().
+    - Finally, it draws a line segment between the two endpoints using the cv2.line() function of the OpenCV library. The src image is modified in-place by this operation, and the modified image is returned at the end of the function.
+
+4. `__hough_lines(src, threshold)`
+    - This function performs the Hough Transform algorithm to detect lines in an input image. The Hough Transform is a technique used to detect straight lines in an image by converting the image space into a parameter space. In this parameter space, each point represents a possible line in the original image.
+    - The function takes two inputs: src is the binary edge image in which lines are to be detected, and threshold is a value that represents the minimum number of points that must be associated with a line in the parameter space in order for that line to be considered a valid line.
+    - The first step of the function is to compute the diagonal of the input image using the Pythagorean theorem. This is used to determine the dimensions of the accumulator matrix, which is a two-dimensional array used to store the votes for each possible line in the parameter space. The size of the accumulator matrix is based on the maximum possible distance between a pixel in the image and the origin, which is given by the diagonal.
+    - Next, the function creates an empty accumulator matrix of size (2 * diagonal, 180), where the first dimension represents the distance of the line from the origin and the second dimension represents the angle of the line with respect to the x-axis.
+    - The function then iterates over each edge pixel in the input image and calculates the Hough Transform for each edge. This involves looping over all possible angles and distances and incrementing the corresponding cell in the accumulator matrix for each point that lies on a line with that angle and distance. This process generates a matrix with peaks at the positions of the lines in the input image.
+    - Finally, the function loops over all the cells in the accumulator matrix and checks if the number of votes for a particular line exceeds the threshold value. If so, the function adds the corresponding line to a list of detected lines, where each line is represented as a tuple of (distance, angle).
+    - The function returns a list of detected lines.
+
+5. `detect_lines(threshold, color)`
+    - This function is used to detect lines in an image using the Hough Transform algorithm. It takes two arguments - threshold and color.
+    - The threshold argument sets the minimum number of pixels required to detect a line. A higher threshold will result in fewer lines being detected, while a lower threshold will result in more lines being detected.
+    - The color argument sets the color of the lines that are drawn on the image. By default, the color is set to (255, 0, 0), which is red.
+    - First, the function calls the getImg method of the Image class to retrieve the image. Then it calls the private method __get_edges to detect the edges in the image using the Canny edge detection algorithm with a minimum threshold of 50.
+    - Next, it calls the private method __hough_lines to detect the lines in the image using the Hough Transform algorithm. This method creates an accumulator matrix with dimensions that cover the range of possible values for r and theta in the Hough space. It then finds the location of the edges in the edge image and calculates the Hough transform for each edge, incrementing the corresponding cells in the accumulator matrix. Finally, it extracts the lines with a number of votes above the specified threshold value.
+    - Finally, the function calls the private method __superimpose to draw the detected lines on the original image. This method creates a copy of the original image and iterates over the detected lines, drawing each one in the specified color. The resulting image is returned as the output of the detect_lines function.
+
+6. `__hough_circles(image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True)`
+![Screenshot 2023-03-24 at 11 18 25 PM](https://user-images.githubusercontent.com/68791488/227646202-92622299-b772-43a9-88ce-3ff6292b9d11.png)
+    - This is an implementation of the Hough transform algorithm for detecting circles in an image.
+    - The function takes as input the original image, an edge-detected image, and various parameters such as the minimum and maximum radius of the circles to be detected, the step size for the radius, the number of angles to use in the Hough transform, and a threshold for how many votes a circle must receive to be considered a valid candidate.
+    - The function first generates a list of all possible circles in the image based on the given radius range and number of angles.
+    - It then loops through each edge pixel in the edge image and for each candidate circle, calculates the center of the circle and votes for it in the accumulator.
+    - The accumulator is a dictionary that keeps track of the number of votes each candidate circle has received.
+    - Once all edge pixels have been processed, the circles are sorted by their vote count and those with a percentage of votes above the given threshold are shortlisted.
+    - A post-processing step can be optionally applied to remove duplicate circles that are too close to each other.
+    - Finally, the shortlisted circles are drawn on the output image and returned.
+
+7. `detect_circles(self, min_radius, max_radius, threshold, color)`
+    - This Function detects circles in an input image using the Hough Circle Transform. The method takes four arguments: min_radius, max_radius, threshold, and color.
+    - min_radius and max_radius set the minimum and maximum radii of circles to be detected, respectively. threshold is a value between 0 and 1 that determines the minimum percentage of votes required for a circle to be considered valid. color is a tuple that specifies the color of the detected circles.
+    - The method first gets the input image using the getImg() method of the class. It then applies the __get_edges() method to the image to extract the edges. The __get_edges() method uses the Canny Edge Detection algorithm to extract the edges.
+    - If the edge image is not None, the method proceeds to call the __hough_circles() method with the input image, edge image, minimum radius, maximum radius, delta radius, number of thetas, and the bin threshold as arguments.
+    - The __hough_circles() method applies the Hough Circle Transform to the edge image to detect circles.
+    - Finally, it returns the output image which is the input image with the detected circles superimposed on it.
+
+9. `detect_ellipses(self, min_radius1, max_radius1, min_radius2, max_radius2, threshold, color)`
+    - This is a method that uses the Hough transform to detect ellipses in an input image.
+    - The method takes several arguments:
+       - min_radius1 and max_radius1: the minimum and maximum values for the first radius of the ellipse.
+       - min_radius2 and max_radius2: the minimum and maximum values for the second radius of the ellipse.
+       - threshold: the minimum percentage of votes required for an ellipse to be considered a valid detection.
+       - color: the color of the ellipses to be drawn on the output image.
+    - The method first calls a private method __get_edges() to extract edges from the input image using the Canny edge detection algorithm.
+    - Then, it calls another private method __hough_ellipses() to perform the Hough transform on the edge image to detect ellipses.
+    - The __hough_ellipses() method takes the edge image, the ranges of the two radii, the step sizes for the two radii, the number of angles to consider, and the bin threshold as arguments.
+    - It initializes an accumulator dictionary and loops over all edge pixels, voting for all possible ellipses that pass through the current pixel.
+    - It then finds ellipses with enough votes to be considered a valid detection, and post-processes the results to remove similar detections. 
+    - Finally, it draws the shortlisted ellipses on the output image and returns it.
+
+
+### Active Contour Class
+
+The given class Active Contour is a class that provides code that implements an Active Contour model, also known as Snake model, which is a framework for performing image segmentation tasks. The model consists of a set of contour points that are iteratively adjusted to align with the boundaries of the object to be segmented. 
+
+1. `high_pass_filter(img, filter_range)`
+    - This method applies a high-pass filter on the input image img. 
+    - It starts by resizing the image to a fixed size (512x512). It then applies a Fourier transform on the image using the np.fft.fft2 method.
+    - The Fourier transform shifts the low frequency components of the image towards the corners and high frequency components towards the center of the image.
+    - The next step is to define a filter mask which will be applied on the Fourier transformed image to remove the low frequency components from the image.
+    - The filter mask is a binary mask of size the same as input image with values 1 for pixels where the distance from the center of the image is greater than the filter_range and 0 otherwise. The mask is applied to the Fourier transformed image by element-wise multiplication with the np.fft.fftshift method. 
+    - After applying the inverse Fourier transform to the filtered image using the np.fft.ifft2 method, it returns the absolute value of the filtered image.
 
 
 ## Contributing

@@ -14,8 +14,34 @@ class Hough:
 
     def detect_lines(self, threshold, color=(255, 0, 0)):
         img = self.getImg()
-        # detect edges using the Canny algorithm
-        src = cv2.Canny(img, 50, 200, None, 3)
+        edges = self.get_edges(img, 50)
+        lines = self.hough_lines(edges, threshold)
+        # draw the lines on the original image
+        res = self.superimpose(lines, color)
+
+        return res
+
+    def detect_circles(self, min_radius=10, max_radius=200, threshold=0.4, color=(255, 0, 0)):
+        img = self.getImg()
+
+        delta_r = 1
+        num_thetas = 100
+
+        edge_image = self.get_edges(img)
+
+        if edge_image is not None:
+
+            print("Detecting Hough Circles Started!")
+            circle_img = self.find_hough_circles(
+                img, edge_image, min_radius, max_radius, delta_r, num_thetas, threshold)
+            return circle_img
+
+        else:
+            print("Error in input image!")
+
+        print("Detecting Hough Circles Complete!")
+
+    def hough_lines(self, src, threshold):
         diagonal = math.ceil(
             math.sqrt(src.shape[0] * src.shape[0] + src.shape[1] * src.shape[1]))
         # declare the accumulator matrix as zero matrix
@@ -37,10 +63,7 @@ class Hough:
                 if acc[i, j] >= threshold:
                     lines.append((i, j - 90))
 
-        # draw the lines on the original image
-        res = self.superimpose(lines, color)
-
-        return res
+        return lines
 
     def superimpose(self, lines, color):
         img = self.getImg()
@@ -54,26 +77,6 @@ class Hough:
             pt2 = (int(x0 - 1000 * (-b)), int(y0 - 1000 * (a)))
             cv2.line(src, pt1, pt2, color, 1, cv2.LINE_AA)
         return src
-
-    def detect_circles(self, min_radius=10, max_radius=200, threshold=0.4, color=(255, 0, 0)):
-        img = self.getImg()
-
-        delta_r = 1
-        num_thetas = 100
-
-        edge_image = self.get_edges(img)
-
-        if edge_image is not None:
-
-            print("Detecting Hough Circles Started!")
-            circle_img = self.find_hough_circles(
-                img, edge_image, min_radius, max_radius, delta_r, num_thetas, threshold)
-            return circle_img
-
-        else:
-            print("Error in input image!")
-
-        print("Detecting Hough Circles Complete!")
 
     def find_hough_circles(image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True):
         # image size
@@ -153,10 +156,9 @@ class Hough:
         return output_img
 
     def get_edges(self, img, min_edge_threshold=100, max_edge_threshold=200):
-        input_img = cv2.imread(img)
 
         # convert to gray scale
-        gray_image = cv2.cvtColor(input_img, cv2.COLOR_BGR2GRAY)
+        gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Edge detection on the input image
         edge_image = cv2.Canny(

@@ -1,13 +1,24 @@
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
+import { FileContext } from '../../contexts/fileContext';
 import axios from '../../global/API/axios';
 
-const UploadImg = () => {
+interface Props {
+    setImgId: (id: string) => void;
+}
+
+const UploadImg = (props: Props) => {
 
     const inputFile = useRef<HTMLInputElement | null>(null);
     const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
+    const [uploadImg, setUploadImg] = useState<string | undefined>('')
+
+    const {
+        baseURL,
+    } = useContext(FileContext);
 
 
     //   Integrating with back
+
 
     const handleUpload = (e: any) => {
         const formData = new FormData();
@@ -17,6 +28,8 @@ const UploadImg = () => {
             formData
         ).then((res: any) => {
             setSpinnerFlag(false)
+            setUploadImg(baseURL + res.data.image);
+            props.setImgId(res.data.id)
             console.log(res)
         }).catch((err: any) => {
             console.log(err)
@@ -46,7 +59,7 @@ const UploadImg = () => {
                     spinnerFlag ?
                         <div className="spinner-border" role="status"></div>
                         :
-                        <img className='upload-img' alt="" />
+                        <img className='upload-img' style={{ display: uploadImg === undefined || uploadImg === "" ? "none" : "block" }} src={uploadImg} alt="" />
                 }
             </div>
         </div>

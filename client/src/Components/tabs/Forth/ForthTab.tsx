@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import UploadImg from './UploadImg'
 import InputLabel from '@mui/material/InputLabel';
@@ -8,6 +8,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import './ForthTab.css'
 import axios from '../../global/API/axios';
+import { FileContext } from '../../contexts/fileContext';
 
 
 const ForthTab = () => {
@@ -18,7 +19,18 @@ const ForthTab = () => {
     const [circleThreshold, setCircleThreshold] = useState<number>(10)
     const [lineThreshold, setLineThreshold] = useState<number>(10)
     const [spinnerFlag, setSpinnerFlag] = useState<boolean | null>(false)
+    const [imgOutput, setImgOutput] = useState<string | undefined>('')
 
+    const [imgId, setImgId] = useState<string | undefined>('')
+
+    const {
+        baseURL,
+    } = useContext(FileContext);
+
+
+    const handleImgId = (id: string) => {
+        setImgId(id);
+    }
 
 
     const handleChangeOptions = (event: SelectChangeEvent) => {
@@ -29,12 +41,14 @@ const ForthTab = () => {
 
     const sendRequest = (option: string, firstValue: number, secondValue?: number, thirdValue?: number) => {
         setSpinnerFlag(true)
-        axios.post("", {
+        axios.post("/image/detect/36/detect_shapes/", {
             option, firstValue, secondValue, thirdValue
-        }).then((response : any) => {
+        }).then((res: any) => {
             setSpinnerFlag(false)
-            console.log(response)
-        }).catch((err : string) => {
+            setImgOutput(baseURL + res.data.image)
+
+            console.log(res)
+        }).catch((err: string) => {
             console.log(err)
         })
     }
@@ -47,11 +61,12 @@ const ForthTab = () => {
         sendRequest(options, minRadius, maxRadius, circleThreshold)
     }
 
+
     return (
         <Container fluid>
             <Row>
                 <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
-                    <UploadImg />
+                    <UploadImg setImgId={handleImgId} />
                 </Col>
                 <Col style={{ height: "85vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} lg={4} md={6} sm={12} xs={12}>
                     <FormControl style={{ marginTop: "2rem", width: "14rem" }} variant="standard" sx={{ m: 1, minWidth: 150 }}>
@@ -77,7 +92,7 @@ const ForthTab = () => {
                             <div className='btn-slider-contain forthtab'>
                                 <div className='sliders-contain'>
                                     <label htmlFor="">Threshold</label>
-                                    <Slider value={lineThreshold} onChange={(e: any) => setLineThreshold(e.target.value)} min={0} max={100} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
+                                    <Slider value={lineThreshold} onChange={(e: any) => setLineThreshold(e.target.value)} min={100} max={255} step={1} style={{ width: "11rem" }} aria-label="Default" valueLabelDisplay="auto" />
                                 </div>
                                 <button className='apply-btn' onClick={handleLineClick}>Apply</button>
                             </div>
@@ -121,7 +136,7 @@ const ForthTab = () => {
                                 spinnerFlag ?
                                     <div className="spinner-border" role="status" ></div>
                                     :
-                                    <img className='output-img' alt="" />
+                                    <img className='output-img' style={{ display: imgOutput === undefined || imgOutput === "" ? "none" : "block" }} src={imgOutput} alt="" />
                             }
                         </div>
                     </div>

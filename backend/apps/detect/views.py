@@ -65,25 +65,29 @@ class DetectViewSet(viewsets.ModelViewSet):
                 'xShift': 10,
                 'yShift': 50,
                 'radius': 100,
-                'iterations': 25
+                'iterations': 25,
+                'gamma':100
             },
             'circle': {
                 'xShift': 0,
                 'yShift': 50,
                 'radius': 90,
-                'iterations': 35
+                'iterations': 35,
+                'gamma':100
             },
             'BlackApple': {
                 'xShift': 40,
                 'yShift': 30,
                 'radius': 100,
-                'iterations': 25
+                'iterations': 25,
+                'gamma':5
             },
             'Convex-Polygon': {
                 'xShift': 10,
                 'yShift': 50,
                 'radius': 110,
-                'iterations': 35
+                'iterations': 35,
+                'gamma':5
             }
         }
         points = 60
@@ -94,7 +98,7 @@ class DetectViewSet(viewsets.ModelViewSet):
         x_cooridinates, y_cooridinates = cn.circle_contour(
             (sz[0] // 2+parametersDict[name]['xShift'], sz[1] // 2+parametersDict[name]['yShift']), parametersDict[name]['radius'], points, x_cooridinates, y_cooridinates)
         x_cooridinates, y_cooridinates = cn.greedy_contour(
-            original_image, parametersDict[name]['iterations'], 1, 2, 5, x_cooridinates, y_cooridinates, points, 11, True)
+            original_image, parametersDict[name]['iterations'], 1, 2, parametersDict[name]['gamma'], x_cooridinates, y_cooridinates, points, 11, True)
         chaincode, normalisedToRotation, normalisedToStartingPoint = cn.getChainCode(
             x_cooridinates, y_cooridinates)
         print(normalisedToStartingPoint)

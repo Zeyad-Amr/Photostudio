@@ -108,7 +108,7 @@ class Hough:
 
         return lines
 
-    def __hough_circles(image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True):
+    def __hough_circles(self, image, edge_image, r_min, r_max, delta_r, num_thetas, bin_threshold, post_process=True):
         # image size
         img_height, img_width = edge_image.shape[:2]
 
@@ -176,7 +176,7 @@ class Hough:
 
         return output_img
 
-    def __hough_ellipses(image, edge_image, a_min, a_max, delta_a, b_min, b_max, delta_b, num_thetas, bin_threshold, post_process=True):
+    def __hough_ellipses(self, image, edge_image, a_min, a_max, delta_a, b_min, b_max, delta_b, num_thetas, bin_threshold, post_process=True):
         # Image size
         img_height, img_width = edge_image.shape[:2]
 

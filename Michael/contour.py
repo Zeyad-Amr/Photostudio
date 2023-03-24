@@ -219,3 +219,81 @@ def greedy_contour(source, iterations, alpha, beta, gamma, x_points, y_points, p
             
 
     return x_points,y_points
+
+
+def normaliseToRotation(chain_code):
+    # Make a copy of the chain code list
+    normalized_code = chain_code.copy()
+    # Iterate through the chain code list
+    for i in range(len(chain_code)):
+        # Subtract the current chain code symbol from the next symbol
+        difference = chain_code[(i+1)%len(chain_code)] - chain_code[i]
+        # Modulo the difference by 8 to normalize it
+        normalized_difference = difference % 8
+        # Replace the original symbol with the normalized symbol
+        normalized_code[(i+1)%len(chain_code)] = normalized_difference
+    # Return the normalized chain code list
+    return normalized_code
+
+def convert(list):
+	
+	# Converting integer list to string list
+	s = [str(i) for i in list]
+	
+	# Join list items using join()
+	res = int("".join(s))
+	
+	return(res)
+def getAllOccurences(lst,val):
+    ret = []
+    for i,value in enumerate(lst):
+        if value == val:
+            ret.append(i)
+    return ret
+def normaliseToStartingPoint(chaincode):
+    sortedLst = sorted(chaincode)
+    occurencesOfMinIndices = getAllOccurences(chaincode,sortedLst[0])
+    mn = 10**(len(chaincode)+1)
+    normalisedChainCode = []
+    for i in occurencesOfMinIndices:
+        rotated_lst = chaincode[i:] + chaincode[:i]
+        intgr = convert(rotated_lst)
+        if intgr < mn:
+             normalisedChainCode = rotated_lst
+             mn = intgr
+    return normalisedChainCode
+
+def parametersToAppend(mulByMn,mulByDx,mulByDy,mn,dx,dy):
+    codeList = []
+    codeList += [mulByMn]*mn
+    dx = np.abs(dx) - mn
+    dy = np.abs(dy) - mn
+    codeList += [mulByDx] * dx
+    codeList += [mulByDy] * dy
+    return codeList
+
+def getCodeBetweenTwoPoints(x1,y1,x2,y2):
+    dx = x2-x1
+    dy = y2-y1
+    mn = min(np.abs(dx),np.abs(dy))
+    codeList = []
+    if dx > 0 and dy > 0:
+        codeList += parametersToAppend(1,0,2,mn,dx,dy)
+    elif dx < 0 and dy > 0:
+        codeList += parametersToAppend(3,4,2,mn,dx,dy)
+    elif dx <0 and dy < 0:
+        codeList += parametersToAppend(5,4,6,mn,dx,dy)
+    else:
+        codeList += parametersToAppend(7,0,6,mn,dx,dy)
+    # print(x1,y1,x2,y2,codeList)
+    return codeList
+
+def getChainCode(contourX,contourY):
+    numOfPoints = len(contourX)
+    chaincode = []
+    for i in range(0,numOfPoints):
+        chaincode += getCodeBetweenTwoPoints(contourX[i % numOfPoints],contourY[i % numOfPoints],contourX[(i+1)%numOfPoints],contourY[(i+1)%numOfPoints])
+    normalisedToRotation = normaliseToRotation(chaincode)
+    normalisedToStartingPoint = normaliseToStartingPoint(normalisedToRotation)
+    return chaincode,normalisedToRotation,normalisedToStartingPoint
+

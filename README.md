@@ -148,8 +148,8 @@ The given class Filters contains various image processing algorithms for adding 
 
 
 3. `roberts_edge_detector(image)`:
-    - This function performs edge detection using the Prewitt operator.
-    - The method initializes two 3x3 filters, vertical_grad_filter and horizontal_grad_filter, which are the Prewitt operators for detecting vertical and horizontal edges in an image, respectively.
+    - This function performs edge detection using the Roberts operator.
+    - The method initializes two 3x3 filters, vertical_grad_filter and horizontal_grad_filter, which are the Roberts operators for detecting vertical and horizontal edges in an image, respectively.
     - The filters are designed to give more weight to the diagonal pixels and less weight to the surrounding pixels.
     - Then, the method calls the __detect_edges_helper method with the input image and these two filters as arguments. The __detect_edges_helper method applies the filters on the image to detect edges and returns a gradient image that represents the strength of the edges and the angles of the gradients at each pixel.
     - Finally, the sobel_edge_detector method returns the gradient image obtained from __detect_edges_helper.
